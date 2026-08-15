@@ -16,6 +16,7 @@ const {
 } = require('./pipeline/run');
 const { renderDashboard } = require('./pipeline/render');
 const { serveStaticFile, renderTripIndexHtml, isPathSafe } = require('./lib/staticServe');
+const { publishTrips, collectTripCards } = require('./pipeline/publish');
 
 // 8090 turned out to collide with an unrelated background service already
 // running on this machine (Wondershare's WsToastNotification.exe) -- after
@@ -96,10 +97,8 @@ const server = http.createServer(async (req, res) => {
     return;
   }
   if (req.method === 'GET' && urlPath === '/trips') {
-    let trips = [];
-    try { trips = fs.readdirSync(TRIPS_DIR).filter((d) => fs.statSync(path.join(TRIPS_DIR, d)).isDirectory()); } catch { /* none yet */ }
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
-    res.end(renderTripIndexHtml(trips, '<p><a href="/new-trip-form">+ טיול חדש</a></p>'));
+    res.end(renderTripIndexHtml(collectTripCards(), '<p><a href="/new-trip-form">+ טיול חדש</a></p>'));
     return;
   }
 
@@ -198,6 +197,19 @@ const server = http.createServer(async (req, res) => {
 
     sendJson(res, 200, { ok: true, message: 'final plan started' });
     runFinalPlanStage(folderName, input, body.points, log, { regionDays: body.regionDays || {}, reuseItinerary, reuseImages })
+      .then(() => {
+        // Auto-publish: once a plan is actually finished, push the updated
+        // static viewer live so the phone/other-device copy reflects it
+        // without a manual `netlify deploy`. Failure here is caught locally
+        // (not rethrown) -- a failed deploy (network blip, CLI not logged
+        // in) must not get mistaken for the final-plan stage itself having
+        // failed and mark tabs 5-7 as errored when the plan is actually fine.
+        log(`[${folderName}] מפרסם עדכון לאתר הציבורי...`);
+        return publishTrips(log).then(
+          () => log(`[${folderName}] הפרסום הושלם`),
+          (err) => log(`[${folderName}] הפרסום נכשל (התוכנית המקומית תקינה): ${err.message}`)
+        );
+      })
       .catch((err) => {
         log(`[${folderName}] שלב המסלול הסופי נכשל: ${err.message}`);
         try { fs.writeFileSync(path.join(dir, `${folderName}_KESSLER_TRIP.html`), renderDashboard(folderName, input, { 2: true, 3: true, 4: true, 5: 'error', 6: 'error', 7: 'error' }), 'utf-8'); } catch { /* best-effort */ }

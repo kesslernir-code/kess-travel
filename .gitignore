@@ -3,3 +3,6 @@ node_modules/
 logs/*.log
 logs/*.out
 *.pid
+
+# Local Netlify folder
+.netlify
