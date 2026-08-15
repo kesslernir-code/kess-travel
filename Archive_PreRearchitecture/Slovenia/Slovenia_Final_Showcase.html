@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סלובניה — Showcase ממוקד</title>
+<style>
+  :root {
+    --ink: #1f2a24;
+    --paper: #faf8f3;
+    --muted: #5c6b62;
+    --accent: #2f6b4f;
+    --gold: #b98b3e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    direction: rtl;
+    text-align: right;
+    line-height: 1.7;
+    padding: 40px 6vw 60px;
+  }
+  .kicker {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  h1 {
+    margin: 0 0 6px;
+    font-size: 32px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 40px;
+  }
+  .day-block {
+    margin-bottom: 48px;
+  }
+  .day-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 18px;
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 8px;
+  }
+  .day-num {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .day-title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .day-date {
+    font-size: 13px;
+    color: var(--muted);
+    margin-inline-start: auto;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(40,50,40,0.08);
+    display: flex;
+    flex-direction: column;
+  }
+  .card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    display: block;
+  }
+  .card-body {
+    padding: 16px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+  .cat-tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    color: #fff;
+    background: var(--accent);
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+  }
+  .card h3 {
+    margin: 2px 0 0;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .card p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .deep-link {
+    margin-top: auto;
+    padding-top: 8px;
+    font-size: 13px;
+  }
+  .deep-link a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .deep-link a:hover {
+    text-decoration: underline;
+  }
+  footer {
+    text-align: center;
+    padding-top: 30px;
+    color: #9aa79e;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="kicker">KESSLER TRIP · סלובניה · Tab 6</div>
+  <h1>Showcase ממוקד — הטיול שנבחר</h1>
+  <div class="subtitle">13 הנקודות שאושרו בטאב 3, מסודרות לפי ימי המסלול. לחצו על "קרא עוד במקום" לפתיחת מידע נוסף כשתגיעו בפועל.</div>
+
+  <div class="day-block">
+    <div class="day-heading"><span class="day-num">1</span><span class="day-title">הגעה + ליובליאנה</span><span class="day-date">שבת, 23.8.2026</span></div>
+    <div class="grid">
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ljubljana,_Tromostovje_(7).jpg" alt="גשר השלושה">
+        <div class="card-body">
+          <span class="cat-tag">עיר</span>
+          <h3>גשר השלושה ושוק המרכזי</h3>
+          <p>עיצוב האדריכל פלצ׳ניק האייקוני: שלושה גשרים צמודים חוצים את נהר ליובליאניצה, ולצדם שוק בוקר תוסס.</p>
+          <div class="deep-link"><a href="https://en.wikipedia.org/wiki/Triple_Bridge" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ljubljana_Castle_-_Ljubljana,_Slovenia_(7451147982).jpg" alt="טירת ליובליאנה">
+        <div class="card-body">
+          <span class="cat-tag">אטרקציה</span>
+          <h3>טירת ליובליאנה</h3>
+          <p>טירה מוגבהת מעל העיר העתיקה, נגישה ברכבל. תצפית פנורמית על העיר ועל ההרים ברקע.</p>
+          <div class="deep-link"><a href="https://en.wikipedia.org/wiki/Ljubljana_Castle" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-heading"><span class="day-num">2</span><span class="day-title">ליובליאנה לעומק</span><span class="day-date">ראשון, 24.8.2026</span></div>
+    <div class="grid">
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Grad_Tivoli-Ljubljana.JPG" alt="פארק טיבולי">
+        <div class="card-body">
+          <span class="cat-tag">טבע</span>
+          <h3>פארק טיבולי (Tivoli Park)</h3>
+          <p>הפארק המרכזי הגדול של ליובליאנה, שבילי הליכה מוצלים ומרחבי דשא — טוב למנוחה בין סיורים.</p>
+          <div class="deep-link"><a href="https://en.wikipedia.org/wiki/Tivoli_City_Park" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Krakovo-Ljubljana.JPG" alt="שכונת קרקובו">
+        <div class="card-body">
+          <span class="cat-tag">עיר</span>
+          <h3>שכונות טרנובו וקרקובו</h3>
+          <p>שכונות ציוריות על גדות נהר ליובליאניצה, בתים צבעוניים וגינות ירק עירוניות.</p>
+          <div class="deep-link"><a href="https://theculturetrip.com/europe/slovenia" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ljubljana_Metelkova_mesto_01.JPG" alt="מטלקובה">
+        <div class="card-body">
+          <span class="cat-tag">עיר</span>
+          <h3>מטלקובה מסטו (Metelkova)</h3>
+          <p>שכונת אמנות/סקווטרים לשעבר שהפכה למרכז תרבות אלטרנטיבי: גרפיטי, ברים ואווירת לילה ייחודית.</p>
+          <div class="deep-link"><a href="https://en.wikipedia.org/wiki/Metelkova" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Slovenian_Railway_Museum_4_2010.JPG" alt="מוזיאון הרכבות">
+        <div class="card-body">
+          <span class="cat-tag">אטרקציה</span>
+          <h3>מוזיאון הרכבות של סלובניה</h3>
+          <p>מוזיאון קטן וייחודי לקטרי קיטור היסטוריים, בתוך מבנה משומר מתחילת המאה ה-20.</p>
+          <div class="deep-link"><a href="https://en.wikipedia.org/wiki/Slovenian_Railway_Museum" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-heading"><span class="day-num">3</span><span class="day-title">הקארסט — פוסטויna ופרדיאמה</span><span class="day-date">שני, 25.8.2026</span></div>
+    <div class="grid">
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Postojna_Cave_-_Slovenia.jpg" alt="מערת פוסטויna">
+        <div class="card-body">
+          <span class="cat-tag">אטרקציה</span>
+          <h3>מערת פוסטויna (Postojna Cave)</h3>
+          <p>מערכת המערות המתויירת ביותר באירופה, עם רכבת פנימית תת-קרקעית לאולמות נטיפים ענקיים.</p>
+          <div class="deep-link"><a href="https://en.wikipedia.org/wiki/Postojna_Cave" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/10th_anniversary_of_Slovene_Wikipedia_-_Predjama_castle.JPG" alt="טירת פרדיאמה">
+        <div class="card-body">
+          <span class="cat-tag">אטרקציה</span>
+          <h3>טירת פרדיאמה (Predjama Castle)</h3>
+          <p>טירה בנויה בתוך פתח מערה בצוק אנכי — אחת מטירות המערה הגדולות בעולם.</p>
+          <div class="deep-link"><a href="https://en.wikipedia.org/wiki/Predjama_Castle" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-heading"><span class="day-num">4</span><span class="day-title">הקארסט — שקוצ'יאן וליפיצה</span><span class="day-date">שלישי, 26.8.2026</span></div>
+    <div class="grid">
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/SkocjanCaves.JPG" alt="מערות שקוצ'יאן">
+        <div class="card-body">
+          <span class="cat-tag">אטרקציה</span>
+          <h3>מערות שקוצ'יאן (Škocjan Caves)</h3>
+          <p>אתר מורשת עולמית של אונסק"ו: קניון תת-קרקעי עצום עם נהר רקה שנעלם באדמה.</p>
+          <div class="deep-link"><a href="https://en.wikipedia.org/wiki/%C5%A0kocjan_Caves" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lipica_horses_(7198987762).jpg" alt="ליפיצה">
+        <div class="card-body">
+          <span class="cat-tag">אטרקציה</span>
+          <h3>ליפיצה (Lipica)</h3>
+          <p>חוות הסוסים הלבנים המקוריים (ליפיצאנר), סיורים ומופעי אילוף בסביבה כפרית.</p>
+          <div class="deep-link"><a href="https://en.wikipedia.org/wiki/Lipica,_Se%C5%BEana" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-heading"><span class="day-num">5</span><span class="day-title">נסיעה למאריבור</span><span class="day-date">רביעי, 27.8.2026</span></div>
+    <div class="grid">
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Maribor_old_town_view,_Slovenia._(51785089774).jpg" alt="מאריבור">
+        <div class="card-body">
+          <span class="cat-tag">עיר</span>
+          <h3>מאריבור (Maribor)</h3>
+          <p>העיר השנייה בגודלה בסלובניה, גפן היין העתיקה בעולם (מעל 400 שנה), לצד נהר דראווה.</p>
+          <div class="deep-link"><a href="https://en.wikipedia.org/wiki/Maribor" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-heading"><span class="day-num">6</span><span class="day-title">פטוי ודרך היין</span><span class="day-date">חמישי, 28.8.2026</span></div>
+    <div class="grid">
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ptuj_from_the_castle.JPG" alt="פטוי">
+        <div class="card-body">
+          <span class="cat-tag">עיר</span>
+          <h3>פטוי (Ptuj)</h3>
+          <p>העיר העתיקה ביותר בסלובניה, עם טירה מוגבהת מעל העיירה ורחוב ראשי ימי-ביניימי משומר.</p>
+          <div class="deep-link"><a href="https://en.wikipedia.org/wiki/Ptuj" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Jeruzalem_(2).jpg" alt="דרך היין המזרחית">
+        <div class="card-body">
+          <span class="cat-tag">אוכל</span>
+          <h3>דרך היין המזרחית (Jeruzalem-Ormož)</h3>
+          <p>כרמים מדורגים, יקבים בוטיקיים ונופי גבעות ירוקים — אזור יין ציורי ופחות מוכר לתיירים.</p>
+          <div class="deep-link"><a href="https://theculturetrip.com/europe/slovenia" target="_blank" rel="noopener">קרא עוד במקום ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>KESSLER TRIP · סלובניה · Showcase ממוקד נבנה מתוך הבחירה הסופית בטאב 3</footer>
+
+</body>
+</html>

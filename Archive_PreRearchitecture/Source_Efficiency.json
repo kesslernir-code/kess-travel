@@ -1,0 +1,14 @@
+{
+  "_readme": "Persistent per-domain mining efficiency ledger. Updated by trip-master-plan_SKILL.md Part A (Step 2b) after every real mining pass. Read by trip-scan_SKILL.md Step 2 (removes any verdict:'low-efficiency' domain from Knowledge_Hubs.md outright) and Step 5 (shows the cost estimate on each source's Tab 2 card so the user can weigh it before checking the box). callsPerPlace = cumulative fetch/search calls spent on this domain / cumulative distinct places+experiences it yielded, averaged across every trip that mined it -- lower is better. estimatedCostPerTripUsd = avgCallsPerTrip (totalCalls / timesEvaluated) x COST_PER_MINING_CALL_USD_ESTIMATE ($0.015 -- a documented rough midpoint for one Haiku fetch+extract call: ~5000 input tok x $1/MTok + ~600 output tok x $5/MTok, rounded up for subagent overhead; see trip-master-plan_SKILL.md Step 2b). This is a heuristic estimate for decision-making, not a real per-domain billing figure -- Claude Code doesn't expose cost broken down by domain, only a whole run's total_cost_usd. Don't present it as more precise than that.",
+  "wander-lush.org": {
+    "totalCalls": 79,
+    "totalPlacesFound": null,
+    "callsPerPlace": null,
+    "timesEvaluated": 2,
+    "avgCallsPerTrip": 39.5,
+    "estimatedCostPerTripUsd": 0.59,
+    "verdict": "low-efficiency",
+    "lastEvaluated": "2026-07-10",
+    "notes": "Pre-tracking-system verdict, not from a measured callsPerPlace ratio -- this system didn't exist yet when this domain was mined. What IS verified from real transcripts: 12 calls in one healthy run, 67 in a second run that then stalled the whole pipeline for 3.5 hours -- the single heaviest domain in both. Removed from Knowledge_Hubs.md on 2026-07-10 on that basis; do not re-add even if a future trip-scan search resurfaces it. Going forward, sources get a real measured callsPerPlace instead of this kind of judgment call."
+  }
+}

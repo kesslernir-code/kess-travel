@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<title>מסלול סופי — רומניה</title>
+<style>
+  html, body { height: 100%; margin: 0; font-family: -apple-system, Segoe UI, Arial, sans-serif; }
+  #app { display: flex; height: 100%; }
+  #map { flex: 1 1 auto; height: 100%; }
+  #sidebar { width: 460px; flex: 0 0 460px; height: 100%; overflow-y: auto; border-right: 3px solid #ddd; box-sizing: border-box; padding: 16px; background: #fafafa; direction: rtl; text-align: right; }
+  h2 { margin-top: 0; font-size: 18px; }
+  .dayTabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .dayTabs button { flex: 1 1 auto; padding: 10px 6px; font-size: 13px; font-weight: 700; border: 1px solid #ccc; background: #fff; border-radius: 6px; cursor: pointer; color: #333; }
+  .dayTabs button.active { color: #fff; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; font-size: 12px; }
+  .legend span { display: inline-flex; align-items: center; gap: 4px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.3); flex-shrink: 0; }
+  .section-title { font-weight: bold; margin: 16px 0 8px; font-size: 14px; color: #222; background: #eee; padding: 6px 8px; border-radius: 4px; }
+  .day-summary-row { display: flex; align-items: center; gap: 8px; padding: 10px; margin-bottom: 8px; background: #fff; border-radius: 6px; border-inline-start: 5px solid #999; cursor: pointer; }
+  .day-summary-row:hover { background: #f0f0f0; }
+  .day-summary-row .dsr-title { font-weight: 700; font-size: 13.5px; }
+  .day-summary-row .dsr-meta { font-size: 11.5px; color: #555; margin-top: 3px; }
+  .trip-total { font-size: 13px; font-weight: 700; margin: 10px 0; padding: 8px; background: #eef4ff; border-radius: 6px; }
+  .pie-wrap { display: flex; align-items: center; gap: 14px; margin: 10px 0 16px; }
+  .pie-legend { font-size: 11.5px; }
+  .pie-legend div { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; }
+  .intro-line { font-size: 14px; background: #fff8e8; border-radius: 6px; padding: 10px 12px; margin-bottom: 12px; line-height: 1.6; }
+  .base-line { font-size: 13px; font-weight: 700; color: #1a1a4e; margin-bottom: 8px; }
+  .field-block { margin-bottom: 10px; font-size: 13px; }
+  .field-block b { display: block; font-size: 11.5px; color: #777; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .schedule { margin: 12px 0; }
+  .sched-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; }
+  .sched-time { font-weight: 700; font-size: 13px; min-width: 46px; color: #1a5fb4; }
+  .sched-icon { font-size: 16px; }
+  .sched-label { font-size: 13px; flex: 1 1 auto; }
+  .poi-card { background: #fff; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; border-inline-start: 4px solid #999; cursor: pointer; }
+  .poi-card:hover { background: #f5f5f5; }
+  .poi-card h4 { margin: 0 0 4px; font-size: 13.5px; }
+  .poi-card p { margin: 0; font-size: 12px; color: #555; line-height: 1.5; }
+  .rest-card { background: #fff3f0; border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; font-size: 12.5px; }
+  .lodging-line { margin-top: 14px; padding: 10px 12px; background: #1a1a4e; color: #fff; border-radius: 6px; font-size: 13px; font-weight: 700; }
+  .departure-line { margin-top: 14px; padding: 10px 12px; background: #a13d3d; color: #fff; border-radius: 6px; font-size: 13px; font-weight: 700; }
+  .worth-section { margin-top: 20px; border-top: 2px solid #ddd; padding-top: 12px; }
+  .worth-region { font-weight: 700; font-size: 12.5px; color: #444; margin: 10px 0 4px; }
+  .worth-row { display: flex; align-items: center; gap: 6px; padding: 3px 0; font-size: 12px; cursor: pointer; }
+  .worth-row:hover { background: #f0f0f0; }
+  .worth-row .worth-name { flex: 1 1 auto; }
+  .worth-dist { font-size: 11px; color: #777; }
+  .worth-hint { font-size: 12px; color: #777; font-style: italic; padding: 6px 0; }
+  #status { font-size: 12px; color: #888; margin-top: 10px; }
+  .info-desc { font-size: 12px; max-width: 260px; line-height: 1.5; }
+  .info-source { font-size: 11px; margin-top: 6px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="map"></div>
+  <div id="sidebar">
+    <h2>מסלול רומניה — 5-12.10.2026</h2>
+    <div class="dayTabs" id="dayTabs"></div>
+    <div class="legend">
+      <span><span class="dot" style="background:#8e44ad"></span>עיר</span>
+      <span><span class="dot" style="background:#e67e22"></span>אטרקציה</span>
+      <span><span class="dot" style="background:#c0392b"></span>אוכל</span>
+    </div>
+    <div id="content"></div>
+    <div id="status"></div>
+  </div>
+</div>
+
+<script>
+const DESTINATION_NAME = "רומניה";
+const TRIP_TRAVEL_MODE = "DRIVING";
+const TRIP_TRAVEL_VERB = "נסיעה";
+const TRIP_TRAVEL_ICON = "🚗";
+const BASE_ADDRESS = "Bucharest, Romania";
+const BASE_NAME = "בוקרשט";
+const OVERNIGHT_BASES = [
+  {
+    "name": "בוקרשט",
+    "query": "בוקרשט, Romania",
+    "nights": 3
+  },
+  {
+    "name": "בראשוב",
+    "query": "בראשוב, Romania",
+    "nights": 2
+  },
+  {
+    "name": "סיגישוארה",
+    "query": "סיגישוארה, Romania",
+    "nights": 1
+  },
+  {
+    "name": "סיביו",
+    "query": "סיביו, Romania",
+    "nights": 2
+  }
+];
+
+const CATEGORY_COLORS = {"Nature":"#27ae60","City":"#8e44ad","Attraction":"#e67e22","Food":"#c0392b","Sleep":"#1a1a4e","Beach":"#2980b9"};
+const CATEGORY_LABELS_HE = {"Nature":"טבע","City":"עיר","Attraction":"אטרקציה","Food":"אוכל","Sleep":"לינה","Beach":"חוף"};
+const CATEGORY_ICONS = {"Nature":"🌲","City":"🛍️","Attraction":"🏛️","Food":"🍽️","Sleep":"🛏️","Beach":"🏖️"};
+const DAY_COLORS = {"1":"#1a7a3c","2":"#1a5fb4","3":"#b8860b","4":"#8e44ad","5":"#c0392b","6":"#16a085","7":"#d35400","8":"#2c3e50"};
+
+// Kept points carried forward from מילאנו_Route_Map.html / מילאנו_Selection.json,
+// with full id/name/query/category/desc/source/url/rec preserved from the map data.
+const POINTS = {
+  "bucharest0": {
+    "id": "bucharest0",
+    "name": "בוקרשט (Bucharest)",
+    "query": "בוקרשט (Bucharest), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "בירת רומניה, המרכז הכלכלי והתרבותי הגדול במדינה. העיר משלבת בין סגנונות בל אפוק וניאו-קלאסי ('פריז של המזרח') לבין שדרות ומונומנטים מתקופת הרודנות הקומוניסטית, וכוללת עיר עתיקה שוקקת חיים, בתי קפה מעולים ומוזיאונים מרכזיים.",
+    "source": "lonelyplanet.com / nomadicmatt.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "bucharestoldtown1": {
+    "id": "bucharestoldtown1",
+    "name": "העיר העתיקה של בוקרשט (Bucharest Old Town)",
+    "query": "העיר העתיקה של בוקרשט (Bucharest Old Town), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "הרובע ההיסטורי המרוצף באבן ששימש כרובע הסוחרים הימי-ביניימי של הבירה. האזור שופץ ומהווה את הלב הפועם של חיי הלילה, מלא בסמטאות להולכי רגל, מסעדות שף, בתי קפה ומבנים היסטוריים.",
+    "source": "lonelyplanet.com / ricksteves.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "palaceofparliament2": {
+    "id": "palaceofparliament2",
+    "name": "ארמון הפרלמנט (Palace of Parliament)",
+    "query": "ארמון הפרלמנט (Palace of Parliament), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "מבנה ענק שהוקם בעלות של מיליארדי דולרים כמונומנט לפולחן האישיות של הרודן ניקולאה צ'אושסקו. נחשב לאחד המבנים המנהליים הגדולים בעולם וכולל מעל אלף חדרים מפוארים, אולמות נשפים ואת הפרלמנט הרומני.",
+    "source": "lonelyplanet.com / ricksteves.com / atlasobscura.com / nomadicmatt.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "romanianathenaeum3": {
+    "id": "romanianathenaeum3",
+    "name": "האתנאום הרומני (Romanian Athenaeum)",
+    "query": "האתנאום הרומני (Romanian Athenaeum), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "אולם קונצרטים ומבנה נאו-קלאסי מפואר שנחנך בשנת 1888 בתכנון האדריכל אלברט גלרון. המבנה כולל עמודי שיש דוריים, פרסקו היסטורי באורך 70 מטרים ומשמש משכנה של התזמורת הפילהרמונית ג'ורג'ה אנסקו.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "caleavictoriei4": {
+    "id": "caleavictoriei4",
+    "name": "שדרת הניצחון (Calea Victoriei)",
+    "query": "שדרת הניצחון (Calea Victoriei), Romania",
+    "category": "City",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "שדרה מרכזית ואלגנטית המדגימה את תקופת הבל אפוק של בוקרשט, שלאורכה ארמונות, מוזיאונים, מלונות יוקרה ומבנים בסגנון אדריכלות צרפתית.",
+    "source": "ricksteves.com",
+    "url": "https://ricksteves.com"
+  },
+  "revolutionsquare5": {
+    "id": "revolutionsquare5",
+    "name": "כיכר המהפכה (Revolution Square)",
+    "query": "כיכר המהפכה (Revolution Square), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "הכיכר המרכזית שבה התחוללה המהפכה העממית בסוף 1989 שהביאה להפלת שלטונו של צ'אושסקו. במקום ניצבת אנדרטת הלידה מחדש להנצחת הנספים במאבק.",
+    "source": "ricksteves.com / atlasobscura.com / nomadicmatt.com",
+    "url": "https://ricksteves.com"
+  },
+  "thermebucharest6": {
+    "id": "thermebucharest6",
+    "name": "תרמה בוקרשט (Therme Bucharest)",
+    "query": "תרמה בוקרשט (Therme Bucharest), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "מתחם בריכות וספא מקורה ענק ומתקדם, הכולל בריכות מים תרמיים, מגלשות, סאונות ייחודיות ומיטות מים לעיסוי והרפיה.",
+    "source": "purewander.com",
+    "url": "https://purewander.com"
+  },
+  "curteavechechurch7": {
+    "id": "curteavechechurch7",
+    "name": "קורטאה ווקה וכנסיית סנט אנטון (Curtea Veche & Church)",
+    "query": "קורטאה ווקה וכנסיית סנט אנטון (Curtea Veche & Church), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "שרידי חצר הנסיכות הישנה מימי הביניים שהוקמה על ידי ולאד המשפד (דרקולה), לצד כנסיית סנט אנטון העתיקה.",
+    "source": "atlasobscura.com / wikiloc.com",
+    "url": "https://atlasobscura.com"
+  },
+  "arculdetriumf8": {
+    "id": "arculdetriumf8",
+    "name": "שער הניצחון של בוקרשט (Arcul de Triumf)",
+    "query": "שער הניצחון של בוקרשט (Arcul de Triumf), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "שער ניצחון מונומנטלי המוקדש לניצחון חיילי רומניה במלחמת העולם הראשונה, המציע תצפית רחבה על שדרות העיר.",
+    "source": "atlasobscura.com",
+    "url": "https://atlasobscura.com"
+  },
+  "springpalacepalatulprimv9": {
+    "id": "springpalacepalatulprimv9",
+    "name": "ארמון האביב / אחוזת צ'אושסקו (Spring Palace / Palatul Primăverii)",
+    "query": "ארמון האביב / אחוזת צ'אושסקו (Spring Palace / Palatul Primăverii), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "אחוזת המגורים המפוארת של הרודן ניקולאה צ'אושסקו ברובע פרימוורי, המציגה את אורח החיים הראוותני של המשפחה השלטת.",
+    "source": "lonelyplanet.com / nomadicmatt.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "dimitriegustinationalvil10": {
+    "id": "dimitriegustinationalvil10",
+    "name": "מוזיאון הכפר הלאומי (Dimitrie Gusti National Village Museum)",
+    "query": "מוזיאון הכפר הלאומי (Dimitrie Gusti National Village Museum), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "מוזיאון פתוח אתנוגרפי על שפת אגם הראסטראו, המציג מאות בתי עץ אותנטיים, כנסיות ומשקי חווה מכל רחבי רומניה.",
+    "source": "nomadicmatt.com",
+    "url": "https://nomadicmatt.com"
+  },
+  "crtureticarusel11": {
+    "id": "crtureticarusel11",
+    "name": "חנות הספרים קרטורשטי קרוסל (Cărturești Carusel)",
+    "query": "חנות הספרים קרטורשטי קרוסל (Cărturești Carusel), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "חנות ספרים מרהיבה בת שש קומות השוכנת במבנה מהמאה ה-19 בעיר העתיקה, בעלת מרפסות עקלקלות לבנות ועיצוב פנים מרשים.",
+    "source": "atlasobscura.com",
+    "url": "https://atlasobscura.com"
+  },
+  "carucubere12": {
+    "id": "carucubere12",
+    "name": "קארו קו ברה (Caru’ cu Bere)",
+    "query": "קארו קו ברה (Caru’ cu Bere), Romania",
+    "category": "Food",
+    "rec": true,
+    "visitMin": 45,
+    "desc": "מבשלת בירה ומסעדה היסטורית מהמפורסמות ברומניה, השוכנת במבנה נאו-גותי מרשים ומגישה אוכל רומני מסורתי.",
+    "source": "lonelyplanet.com / atlasobscura.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "cimigiugarden13": {
+    "id": "cimigiugarden13",
+    "name": "גני צ'ישמיג'יו (Cișmigiu Garden)",
+    "query": "גני צ'ישמיג'יו (Cișmigiu Garden), Romania",
+    "category": "Nature",
+    "rec": false,
+    "visitMin": 90,
+    "desc": "הפארק הציבורי העתיק ביותר בבוקרשט, הכולל אגם מלאכותי, פינות ישיבה מוצלות וגשרים רומנטיים בלב העיר.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "lakeherstrukingmihaiipar14": {
+    "id": "lakeherstrukingmihaiipar14",
+    "name": "אגם הראסטראו (Lake Herăstrău / King Mihai I Park)",
+    "query": "אגם הראסטראו (Lake Herăstrău / King Mihai I Park), Romania",
+    "category": "Nature",
+    "rec": false,
+    "visitMin": 90,
+    "desc": "פארק רחב ידיים ואגם בצפון העיר המוקף וילות יוקרתיות, מסעדות ומוזיאונים מרכזיים.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "vcretinaturepark15": {
+    "id": "vcretinaturepark15",
+    "name": "פארק הטבע וקרשט (Văcărești Nature Park)",
+    "query": "פארק הטבע וקרשט (Văcărești Nature Park), Romania",
+    "category": "Nature",
+    "rec": false,
+    "visitMin": 90,
+    "desc": "שמורת טבע ודלתה עירונית ייחודית שנוצרה באופן טבעי בתוך שטח מאגר מים נטוש בלב בוקרשט.",
+    "source": "atlasobscura.com",
+    "url": "https://atlasobscura.com"
+  },
+  "museumoftheromanianpeasa16": {
+    "id": "museumoftheromanianpeasa16",
+    "name": "מוזיאון האיכר הרומני (Museum of the Romanian Peasant)",
+    "query": "מוזיאון האיכר הרומני (Museum of the Romanian Peasant), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "מוזיאון אתנוגרפי עטור פרסים המציג את ההיסטוריה, הפולקלור, התלבושות והאמנות הכפרית של רומניה.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "mnac17": {
+    "id": "mnac17",
+    "name": "המוזיאון הלאומי לאמנות עכשווית (MNAC)",
+    "query": "המוזיאון הלאומי לאמנות עכשווית (MNAC), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "מוזיאון לאמנות עכשווית הממוקם בחלק ממבנה ארמון הפרלמנט העצום ומציג תערוכות מתחלפות.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "ceccecbankpalace18": {
+    "id": "ceccecbankpalace18",
+    "name": "ארמון בנק CEC (CEC Bank Palace)",
+    "query": "ארמון בנק CEC (CEC Bank Palace), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "מבנה מונומנטלי מרשים בסגנון בוז-אר עם כיפת זכוכית ומתכת על שדרת קאליה ויקטוריי.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "nationalhistorymuseum19": {
+    "id": "nationalhistorymuseum19",
+    "name": "המוזיאון הלאומי להיסטוריה של רומניה (National History Museum)",
+    "query": "המוזיאון הלאומי להיסטוריה של רומניה (National History Museum), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "מוזיאון היסטורי מרכזי המציג ממצאים מתקופת דאקיה והאימפריה הרומית, כולל שחזור מדויק של עמוד טראיאנוס.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "mogooaiapalace20": {
+    "id": "mogooaiapalace20",
+    "name": "ארמון מוגושואיה (Mogoșoaia Palace)",
+    "query": "ארמון מוגושואיה (Mogoșoaia Palace), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "ארמון היסטורי מהמאה ה-17 בסגנון ברנקובניאני ייחודי, הממוקם על שפת אגם צפונית לבוקרשט ומוקף גנים מטופחים.",
+    "source": "atlasobscura.com",
+    "url": "https://atlasobscura.com"
+  },
+  "snagovmonastery21": {
+    "id": "snagovmonastery21",
+    "name": "מנזר סנאגוב (Snagov Monastery)",
+    "query": "מנזר סנאגוב (Snagov Monastery), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "מנזר מבודד השוכן על אי בלב אגם סנאגוב מצפון לבוקרשט, המזוהה לפי המסורת כמקום קבורתו של ולאד המשפד.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "kaiamo22": {
+    "id": "kaiamo22",
+    "name": "מסעדת קאיאמו (Kaiamo)",
+    "query": "מסעדת קאיאמו (Kaiamo), Romania",
+    "category": "Food",
+    "rec": false,
+    "visitMin": 45,
+    "desc": "מסעדת קונספט קולינרית מודרנית בבוקרשט המציעה פרשנות חדשנית למטבח הרומני בגישת Farm-to-table.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "noua23": {
+    "id": "noua23",
+    "name": "מסעדת נואה (Noua)",
+    "query": "מסעדת נואה (Noua), Romania",
+    "category": "Food",
+    "rec": false,
+    "visitMin": 45,
+    "desc": "מסעדת שף מובילה בבירה המציעה מטבח רומני עכשווי המבוסס על חומרי גלם מקומיים מובחרים.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "kan24": {
+    "id": "kan24",
+    "name": "מסעדת קאנה (Kané)",
+    "query": "מסעדת קאנה (Kané), Romania",
+    "category": "Food",
+    "rec": false,
+    "visitMin": 45,
+    "desc": "מסעדת פיין דיינינג המציגה תפריטי טעימות מודרניים של מטבח רומני יצירתי.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "pasajulmaccavillacrosse25": {
+    "id": "pasajulmaccavillacrosse25",
+    "name": "פסאז' מאקה-וילקרוס (Pasajul Macca-Villacrosse)",
+    "query": "פסאז' מאקה-וילקרוס (Pasajul Macca-Villacrosse), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "ארקדה מקורה ומרשימה בבוקרשט המעוטרת בחלונות ויטראז' צהובים וכוללת בתי קפה וברים נעימים.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "stavropoleoschurch26": {
+    "id": "stavropoleoschurch26",
+    "name": "כנסיית סטברופולאוס (Stavropoleos Church)",
+    "query": "כנסיית סטברופולאוס (Stavropoleos Church), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "כנסייה אורתודוקסית מהמאה ה-18 בסגנון ברנקובניאני, הידועה בחצר פנימית שלווה עם קשתות מגולפות באבן.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "romanianpatriarchalcathe27": {
+    "id": "romanianpatriarchalcathe27",
+    "name": "הקתדרלה הפטריארכלית של רומניה (Romanian Patriarchal Cathedral)",
+    "query": "הקתדרלה הפטריארכלית של רומניה (Romanian Patriarchal Cathedral), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "קתדרלה שנבנתה במאה ה-17 על גבעת המיטרופוליה ומשמשת כמרכז הכנסייה האורתודוקסית הרומנית.",
+    "source": "nomadicmatt.com",
+    "url": "https://nomadicmatt.com"
+  },
+  "bellucemetery28": {
+    "id": "bellucemetery28",
+    "name": "בית הקברות בלו (Bellu Cemetery)",
+    "query": "בית הקברות בלו (Bellu Cemetery), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "בית קברות היסטורי ומונומנטלי המשמש כפנתיאון הלאומי של רומניה, שבו קבורים סופרים, אמנים ומנהיגים.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "laculmorii29": {
+    "id": "laculmorii29",
+    "name": "אגם מוריי (Lacul Morii)",
+    "query": "אגם מוריי (Lacul Morii), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "האגם הגדול ביותר בבוקרשט המציע שבילי הליכה וריצה פתוחים וטיילת שקיעה נעימה.",
+    "source": "wikiloc.com",
+    "url": "https://wikiloc.com"
+  },
+  "comanapark30": {
+    "id": "comanapark30",
+    "name": "פארק קומאנה (Comana Park)",
+    "query": "פארק קומאנה (Comana Park), Romania",
+    "category": "Nature",
+    "rec": false,
+    "visitMin": 90,
+    "desc": "שמורת טבע ויער מדרום לבוקרשט המציעה שבילי רכיבה על אופניים, שיט בביצות ופעילויות בטבע.",
+    "source": "wikiloc.com",
+    "url": "https://wikiloc.com"
+  },
+  "braov31": {
+    "id": "braov31",
+    "name": "בראשוב (Brașov)",
+    "query": "בראשוב (Brașov), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "אחת הערים השמורות והמתוירות ביותר ברומניה, השוכנת למרגלות הרי הקרפטים. העיר כוללת מרכז סקסוני ימי-ביניימי מוקף חומות, כיכר שוק ציורית, מסעדות מעולות ושער יציאה מעולה לטירות ומסלולי טבע.",
+    "source": "lonelyplanet.com / ricksteves.com / nomadicmatt.com / balkantrails.com / purewander.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "brancastle32": {
+    "id": "brancastle32",
+    "name": "טירת בראן (Bran Castle)",
+    "query": "טירת בראן (Bran Castle), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "המבצר הימי-ביניימי הניצב על צוק סלעי בבראן, הידוע בעולם כמקור ההשראה לטירת דרקולה של בראם סטוקר. הטירה כוללת חדרים תקופתיים, מעברים סודיים ותערוכות על בית המלוכה הרומני.",
+    "source": "lonelyplanet.com / ricksteves.com / atlasobscura.com / timeout.com / nomadicmatt.com / wikiloc.com / romanianfriend.com / balkantrails.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "pelecastle33": {
+    "id": "pelecastle33",
+    "name": "טירת פלש (Peleș Castle)",
+    "query": "טירת פלש (Peleș Castle), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "מעון הקיץ המלכותי המפואר של המלך קרול הראשון בסינאיה. נחשבת לאחת הטירות היפות והמרשימות באירופה, עם אדריכלות נאו-רנסאנסית, חדר נשק עשיר, גנים מטופחים ועיטורי עץ יוקרתיים.",
+    "source": "lonelyplanet.com / ricksteves.com / atlasobscura.com / nomadicmatt.com / balkantrails.com / purewander.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "blackchurchbisericaneagr34": {
+    "id": "blackchurchbisericaneagr34",
+    "name": "הכנסייה השחורה (Black Church / Biserica Neagră)",
+    "query": "הכנסייה השחורה (Black Church / Biserica Neagră), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "הכנסייה הגותית הגדולה ביותר ברומניה, שנבנתה במאה ה-14 בבראשוב. שמה ניתן לה לאחר שקירותיה הושחרו בשריפה הגדולה של 1689. היא מכילה עוגב ענק מהמאה ה-19 ואוסף נדיר של שטיחים אנטוליים.",
+    "source": "lonelyplanet.com / atlasobscura.com / nomadicmatt.com / romanianfriend.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "rnovfortress35": {
+    "id": "rnovfortress35",
+    "name": "מבצר רשנוב (Râșnov Fortress)",
+    "query": "מבצר רשנוב (Râșnov Fortress), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "מבצר צלבני-טבטוני מהמאה ה-13 השוכן על ראש גבעה סלעית מעל העיירה רשנוב. המתחם תיפקד כעיר מקלט קהילתית מבוצרת ומציע תצפית פנורמית על הרי בוצ'ג'י.",
+    "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "piatracraiuluinationalpa36": {
+    "id": "piatracraiuluinationalpa36",
+    "name": "הפארק הלאומי פיאטרה קראיולוי (Piatra Craiului National Park)",
+    "query": "הפארק הלאומי פיאטרה קראיולוי (Piatra Craiului National Park), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "פארק לאומי דרמטי המתאפיין ברכס אבן גיר צר ומשונן באורך 25 ק\"מ. האזור מציע טרקים אלפיניים מאתגרים, קניונים עמוקים, יערות עשירים בדובי בר ובקתות הרים ציוריות.",
+    "source": "lonelyplanet.com / romanianfriend.com / balkantrails.com / purewander.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "zrnetigorgesprpstiilezrn37": {
+    "id": "zrnetigorgesprpstiilezrn37",
+    "name": "קניון זרנשט (Zărnești Gorges / Prăpăstiile Zărneștiului)",
+    "query": "קניון זרנשט (Zărnești Gorges / Prăpăstiile Zărneștiului), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "קניון סלעי צר ומרהיב המוקף מצוקי גיר אנכיים גבוהים, המהווה את אחד ממסלולי ההליכה הפופולריים ביותר בפיאטרה קראיולוי.",
+    "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "libeartybearsanctuary38": {
+    "id": "libeartybearsanctuary38",
+    "name": "שמורת מקלט הדובים ליברטי (Libearty Bear Sanctuary)",
+    "query": "שמורת מקלט הדובים ליברטי (Libearty Bear Sanctuary), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "מקלט הדובים החומים הגדול בעולם הממוקם ביערות זרנשט, המשמש בית מוגן למעל 100 דובים שניצלו מתנאי שבי קשים.",
+    "source": "balkantrails.com",
+    "url": "https://balkantrails.com"
+  },
+  "sevenladderscanyon39": {
+    "id": "sevenladderscanyon39",
+    "name": "קניון שבעת הסולמות (Seven Ladders Canyon)",
+    "query": "קניון שבעת הסולמות (Seven Ladders Canyon), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "קניון צר ברכס פיאטרה מארה ליד בראשוב, המאפשר טיפוס חווייתי לצד מפלים שוצפים באמצעות סדרת סולמות וגשרוני מתכת.",
+    "source": "wikiloc.com / romanianfriend.com",
+    "url": "https://wikiloc.com"
+  },
+  "bucegimountainssphinxbab40": {
+    "id": "bucegimountainssphinxbab40",
+    "name": "הרי בוצ'ג'י, הספינקס והבאבלה (Bucegi Mountains, Sphinx & Babele)",
+    "query": "הרי בוצ'ג'י, הספינקס והבאבלה (Bucegi Mountains, Sphinx & Babele), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "רכס הרים פראי בעמק פראחובה הנגיש ברכבל מסינאיה או בושטני. על הרמה הגבוהה ניצבות תצורות סלע מפורסמות שפוסלו על ידי הרוח והטבע, וכן שבילים לפסגת אומו.",
+    "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com / balkantrails.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "mounttmpa41": {
+    "id": "mounttmpa41",
+    "name": "הר טמפה (Mount Tâmpa)",
+    "query": "הר טמפה (Mount Tâmpa), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "הר המתנשא ישירות מעל העיר בראשוב ומציע תצפית פנורמית מרהיבה על העיר העתיקה לצד השלט המפורסם 'Brașov'. העלייה אפשרית ברגל או ברכבל.",
+    "source": "nomadicmatt.com / wikiloc.com / balkantrails.com",
+    "url": "https://nomadicmatt.com"
+  },
+  "piaasfatului42": {
+    "id": "piaasfatului42",
+    "name": "כיכר המועצה בראשוב (Piața Sfatului)",
+    "query": "כיכר המועצה בראשוב (Piața Sfatului), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "הכיכר המרכזית בלב העיר העתיקה של בראשוב, המוקפת מבנים סקסוניים צבעוניים ובמרכזה בית המועצה ההיסטורי.",
+    "source": "lonelyplanet.com / nomadicmatt.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "stradasforii43": {
+    "id": "stradasforii43",
+    "name": "רחוב החבל (Strada Sforii)",
+    "query": "רחוב החבל (Strada Sforii), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "אחת הסמטאות הצרות ביותר באירופה, שרוחבה נע בין 111 ל-135 ס\"מ, ששימשה במקור כמעבר חירום לכבאים בבראשוב.",
+    "source": "atlasobscura.com / nomadicmatt.com",
+    "url": "https://atlasobscura.com"
+  },
+  "sinaia44": {
+    "id": "sinaia44",
+    "name": "סינאיה (Sinaia)",
+    "query": "סינאיה (Sinaia), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "עיירת נופש הררית יוקרתית בעמק פראחובה, ששימשה כעיירת הקיץ של משפחת המלוכה הרומנית ומשמשת מרכז לסקי ולטיולים.",
+    "source": "lonelyplanet.com / balkantrails.com / purewander.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "poianabraov45": {
+    "id": "poianabraov45",
+    "name": "פויאנה בראשוב (Poiana Brașov)",
+    "query": "פויאנה בראשוב (Poiana Brașov), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "אתר הסקי והנופש ההררי הפופולרי ביותר ברומניה, השוכן 12 ק\"מ מעל העיר בראשוב ומציע מסלולי סקי, רכיבת אופניים ומלונות נופש.",
+    "source": "wikiloc.com / balkantrails.com",
+    "url": "https://wikiloc.com"
+  },
+  "mgura46": {
+    "id": "mgura46",
+    "name": "הכפר מגורה (Măgura)",
+    "query": "הכפר מגורה (Măgura), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "כפר הררי פסטורלי ושליו בתוך הפארק הלאומי פיאטרה קראיולוי, המציע נופי מרעה ירוקים, בקתות מסורתיות ושקט כפרי מוחלט.",
+    "source": "wikiloc.com / purewander.com",
+    "url": "https://wikiloc.com"
+  },
+  "cabanacurmtura47": {
+    "id": "cabanacurmtura47",
+    "name": "בקתת קורמטורה (Cabana Curmătura)",
+    "query": "בקתת קורמטורה (Cabana Curmătura), Romania",
+    "category": "Sleep",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "בקתת הרים מסורתית ואהובה ברכס פיאטרה קראיולוי, המהווה צומת שבילים מרכזי למטיילים ומציעה ארוחות חמות ולינה.",
+    "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "cantacuzinocastle48": {
+    "id": "cantacuzinocastle48",
+    "name": "טירת קנטקוזינו (Cantacuzino Castle)",
+    "query": "טירת קנטקוזינו (Cantacuzino Castle), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "טירה מרשימה בסגנון נאו-רומני בעיירה בושטני, המוקפת גנים ומזרקות עם נוף ישיר למצוקי הרי בוצ'ג'י.",
+    "source": "romanianfriend.com",
+    "url": "https://romanianfriend.com"
+  },
+  "ciucamountains49": {
+    "id": "ciucamountains49",
+    "name": "הרי צ'יוקאש (Ciucaș Mountains)",
+    "query": "הרי צ'יוקאש (Ciucaș Mountains), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "רכס הרים פוטוגני ליד בראשוב הידוע בתצורות סלע קרסטיות מרהיבות, עמקים ירוקים ומסלולי הליכה נוחים.",
+    "source": "romanianfriend.com",
+    "url": "https://romanianfriend.com"
+  },
+  "prejmerfortifiedchurch50": {
+    "id": "prejmerfortifiedchurch50",
+    "name": "הכנסייה המבוצרת בפרז'מר (Prejmer Fortified Church)",
+    "query": "הכנסייה המבוצרת בפרז'מר (Prejmer Fortified Church), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "כנסייה סקסונית מבוצרת במיוחד שהוכרזה כאתר מורשת עולמית של אונסק\"ו, בעלת חומות מגן עבות ומאות תאי מגורים לתושבי הכפר בעת מצור.",
+    "source": "romanianfriend.com",
+    "url": "https://romanianfriend.com"
+  },
+  "sergiana51": {
+    "id": "sergiana51",
+    "name": "מסעדת סרג'יאנה (Sergiana)",
+    "query": "מסעדת סרג'יאנה (Sergiana), Romania",
+    "category": "Food",
+    "rec": true,
+    "visitMin": 45,
+    "desc": "מסעדה מסורתית מובילה בבראשוב השוכנת במרתף לבנים עתיק ומגישה מאכלים טרנסילבניים, רומניים והונגריים עשירים.",
+    "source": "purewander.com",
+    "url": "https://purewander.com"
+  },
+  "sibiu52": {
+    "id": "sibiu52",
+    "name": "סיביו (Sibiu)",
+    "query": "סיביו (Sibiu), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "אחת הערים היפות ברומניה ובירת התרבות האירופית לשעבר. מרכזה ההיסטורי מאופיין בסמטאות אבן, כיכרות מרשימות, חומות ימי-ביניימיות וגגות בעלי חלונות ייחודיים הידועים כ'עיניים של סיביו'.",
+    "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com / balkantrails.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "sighioara53": {
+    "id": "sighioara53",
+    "name": "סיגישוארה (Sighișoara)",
+    "query": "סיגישוארה (Sighișoara), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "עיר מצודה ימי-ביניימית שמורה במלואה שהוכרזה כאתר מורשת עולמית של אונסק\"ו. העיר מתאפיינת ברחובות מרוצפי אבן, בתים צבועים בגוני פסטל, מגדלי שמירה ומגדל שעון מפורסם, ומוכרת כמקום הולדתו של ולאד המשפד.",
+    "source": "lonelyplanet.com / ricksteves.com / nomadicmatt.com / winetravelguides.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "transfgranlakeblea54": {
+    "id": "transfgranlakeblea54",
+    "name": "כביש טרנספגרשאן ואגם בלאה (Transfăgărășan & Lake Bâlea)",
+    "query": "כביש טרנספגרשאן ואגם בלאה (Transfăgărășan & Lake Bâlea), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "כביש נופי מפותל והרפתקני החוצה את הרי פגראש בגובה מעל 2,000 מטר, ומגיע אל אגם בלאה הקרחוני. נחשב לאחד מנתיבי הנסיעה היפים בעולם (פתוח בקיץ ובסתיו).",
+    "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com / balkantrails.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "corvincastlecastelulcorv55": {
+    "id": "corvincastlecastelulcorv55",
+    "name": "טירת קורבין (Corvin Castle / Castelul Corvinilor)",
+    "query": "טירת קורבין (Corvin Castle / Castelul Corvinilor), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "טירה גותית-רנסנסית מונומנטלית בחונדוארה, הנחשבת למבצר הימי-ביניימי המרשים ביותר ברומניה, עם גשר מתרומם, צריחים נישאים ואולמות אבירים.",
+    "source": "lonelyplanet.com / atlasobscura.com / romanianfriend.com / balkantrails.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "fgramountainsmoldoveanup56": {
+    "id": "fgramountainsmoldoveanup56",
+    "name": "הרי פגראש ופסגת מולדובאנו (Făgăraș Mountains & Moldoveanu Peak)",
+    "query": "הרי פגראש ופסגת מולדובאנו (Făgăraș Mountains & Moldoveanu Peak), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "הרכס הגבוה ביותר ברומניה הכולל את הפסגה הגבוהה במדינה (מולדובאנו, 2,544 מ') ואגמים קרחוניים מרהיבים, המהווים גן עדן לטרקים ומטפסי הרים.",
+    "source": "nomadicmatt.com / wikiloc.com / romanianfriend.com",
+    "url": "https://nomadicmatt.com"
+  },
+  "astranationalmuseumcompl57": {
+    "id": "astranationalmuseumcompl57",
+    "name": "מוזיאון אסטרה הפתוח (ASTRA National Museum Complex)",
+    "query": "מוזיאון אסטרה הפתוח (ASTRA National Museum Complex), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "המוזיאון הפתוח הגדול באירופה, המשתרע על פני עשרות דונמים ביער מדרום לסיביו ומציג מאות טחנות רוח ומים, בתי חווה ובתי מלאכה מסורתיים.",
+    "source": "lonelyplanet.com / nomadicmatt.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "biertanfortifiedchurch58": {
+    "id": "biertanfortifiedchurch58",
+    "name": "הכנסייה המבוצרת בבירטאן (Biertan Fortified Church)",
+    "query": "הכנסייה המבוצרת בבירטאן (Biertan Fortified Church), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "כנסייה גותית מבוצרת ומוקפת שלוש חומות הגנה בכפר בירטאן, אתר מורשת עולמית של אונסק\"ו המייצג את המורשת הסקסונית של טרנסילבניה.",
+    "source": "lonelyplanet.com / romanianfriend.com / balkantrails.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "viscri59": {
+    "id": "viscri59",
+    "name": "הכפר ויסקרי (Viscri)",
+    "query": "הכפר ויסקרי (Viscri), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "כפר סקסוני אותנטי ומשומר בעל כנסייה מבוצרת של אונסק\"ו, בתי חווה מסורתיים ופרויקטים לשימור מורשת הנתמכים על ידי המלך צ'ארלס השלישי.",
+    "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com / balkantrails.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "brukenthalnationalmuseum60": {
+    "id": "brukenthalnationalmuseum60",
+    "name": "המוזיאון הלאומי ברוקנטל (Brukenthal National Museum)",
+    "query": "המוזיאון הלאומי ברוקנטל (Brukenthal National Museum), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "המוזיאון הוותיק ביותר ברומניה, השוכן בארמון בארוקי בכיכר פיאצה מארה בסיביו ומציג אוספי אמנות אירופית ורומנית יקרי ערך.",
+    "source": "nomadicmatt.com / balkantrails.com",
+    "url": "https://nomadicmatt.com"
+  },
+  "bridgeoflies61": {
+    "id": "bridgeoflies61",
+    "name": "גשר השקרים בסיביו (Bridge of Lies)",
+    "query": "גשר השקרים בסיביו (Bridge of Lies), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "גשר הברזל היצוק הראשון ברומניה, הממוקם בעיר העתיקה של סיביו וקשור באגדות מקומיות לפיהן הגשר יקרוס אם ייאמר עליו שקר.",
+    "source": "atlasobscura.com / nomadicmatt.com",
+    "url": "https://atlasobscura.com"
+  },
+  "clocktower62": {
+    "id": "clocktower62",
+    "name": "מגדל השעון בסיגישוארה (Clock Tower)",
+    "query": "מגדל השעון בסיגישוארה (Clock Tower), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "סמלה של מצודת סיגישוארה מהמאה ה-14, הכולל גג רעפים צבעוני, מנגנון בובות עץ מכני ותצפית פנורמית על העיר.",
+    "source": "lonelyplanet.com / atlasobscura.com / romanianfriend.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "albaiuliacitadel63": {
+    "id": "albaiuliacitadel63",
+    "name": "מצודת אלבה יוליה (Alba Iulia Citadel)",
+    "query": "מצודת אלבה יוליה (Alba Iulia Citadel), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "מצודת כוכב ענקית ושמורה היטב בסגנון וובאן, שבה הוכרז איחוד רומניה ב-1918, הכוללת שערים מונומנטליים, קתדרלות וטקסי חילופי משמר.",
+    "source": "romanianfriend.com / winetravelguides.com",
+    "url": "https://romanianfriend.com"
+  },
+  "poenarifortress64": {
+    "id": "poenarifortress64",
+    "name": "מצודת פוינארי (Poenari Fortress)",
+    "query": "מצודת פוינארי (Poenari Fortress), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "מבצר הררי תלול על ראש צוק מעל עמק ארג'ש, ששימש כמעוזו ההיסטורי האותנטי של ולאד המשפד ודורש טיפוס של 1,480 מדרגות.",
+    "source": "atlasobscura.com / romanianfriend.com / balkantrails.com",
+    "url": "https://atlasobscura.com"
+  },
+  "curteadeargemonastery65": {
+    "id": "curteadeargemonastery65",
+    "name": "מנזר קורטאה דה ארג'ש (Curtea de Argeș Monastery)",
+    "query": "מנזר קורטאה דה ארג'ש (Curtea de Argeș Monastery), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "קתדרלה מהמאה ה-16 בעלת אדריכלות ייחודית וצריחים מפותלים, המשמשת כמקום קבורתם של מלכי רומניה.",
+    "source": "atlasobscura.com",
+    "url": "https://atlasobscura.com"
+  },
+  "mrginimeasibiului66": {
+    "id": "mrginimeasibiului66",
+    "name": "מרג'ינימאה סיביולוי (Mărginimea Sibiului)",
+    "query": "מרג'ינימאה סיביולוי (Mărginimea Sibiului), Romania",
+    "category": "Food",
+    "rec": false,
+    "visitMin": 45,
+    "desc": "אזור כפרים ציוריים למרגלות הרי קינדרל ליד סיביו, הידוע בשימור מסורות רועים, גבינות מקומיות משובחות ואירוח כפרי.",
+    "source": "romanianfriend.com",
+    "url": "https://romanianfriend.com"
+  },
+  "casteljidvei67": {
+    "id": "casteljidvei67",
+    "name": "יקב וטירת ז'ידוויי (Castel Jidvei)",
+    "query": "יקב וטירת ז'ידוויי (Castel Jidvei), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "טירה מהמאה ה-16 ואחוזת יין בולטת באזור נהר טארנאבה, המפורסמת ביינות לבנים איכותיים ובסיורי טעימות במרתפיה ההיסטוריים.",
+    "source": "winetravelguides.com",
+    "url": "https://winetravelguides.com"
+  },
+  "devacitadel68": {
+    "id": "devacitadel68",
+    "name": "מצודת דווה (Deva Citadel)",
+    "query": "מצודת דווה (Deva Citadel), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "שרידי מבצר היסטורי הניצב בראש הר געש כבוי מעל העיר דווה, אליו ניתן להעפיל ברכבל תלול.",
+    "source": "lonelyplanet.com / atlasobscura.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "sarmizegetusaregia69": {
+    "id": "sarmizegetusaregia69",
+    "name": "סרמיזגטוסה רג'יה (Sarmizegetusa Regia)",
+    "query": "סרמיזגטוסה רג'יה (Sarmizegetusa Regia), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "הבירה הצבאית, הדתית והפוליטית של ממלכת דאקיה הקדומה לפני הכיבוש הרומי, השוכנת בהרי אורשטיה ומוכרזת כאתר אונסק\"ו.",
+    "source": "atlasobscura.com / romanianfriend.com",
+    "url": "https://atlasobscura.com"
+  },
+  "clujnapoca70": {
+    "id": "clujnapoca70",
+    "name": "קלוז'-נאפוקה (Cluj-Napoca)",
+    "query": "קלוז'-נאפוקה (Cluj-Napoca), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "העיר הגדולה והחשובה ביותר בטרנסילבניה, מרכז תרבותי, אקדמי וטכנולוגי תוסס המציע אדריכלות היסטורית, בתי קפה מעולים וחיי לילה עשירים.",
+    "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com / balkantrails.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "salinaturda71": {
+    "id": "salinaturda71",
+    "name": "מכרה המלח בטורדה (Salina Turda)",
+    "query": "מכרה המלח בטורדה (Salina Turda), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "מכרה מלח עתיק ועצום שהוסב לפארק שעשועים ומרכז בריאות תת-קרקעי עתידני, הכולל אגם עם סירות משוטים, גלגל ענק ומתקני ספורט בתוך אולמות מלח מוארים.",
+    "source": "atlasobscura.com / nomadicmatt.com / romanianfriend.com",
+    "url": "https://atlasobscura.com"
+  },
+  "oradea72": {
+    "id": "oradea72",
+    "name": "אוראדיה (Oradea)",
+    "query": "אוראדיה (Oradea), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "פנינה אדריכלית סמוך לגבול הונגריה, המפורסמת באוסף המבנים המרהיב שלה בסגנון ארט נובו וזצסיון וינאי שעברו שחזור קפדני.",
+    "source": "lonelyplanet.com / wikiloc.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "apuseninaturalpark73": {
+    "id": "apuseninaturalpark73",
+    "name": "הפארק הלאומי אפוסני (Apuseni Natural Park)",
+    "query": "הפארק הלאומי אפוסני (Apuseni Natural Park), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "פארק טבע מרהיב במערב הקרפטים המתאפיין בכפרי עץ מסורתיים, עמקי קרסט ומאות מערות נטיפים וקרח תת-קרקעיות.",
+    "source": "romanianfriend.com",
+    "url": "https://romanianfriend.com"
+  },
+  "scrioaraicecave74": {
+    "id": "scrioaraicecave74",
+    "name": "מערת הקרח סקרישוארה (Scărișoara Ice Cave)",
+    "query": "מערת הקרח סקרישוארה (Scărișoara Ice Cave), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "מערה טבעית בהרי אפוסני המכילה את אחד מקרחוני הקרסט התת-קרקעיים הגדולים בעולם, אליה יורדים במדרגות עץ אל עולם קפוא.",
+    "source": "romanianfriend.com",
+    "url": "https://romanianfriend.com"
+  },
+  "peteraurilor75": {
+    "id": "peteraurilor75",
+    "name": "מערת הדובים (Peștera Urșilor)",
+    "query": "מערת הדובים (Peștera Urșilor), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "מערת נטיפים שמורה להפליא שבה התגלו שלדים ומאובנים של מאות דובי מערות שחיו באזור בתקופת הקרח.",
+    "source": "romanianfriend.com",
+    "url": "https://romanianfriend.com"
+  },
+  "cheileturzii76": {
+    "id": "cheileturzii76",
+    "name": "קניון טורדה (Cheile Turzii)",
+    "query": "קניון טורדה (Cheile Turzii), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "שמורת טבע מרשימה של קניון צר בעל מצוקי גיר תלולים המתנשאים לגובה מאות מטרים מעל נחל האשדאט, עם שבילי הליכה וגשרים תלויים.",
+    "source": "wikiloc.com / romanianfriend.com",
+    "url": "https://wikiloc.com"
+  },
+  "hoiabaciuforest77": {
+    "id": "hoiabaciuforest77",
+    "name": "יער הויה-באצ'ו (Hoia-Baciu Forest)",
+    "query": "יער הויה-באצ'ו (Hoia-Baciu Forest), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "יער מסתורי סמוך לקלוז'-נאפוקה הידוע בעציו המפותלים בצורה מוזרה ובסיפורי פולקלור על תופעות על-טבעיות.",
+    "source": "atlasobscura.com / nomadicmatt.com",
+    "url": "https://atlasobscura.com"
+  },
+  "blackeaglepalace78": {
+    "id": "blackeaglepalace78",
+    "name": "ארמון הנשר השחור (Black Eagle Palace)",
+    "query": "ארמון הנשר השחור (Black Eagle Palace), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "מתחם ארכיטקטוני מרהיב בסגנון ארט נובו בכיכר אונירי שבאוראדיה, הכולל גלריית זכוכית מעוטרת בוויטראז'ים.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "alexandruborzabotanicalg79": {
+    "id": "alexandruborzabotanicalg79",
+    "name": "הגן הבוטני של קלוז' (Alexandru Borza Botanical Garden)",
+    "query": "הגן הבוטני של קלוז' (Alexandru Borza Botanical Garden), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "גן בוטני רחב ידיים שנוסד במאה ה-19, הכולל אלפי מיני צמחים, גן יפני אותנטי וחממות טרופיות.",
+    "source": "nomadicmatt.com",
+    "url": "https://nomadicmatt.com"
+  },
+  "untoldfestival80": {
+    "id": "untoldfestival80",
+    "name": "פסטיבל אנטולד (Untold Festival)",
+    "query": "פסטיבל אנטולד (Untold Festival), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "אחד מפסטיבלי המוזיקה האלקטרונית הגדולים והמובילים באירופה, הנערך מדי קיץ במרכז קלוז'-נאפוקה.",
+    "source": "lonelyplanet.com / romanianfriend.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "bilefelix81": {
+    "id": "bilefelix81",
+    "name": "אתר המרחצאות ביילה פליקס (Băile Felix)",
+    "query": "אתר המרחצאות ביילה פליקס (Băile Felix), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "אתר נופש וספא תרמי מפורסם סמוך לאוראדיה המציע בריכות מים גיאותרמיים הפתוחות לאורך כל השנה.",
+    "source": "romanianfriend.com",
+    "url": "https://romanianfriend.com"
+  },
+  "paintedmonasteriesofbuco82": {
+    "id": "paintedmonasteriesofbuco82",
+    "name": "המנזרים המצוירים בבוקובינה (Painted Monasteries of Bucovina)",
+    "query": "המנזרים המצוירים בבוקובינה (Painted Monasteries of Bucovina), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "קבוצת מנזרים מבוצרים שהוכרזו כאתר מורשת עולמית של אונסק\"ו (כולל סוצ'ביצה, וורונץ, מולדובוצה והומור), המפורסמים בציורי קיר חיצוניים מרהיבים מהמאות ה-15 וה-16.",
+    "source": "lonelyplanet.com / nomadicmatt.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "maramure83": {
+    "id": "maramure83",
+    "name": "מרמורש (Maramureș)",
+    "query": "מרמורש (Maramureș), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "חבל ארץ צפוני וכפרי המשמר אורח חיים מסורתי וייחודי ברומניה, הידוע בשערי עץ מגולפים, לבוש מסורתי עממי, עמקים פסטורליים וכנסיות עץ מרשימות.",
+    "source": "lonelyplanet.com / nomadicmatt.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "merrycemetery84": {
+    "id": "merrycemetery84",
+    "name": "בית הקברות השמח בספנצה (Merry Cemetery)",
+    "query": "בית הקברות השמח בספנצה (Merry Cemetery), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "בית קברות ייחודי בכפר ספנצה שבמרמורש, שבו מאות צלבי עץ צבועים בכחול עז מעוטרים בציורים נאיביים ובשירים הומוריסטיים המתארים את חיי הנפטרים.",
+    "source": "ricksteves.com / romanianfriend.com",
+    "url": "https://ricksteves.com"
+  },
+  "woodenchurchesofmaramure85": {
+    "id": "woodenchurchesofmaramure85",
+    "name": "כנסיות העץ של מרמורש (Wooden Churches of Maramureș)",
+    "query": "כנסיות העץ של מרמורש (Wooden Churches of Maramureș), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "עשרות כנסיות עץ גותיות-אורתודוקסיות בעלות צריחים גבוהים ומחודדים וגגות רעפי עץ, שחלקן הוכרזו כאתרי מורשת עולמית של אונסק\"ו.",
+    "source": "lonelyplanet.com / ricksteves.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "mocniasteamtrain86": {
+    "id": "mocniasteamtrain86",
+    "name": "רכבת הקיטור מוקניצה (Mocănița Steam Train)",
+    "query": "רכבת הקיטור מוקניצה (Mocănița Steam Train), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "נסיעה חווייתית ברכבת קיטור עתיקה הנוסעת על מסילה צרה לאורך עמק נהר הוואסר בהרי מרמורש הפראיים.",
+    "source": "romanianfriend.com",
+    "url": "https://romanianfriend.com"
+  },
+  "sighetmemorialmuseum87": {
+    "id": "sighetmemorialmuseum87",
+    "name": "אנדרטת קורבנות הקומוניזם בסיגט (Sighet Memorial Museum)",
+    "query": "אנדרטת קורבנות הקומוניזם בסיגט (Sighet Memorial Museum), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "מוזיאון הנצחה עוצמתי השוכן במבנה כלא פוליטי לשעבר בעיר סיגטו מרמאציאי, המוקדש לקורבנות המשטר הקומוניסטי וההתנגדות ברומניה.",
+    "source": "atlasobscura.com / nomadicmatt.com",
+    "url": "https://atlasobscura.com"
+  },
+  "rodnamountains88": {
+    "id": "rodnamountains88",
+    "name": "הרי רודנה (Rodna Mountains)",
+    "query": "הרי רודנה (Rodna Mountains), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "הפארק הלאומי והרכס האלפיני הגבוה והפראי ביותר בצפון הקרפטים הרומניים, המציע אגמים קרחוניים ופסגות נישאות מעל 2,300 מטר.",
+    "source": "wikiloc.com / romanianfriend.com",
+    "url": "https://wikiloc.com"
+  },
+  "ceahlumountainsredlake89": {
+    "id": "ceahlumountainsredlake89",
+    "name": "הרי צ'חלאו והאגם האדום (Ceahlău Mountains & Red Lake)",
+    "query": "הרי צ'חלאו והאגם האדום (Ceahlău Mountains & Red Lake), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "מסיב הררי דרמטי במזרח הקרפטים המאופיין בצוקים בולטים, מפלים שוצפים וקרבה לאגם האדום (Lacul Roșu) וקניון ביקאז.",
+    "source": "wikiloc.com / romanianfriend.com",
+    "url": "https://wikiloc.com"
+  },
+  "iai90": {
+    "id": "iai90",
+    "name": "יאשי (Iași)",
+    "query": "יאשי (Iași), Romania",
+    "category": "City",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "הבירה ההיסטורית של חבל מולדובה, עיר אלגנטית ותרבותית המציעה ארמונות מרשימים, כנסיות עתיקות ואוניברסיטאות מובילות.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "cotnariwineregion91": {
+    "id": "cotnariwineregion91",
+    "name": "אזור היין של קוטנרי (Cotnari Wine Region)",
+    "query": "אזור היין של קוטנרי (Cotnari Wine Region), Romania",
+    "category": "Food",
+    "rec": true,
+    "visitMin": 45,
+    "desc": "אזור כרמים עתיק בגבעות מולדובה המפורסם מאז המאה ה-15 ביינות הקינוח הלבנים המסורתיים שלו ובסיורי יקבים היסטוריים.",
+    "source": "winetravelguides.com",
+    "url": "https://winetravelguides.com"
+  },
+  "breb92": {
+    "id": "breb92",
+    "name": "הכפר ברב (Breb)",
+    "query": "הכפר ברב (Breb), Romania",
+    "category": "City",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "כפר מסורתי וציורי בעמק מארה שבמרמורש, המהווה מוקד למלאכות יד מסורתיות, נגרות עץ ואירוח כפרי אותנטי.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "danubedelta93": {
+    "id": "danubedelta93",
+    "name": "שמורת הביוספרה של דלתת הדנובה (Danube Delta)",
+    "query": "שמורת הביוספרה של דלתת הדנובה (Danube Delta), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "שמורת הביוספרה ודלתת הנהר הגדולה והשמורה ביותר באירופה. גן עדן לצפרות ולטבע פראי הכולל מבוך תעלות, אגמים, איים צפים ומושבות שקנאים הגדולות באירופה.",
+    "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "constana94": {
+    "id": "constana94",
+    "name": "קונסטנצה (Constanța)",
+    "query": "קונסטנצה (Constanța), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "עיר הנמל והחוף הראשית של רומניה לחוף הים השחור, שנוסדה בעת העתיקה ומציעה מוזיאונים היסטוריים, טיילת חוף ומבנים ארכיטקטוניים מרשימים.",
+    "source": "lonelyplanet.com / nomadicmatt.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "constanacasino95": {
+    "id": "constanacasino95",
+    "name": "קזינו קונסטנצה (Constanța Casino)",
+    "query": "קזינו קונסטנצה (Constanța Casino), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "מבנה אר נובו איקוני ומפואר הניצב על שפת הים השחור בטיילת של קונסטנצה, שנחשב לאחד המונומנטים המפורסמים ברומניה.",
+    "source": "atlasobscura.com",
+    "url": "https://atlasobscura.com"
+  },
+  "tulcea96": {
+    "id": "tulcea96",
+    "name": "טולצ'אה (Tulcea)",
+    "query": "טולצ'אה (Tulcea), Romania",
+    "category": "City",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "עיר נמל על גדות הדנובה המשמשת כשער הכניסה הראשי לסיורי שיט ולחקר שמורת דלתת הדנובה.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "leteaforest97": {
+    "id": "leteaforest97",
+    "name": "יער לטאה (Letea Forest)",
+    "query": "יער לטאה (Letea Forest), Romania",
+    "category": "Nature",
+    "rec": false,
+    "visitMin": 90,
+    "desc": "יער קדום ייחודי בדלתת הדנובה הגדל על דיונות חול, המפורסם בסוסי הבר החופשיים המשוטטים בו ובצמחייה הסובטרופית שבו.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "enisalafortresshistria98": {
+    "id": "enisalafortresshistria98",
+    "name": "מבצר אניסלה והעיר העתיקה היסטריה (Enisala Fortress & Histria)",
+    "query": "מבצר אניסלה והעיר העתיקה היסטריה (Enisala Fortress & Histria), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "אתרים ארכיאולוגיים מרשימים בדוברוג'ה, הכוללים מצודה ימי-ביניימית של בני גנואה המשקיפה על הלגונות ושרידי עיר נמל יוונית-רומית עתיקה.",
+    "source": "lonelyplanet.com / atlasobscura.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "guraportieivamaveche99": {
+    "id": "guraportieivamaveche99",
+    "name": "גורה פורטיציי וואמה וקה (Gura Portiței & Vama Veche)",
+    "query": "גורה פורטיציי וואמה וקה (Gura Portiței & Vama Veche), Romania",
+    "category": "Nature",
+    "rec": false,
+    "visitMin": 90,
+    "desc": "חופי רחצה בולטים על הים השחור – החל מרצועת חול שקטה ובתולית בין הלגונה לים בגורה פורטיציי ועד לחוף הבוהמי והתוסס בואמה וקה.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "sulinasfntugheorghe100": {
+    "id": "sulinasfntugheorghe100",
+    "name": "סולינה וספנטו גאורגה (Sulina & Sfântu Gheorghe)",
+    "query": "סולינה וספנטו גאורגה (Sulina & Sfântu Gheorghe), Romania",
+    "category": "City",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "כפרי דייגים ועיירות חוף מבודדות בקצות ערוצי הדנובה, אליהם ניתן להגיע בשיט בלבד, המציעים חופי ים בתוליים ואווירה שלווה.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "irongatesdecebalsculptur101": {
+    "id": "irongatesdecebalsculptur101",
+    "name": "הפארק הלאומי שערי הברזל ופסל דצ'באל (Iron Gates & Decebal Sculpture)",
+    "query": "הפארק הלאומי שערי הברזל ופסל דצ'באל (Iron Gates & Decebal Sculpture), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "קניון נהר הדנובה הדרמטי בגבול רומניה וסרביה, שבו נחצב בסלע צוק ענק בדמותו של המלך הדאקי דצ'באל, לצד מערות ומסלולי שיט במעוק הנהר.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "retezatnationalpark102": {
+    "id": "retezatnationalpark102",
+    "name": "הפארק הלאומי רטזאט (Retezat National Park)",
+    "query": "הפארק הלאומי רטזאט (Retezat National Park), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "פארק לאומי אלפיני פראי בקרפטים הדרומיים, הכולל עשרות אגמים קרחוניים צלולים, יערות עתיקים ופסגות תלולות מעל 2,500 מטר.",
+    "source": "wikiloc.com / romanianfriend.com",
+    "url": "https://wikiloc.com"
+  },
+  "timioara103": {
+    "id": "timioara103",
+    "name": "טימישוארה (Timișoara)",
+    "query": "טימישוארה (Timișoara), Romania",
+    "category": "City",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "העיר המרכזית בחבל באנאט, עיר בעלת היסטוריה עשירה וכיכרות רחבות ידיים, שהייתה מוקד פרוץ המהפכה הרומנית בשנת 1989.",
+    "source": "lonelyplanet.com / winetravelguides.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "endlesscolumn104": {
+    "id": "endlesscolumn104",
+    "name": "עמוד האינסוף בטרגו ז'יו (Endless Column)",
+    "query": "עמוד האינסוף בטרגו ז'יו (Endless Column), Romania",
+    "category": "Attraction",
+    "rec": false,
+    "visitMin": 60,
+    "desc": "פסל מונומנטלי מפורסם מעשה ידי הפסל קונסטנטין ברנקושי בעיר טרגו ז'יו, המהווה יצירת מופת של האמנות המודרנית להנצחת גיבורי רומניה.",
+    "source": "lonelyplanet.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "transalpinadn67c105": {
+    "id": "transalpinadn67c105",
+    "name": "כביש טרנסאלפינה (Transalpina / DN 67C)",
+    "query": "כביש טרנסאלפינה (Transalpina / DN 67C), Romania",
+    "category": "Attraction",
+    "rec": true,
+    "visitMin": 60,
+    "desc": "כביש הנסיעה ההררי הסלול הגבוה ביותר ברומניה, החוצה את הרי פארנג בגובה שיא של 2,145 מטר ומציע נופים הרריים עוצרי נשימה.",
+    "source": "lonelyplanet.com / romanianfriend.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "dealumarewineregion106": {
+    "id": "dealumarewineregion106",
+    "name": "אזור היין דיאלו מארה (Dealu Mare Wine Region)",
+    "query": "אזור היין דיאלו מארה (Dealu Mare Wine Region), Romania",
+    "category": "Food",
+    "rec": true,
+    "visitMin": 45,
+    "desc": "אזור כרמים וייצור יין מוביל במורדות הדרומיים של הקרפטים, המפורסם ביינות האדומים האיכותיים שלו (בעיקר פטסקה נגרה) ודרך היין של פראחובה.",
+    "source": "lonelyplanet.com / winetravelguides.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "viatransilvanica107": {
+    "id": "viatransilvanica107",
+    "name": "שביל ויה טרנסילבניקה (Via Transilvanica)",
+    "query": "שביל ויה טרנסילבניקה (Via Transilvanica), Romania",
+    "category": "Nature",
+    "rec": true,
+    "visitMin": 90,
+    "desc": "שביל מסעות והליכה לאומי באורך 1,400 ק\"מ החוצה את רומניה מצפון לדרום (מפוטנה עד דרובטה-טורנו סברין) ועובר דרך קהילות כפריות ואתרי אונסק\"ו.",
+    "source": "lonelyplanet.com / timeout.com / wikiloc.com",
+    "url": "https://lonelyplanet.com"
+  },
+  "bigrwaterfall108": {
+    "id": "bigrwaterfall108",
+    "name": "מפל ביגאר (Bigăr Waterfall)",
+    "query": "מפל ביגאר (Bigăr Waterfall), Romania",
+    "category": "Nature",
+    "rec": false,
+    "visitMin": 90,
+    "desc": "מפל מים ייחודי בעמק מיניש הזורם על גבי סלע חרוטי המכוסה באזוב ירוק עשיר.",
+    "source": "atlasobscura.com",
+    "url": "https://atlasobscura.com"
+  }
+};
+
+// Not-kept points from the Route Map's other regions, carried forward lightly
+// (name/category/query/region only) for the "worth knowing about" section.
+const EXTRA_REGIONS = [];
+
+const DAYS = [
+  { id:1, label:"יום 1", date:"05.10.2026", color:DAY_COLORS[1], base:"בוקרשט", baseQuery:"בוקרשט, Romania", isDeparture:false, intro:"מתחילים את הטיול בבירה הרומנית עם ארכיטקטורה מונומנטלית ושוטטות בסמטאות העיר העתיקה מלאות החיים 🏛️🍷 מסיימים בארוחת ערב מסורתית אותנטית.", route:["palaceofparliament2","caleavictoriei4","revolutionsquare5","bucharestoldtown1","carucubere12"], restaurants:[{"id":"carucubere12","note":"מסעדה/אוכל"}], note:"מומלץ להזמין מראש סיור בארמון הפרלמנט ושולחן למסעדת קארו קו ברה." },
+  { id:2, label:"יום 2", date:"06.10.2026", color:DAY_COLORS[2], base:"בראשוב", baseQuery:"בראשוב, Romania", isDeparture:false, intro:"יוצאים צפונה ברכב לעבר רכס הקרפטים הציורי 🌲 מבקרים בארמון הקיץ המלכותי בסינאיה וממשיכים לערב מקסים בכיכר המרכזית של בראשוב.", route:["sinaia44","pelecastle33","braov31","piaasfatului42","blackchurchbisericaneagr34","sergiana51"], restaurants:[{"id":"sergiana51","note":"מסעדה/אוכל"}], note:"נסיעה של כשעתיים וחצי מבוקרשט לסינאיה, מומלץ לצאת מוקדם כדי להקדים את הפקקים בעמק פראחובה." },
+  { id:3, label:"יום 3", date:"07.10.2026", color:DAY_COLORS[3], base:"בראשוב", baseQuery:"בראשוב, Romania", isDeparture:false, intro:"יום מרתק המשלב ביקור מרגש במקלט הדובים ביערות זרנשט עם טירת בראן האייקונית 🐻🏰 לקראת שקיעה עולים לתצפית פנורמית מהר טמפה.", route:["libeartybearsanctuary38","rnovfortress35","brancastle32","stradasforii43","mounttmpa41"], restaurants:[], note:"הכניסה למקלט הדובים היא בסיורים מודרכים בלבד ויש להזמין כרטיסים מראש לשעות הבוקר." },
+  { id:4, label:"יום 4", date:"08.10.2026", color:DAY_COLORS[4], base:"סיגישוארה", baseQuery:"סיגישוארה, Romania", isDeparture:false, intro:"נוסעים דרך כפרים פסטורליים שנשתמרו בזמן אל לב טרנסילבניה 🌄 מבקרים בכנסיות מבוצרות ומגיעים לעיר הולדתו הציורית של דרקולה.", route:["mgura46","viscri59","biertanfortifiedchurch58","sighioara53","clocktower62"], restaurants:[], note:"הדרכים לכפר מגורה וויסקרי כפריות, סעו בזהירות ותיהנו מהנוף המרהיב של שלכת אוקטובר." },
+  { id:5, label:"יום 5", date:"09.10.2026", color:DAY_COLORS[5], base:"סיביו", baseQuery:"סיביו, Romania", isDeparture:false, intro:"מסע בין שתי מצודות מרשימות ביותר ברומניה: המבצר הכוכבי באלבה יוליה וטירת קורבין הגותית 🏰 בסיום מגיעים לעיר התרבות סיביו.", route:["albaiuliacitadel63","corvincastlecastelulcorv55","sibiu52","bridgeoflies61"], restaurants:[], note:"טירת קורבין ממוקמת בעיר חונדוארה, נסיעה קצרה על הכביש המהיר מאלבה יוליה." },
+  { id:6, label:"יום 6", date:"10.10.2026", color:DAY_COLORS[6], base:"סיביו", baseQuery:"סיביו, Romania", isDeparture:false, intro:"יום רגוע המוקדש לפנינת התרבות של טרנסילבניה 🎨 מבקרים באחד ממוזיאוני הטבע הפתוחים הגדולים באירופה וטועמים גבינות בכפרי האזור.", route:["brukenthalnationalmuseum60","astranationalmuseumcompl57","mrginimeasibiului66"], restaurants:[], note:"מוזיאון אסטרה ממוקם בתוך יער יפהפה וכולל הליכה נעימה לצד אגמים ובתי עץ עתיקים." },
+  { id:7, label:"יום 7", date:"11.10.2026", color:DAY_COLORS[7], base:"בוקרשט", baseQuery:"בוקרשט, Romania", isDeparture:false, intro:"חוויית נהיגה עוצרת נשימה באחד הכבישים המפורסמים והיפים בעולם 🚗 פיתולים חדים, אגם אלפיני בגובה 2,000 מטרים וחזרה דרומה לעבר בוקרשט.", route:["transfgranlakeblea54","poenarifortress64","curteadeargemonastery65","bucharest0"], restaurants:[], note:"בתחילת אוקטובר ייתכנו תנאי מזג אוויר משתנים או ערפל באגם בלאה; כדאי לבדוק את סטטוס הכביש בבוקר היציאה ולהצטייד בביגוד חם." },
+  { id:8, label:"יום 8", date:"12.10.2026", color:DAY_COLORS[8], base:"בוקרשט", baseQuery:"בוקרשט, Romania", isDeparture:true, intro:"מסיימים את המסע ברוגע ובסטייל בצפון בוקרשט 🌴 ביקור באחוזתו המפוארת של צ'אושסקו ומספר שעות של מנוחה מושלמת במרחצאות התרמיים לפני הטיסה.", route:["springpalacepalatulprimv9","lakeherstrukingmihaiipar14","thermebucharest6"], restaurants:[], note:"מתחם תרמה בוקרשט קרוב מאוד לנמל התעופה הבינלאומי אוטופני (OTP), נוח מאוד לסיום הטיול." }
+];
+
+function formatHebrewDuration(totalSeconds) {
+  const totalMinutes = Math.round(totalSeconds / 60);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours === 0) return `${minutes} דקות`;
+  if (minutes === 0) return `${hours} שעות`;
+  return `${hours} שעות ו-${minutes} דקות`;
+}
+function formatHebrewDistance(meters) {
+  return `${Math.round(meters / 1000)} ק"מ`;
+}
+function roundToHalfHour(mins) {
+  return Math.round(mins / 30) * 30;
+}
+function minutesToClock(mins) {
+  const m = ((mins % 1440) + 1440) % 1440;
+  const h = Math.floor(m / 60);
+  const mm = m % 60;
+  return `${String(h).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+}
+function clockToMinutes(hhmm) {
+  const [h, m] = hhmm.split(':').map(Number);
+  return h * 60 + m;
+}
+
+let map, geocoder, directionsService, sharedInfoWindow, focusedId;
+let DistanceLabel;
+let currentView = 'overview'; // 'overview' | 1 | 2
+const dayRenderers = {};   // day.id -> google.maps.DirectionsRenderer
+const dayLabelOverlays = {}; // day.id -> [DistanceLabel,...]
+const dayLegsMinutes = {}; // day.id -> [minutes,...] real walking legs from Directions
+const worthCache = {}; // baseName -> { pointName: distanceText }
+const extraMarkers = {}; // lazy markers for "worth knowing about" points, keyed by name
+
+function initMap() {
+  // Must be defined here, not as a top-level class -- google isn't defined yet
+  // when this script block's top-level statements first run (async Maps script tag).
+  DistanceLabel = class extends google.maps.OverlayView {
+    constructor(position, text) {
+      super();
+      this.position = position;
+      this.text = text;
+    }
+    onAdd() {
+      this.div = document.createElement('div');
+      this.div.style.position = 'absolute';
+      this.div.style.background = '#fff';
+      this.div.style.border = '1px solid #999';
+      this.div.style.borderRadius = '10px';
+      this.div.style.padding = '1px 6px';
+      this.div.style.fontSize = '11px';
+      this.div.style.fontWeight = '700';
+      this.div.style.whiteSpace = 'nowrap';
+      this.div.style.transform = 'translate(-50%, -50%)';
+      this.div.textContent = this.text;
+      this.getPanes().overlayLayer.appendChild(this.div);
+    }
+    draw() {
+      const proj = this.getProjection();
+      if (!proj || !this.div) return;
+      const pos = proj.fromLatLngToDivPixel(this.position);
+      this.div.style.left = pos.x + 'px';
+      this.div.style.top = pos.y + 'px';
+    }
+    onRemove() {
+      if (this.div) { this.div.parentNode.removeChild(this.div); this.div = null; }
+    }
+  };
+
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: 45.9432, lng: 24.9668 },
+    zoom: 13
+  });
+  geocoder = new google.maps.Geocoder();
+  directionsService = new google.maps.DirectionsService();
+  sharedInfoWindow = new google.maps.InfoWindow();
+
+  buildDayTabs();
+  geocodeAllPoints();
+  geocodeOvernightBases();
+  fetchAllDayRoutes();
+}
+
+function buildDayTabs() {
+  const wrap = document.getElementById('dayTabs');
+  const allBtn = document.createElement('button');
+  allBtn.textContent = 'כל הימים';
+  allBtn.className = 'active';
+  allBtn.style.background = '#333';
+  allBtn.style.color = '#fff';
+  allBtn.addEventListener('click', () => selectView('overview', allBtn));
+  wrap.appendChild(allBtn);
+  DAYS.forEach(d => {
+    const btn = document.createElement('button');
+    btn.textContent = d.label;
+    btn.addEventListener('click', () => selectView(d.id, btn));
+    wrap.appendChild(btn);
+    d._tabBtn = btn;
+  });
+  allBtn._isAll = true;
+  wrap._allBtn = allBtn;
+}
+
+function selectView(view, btnEl) {
+  currentView = view;
+  document.querySelectorAll('#dayTabs button').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = '#fff';
+    b.style.color = '#333';
+  });
+  btnEl.classList.add('active');
+  if (view === 'overview') {
+    btnEl.style.background = '#333';
+    btnEl.style.color = '#fff';
+  } else {
+    const d = DAYS.find(x => x.id === view);
+    btnEl.style.background = d.color;
+    btnEl.style.color = '#fff';
+  }
+  render();
+}
+
+function geocodeOvernightBases() {
+  OVERNIGHT_BASES.forEach((b, i) => {
+    setTimeout(() => {
+      geocoder.geocode({ address: b.query, componentRestrictions: { country: GEOCODE_COUNTRY } }, (results, status2) => {
+        if (status2 === 'OK' && results[0]) {
+          const pos = results[0].geometry.location;
+          const nightsLabel = b.nights === 1 ? '1 לילה' : (b.nights + ' לילות');
+          new google.maps.Marker({
+            position: pos,
+            map: map,
+            title: '🛏 לינה: ' + b.name + ' (' + nightsLabel + ')',
+            label: { text: '🛏', fontSize: '16px' },
+            icon: { path: google.maps.SymbolPath.CIRCLE, scale: 14, fillColor: '#1a1a4e', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2 },
+            zIndex: 999
+          });
+          // A marker's own label can't fit "Sibiu, 2 לילות" legibly (it's
+          // centered ON the icon) -- the same DistanceLabel overlay used for
+          // road distances works here too, offset just above the pin.
+          if (DistanceLabel) {
+            new DistanceLabel(pos, '🛏 ' + b.name + ' (' + nightsLabel + ')').setMap(map);
+          }
+        }
+      });
+    }, i * 200);
+  });
+}
+
+function geocodeAllPoints() {
+  const ids = Object.keys(POINTS);
+  let done = 0;
+  const status = document.getElementById('status');
+  ids.forEach((id, i) => {
+    setTimeout(() => {
+      const p = POINTS[id];
+      geocoder.geocode({ address: p.query, componentRestrictions: { country: "RO" } }, (results, status2) => {
+        done++;
+        status.textContent = `מאתר מיקומים... (${done}/${ids.length})`;
+        if (status2 === 'OK' && results[0]) {
+          p.location = results[0].geometry.location;
+          const dayObj = DAYS.find(d => d.route.includes(id));
+          const markerOptions = {
+            position: p.location,
+            map: null,
+            title: (p.rec ? '⭐ ' : '') + p.name,
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: p.rec ? 9 : 7,
+              fillColor: CATEGORY_COLORS[p.category],
+              fillOpacity: 1,
+              strokeColor: dayObj ? dayObj.color : '#fff',
+              strokeWeight: 3
+            }
+          };
+          p.marker = new google.maps.Marker(markerOptions);
+          p.infoContent = `<div dir="rtl" style="text-align:right; font-family:-apple-system,Segoe UI,Arial,sans-serif;">
+              <b>${p.name}</b> <span style="color:${CATEGORY_COLORS[p.category]}">● ${CATEGORY_LABELS_HE[p.category]}</span>
+              ${p.rec ? '<div style="font-size:11px;color:#b8860b;font-weight:bold;margin-top:4px;">⭐ מומלץ</div>' : ''}
+              <div class="info-desc">${p.desc}</div>
+              <div class="info-source">מקור: ${p.source}${p.url ? ` — <a href="${p.url}" target="_blank" rel="noopener">קישור</a>` : ''}</div>
+            </div>`;
+          p.marker.addListener('click', () => focusMapPoint(id));
+        } else {
+          p.geocodeFailed = true;
+          console.warn('Geocode failed for', p.name, status2);
+        }
+        if (done === ids.length) {
+          status.textContent = 'מוכן.';
+          render();
+        }
+      });
+    }, i * 150);
+  });
+}
+
+function fetchAllDayRoutes() {
+  DAYS.forEach((d, di) => {
+    setTimeout(() => {
+      const waypoints = d.route.slice(0, -1).map(id => ({ location: POINTS[id].query, stopover: true }));
+      const destination = POINTS[d.route[d.route.length - 1]].query;
+      directionsService.route({
+        origin: di === 0 ? BASE_ADDRESS : DAYS[di - 1].baseQuery,
+        destination: destination,
+        waypoints: waypoints,
+        travelMode: google.maps.TravelMode[TRIP_TRAVEL_MODE]
+      }, (result, status) => {
+        if (status === 'OK') {
+          d._directionsResult = result;
+          const legs = result.routes[0].legs;
+          dayLegsMinutes[d.id] = legs.map(l => Math.round(l.duration.value / 60));
+          d._totalSeconds = legs.reduce((sum, l) => sum + l.duration.value, 0);
+          d._totalMeters = legs.reduce((sum, l) => sum + l.distance.value, 0);
+
+          const renderer = new google.maps.DirectionsRenderer({
+            suppressMarkers: true,
+            preserveViewport: true,
+            polylineOptions: { strokeColor: d.color, strokeWeight: 4, strokeOpacity: 0.8 }
+          });
+          renderer.setDirections(result);
+          dayRenderers[d.id] = renderer;
+
+          dayLabelOverlays[d.id] = legs.map((leg, li) => {
+            const mid = google.maps.geometry
+              ? google.maps.geometry.spherical.interpolate(leg.start_location, leg.end_location, 0.5)
+              : leg.start_location;
+            const destPoint = POINTS[d.route[li]];
+            const labelText = (destPoint ? destPoint.name + ' — ' : '') + formatHebrewDistance(leg.distance.value);
+            const overlay = new DistanceLabel(mid, labelText);
+            return overlay;
+          });
+        } else {
+          console.warn('Directions failed for day', d.id, status);
+        }
+        render();
+      });
+    }, di * 400);
+  });
+}
+
+function render() {
+  DAYS.forEach(d => {
+    const show = currentView === 'overview' || currentView === d.id;
+    d.route.forEach(id => { if (POINTS[id].marker) POINTS[id].marker.setMap(show ? map : null); });
+    if (dayRenderers[d.id]) dayRenderers[d.id].setMap(show ? map : null);
+    if (dayLabelOverlays[d.id]) dayLabelOverlays[d.id].forEach(o => o.setMap(show ? map : null));
+  });
+
+  if (currentView === 'overview') {
+    fitBoundsToAll();
+    renderOverviewContent();
+  } else {
+    const d = DAYS.find(x => x.id === currentView);
+    fitBoundsToDay(d);
+    renderDayContent(d);
+  }
+}
+
+function fitBoundsToAll() {
+  const locs = Object.values(POINTS).filter(p => p.location).map(p => p.location);
+  if (!locs.length) return;
+  const bounds = new google.maps.LatLngBounds();
+  locs.forEach(l => bounds.extend(l));
+  map.fitBounds(bounds);
+}
+
+function fitBoundsToDay(d) {
+  const locs = d.route.map(id => POINTS[id]).filter(p => p.location).map(p => p.location);
+  if (!locs.length) return;
+  const bounds = new google.maps.LatLngBounds();
+  locs.forEach(l => bounds.extend(l));
+  map.fitBounds(bounds);
+}
+
+function buildPieSVG(counts, size) {
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  if (!total) return '';
+  const r = size / 2;
+  let angle = -90;
+  const paths = [];
+  Object.keys(counts).forEach(cat => {
+    const val = counts[cat];
+    if (!val) return;
+    const frac = val / total;
+    const startAngle = angle;
+    const endAngle = angle + frac * 360;
+    angle = endAngle;
+    const large = (endAngle - startAngle) > 180 ? 1 : 0;
+    const toXY = (a) => [r + r * Math.cos(a * Math.PI / 180), r + r * Math.sin(a * Math.PI / 180)];
+    const [x1, y1] = toXY(startAngle);
+    const [x2, y2] = toXY(endAngle);
+    if (frac >= 0.999) {
+      paths.push(`<circle cx="${r}" cy="${r}" r="${r}" fill="${CATEGORY_COLORS[cat]}" />`);
+    } else {
+      paths.push(`<path d="M${r},${r} L${x1},${y1} A${r},${r} 0 ${large} 1 ${x2},${y2} Z" fill="${CATEGORY_COLORS[cat]}" />`);
+    }
+  });
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${paths.join('')}</svg>`;
+}
+
+function categoryCounts(ids) {
+  const counts = { City: 0, Attraction: 0, Food: 0 };
+  ids.forEach(id => { const c = POINTS[id].category; counts[c] = (counts[c] || 0) + 1; });
+  return counts;
+}
+
+function renderOverviewContent() {
+  const el = document.getElementById('content');
+  const allIds = DAYS.flatMap(d => d.route);
+  const totalSeconds = DAYS.reduce((s, d) => s + (d._totalSeconds || 0), 0);
+  let html = `<div class="section-title">כל הימים — סקירה</div>`;
+  html += `<div class="pie-wrap">${buildPieSVG(categoryCounts(allIds), 90)}
+    <div class="pie-legend">
+      <div><span class="dot" style="background:${CATEGORY_COLORS.City}"></span>עיר</div>
+      <div><span class="dot" style="background:${CATEGORY_COLORS.Attraction}"></span>אטרקציה</div>
+      <div><span class="dot" style="background:${CATEGORY_COLORS.Food}"></span>אוכל</div>
+    </div></div>`;
+  if (totalSeconds) {
+    html += `<div class="trip-total">סה"כ ${TRIP_TRAVEL_VERB} בין הנקודות בכל הטיול: ${formatHebrewDuration(totalSeconds)}</div>`;
+  }
+  DAYS.forEach(d => {
+    const stopsNames = d.route.map(id => POINTS[id].name).join(' ← ');
+    const timeText = d._totalSeconds ? formatHebrewDuration(d._totalSeconds) : 'מחשב...';
+    html += `<div class="day-summary-row" data-day="${d.id}" style="border-inline-start-color:${d.color}">
+      <div>
+        <div class="dsr-title">${d.label} — ${d.date}</div>
+        <div class="dsr-meta">${stopsNames}</div>
+        <div class="dsr-meta">${TRIP_TRAVEL_ICON} ${timeText} ${TRIP_TRAVEL_VERB} בין הנקודות</div>
+      </div>
+    </div>`;
+  });
+  html += `<div class="worth-hint">כדי לראות מרחקים מבסיס הלינה ל"עוד דברים ששווה לדעת עליהם", פתחו יום ספציפי.</div>`;
+  el.innerHTML = html;
+  el.querySelectorAll('.day-summary-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const d = DAYS.find(x => x.id == row.dataset.day);
+      selectView(d.id, d._tabBtn);
+    });
+  });
+}
+
+function renderDayContent(d) {
+  const el = document.getElementById('content');
+  let html = `<div class="section-title">${d.label} — ${d.date}</div>`;
+  if (d.base) html += `<div class="base-line">🛏 לינה הלילה: ${d.base}</div>`;
+  html += `<div class="intro-line">${d.intro}</div>`;
+  html += `<div class="pie-wrap">${buildPieSVG(categoryCounts(d.route), 70)}
+    <div class="pie-legend">
+      <div><span class="dot" style="background:${CATEGORY_COLORS.City}"></span>עיר</div>
+      <div><span class="dot" style="background:${CATEGORY_COLORS.Attraction}"></span>אטרקציה</div>
+      <div><span class="dot" style="background:${CATEGORY_COLORS.Food}"></span>אוכל</div>
+    </div></div>`;
+
+  if (d.note) html += `<div class="intro-line" style="background:#f0f0ff;">💡 ${d.note}</div>`;
+
+  html += `<div class="field-block"><b>ארוחת בוקר</b>${d.breakfast || 'לפי שעת הנחיתה — ראו הערה בלוח הזמנים'}</div>`;
+
+  html += `<div class="section-title">לוח זמנים</div><div class="schedule">${buildScheduleHTML(d)}</div>`;
+
+  html += `<div class="section-title">נקודות עניין</div>`;
+  d.route.forEach(id => {
+    const p = POINTS[id];
+    html += `<div class="poi-card" data-id="${id}" style="border-inline-start-color:${CATEGORY_COLORS[p.category]}">
+      <h4>${p.rec ? '⭐ ' : ''}${p.name}</h4>
+      <p>${p.desc}</p>
+    </div>`;
+  });
+
+  if (d.restaurants && d.restaurants.length) {
+    html += `<div class="section-title">מסעדות מומלצות</div>`;
+    d.restaurants.forEach(r => {
+      const p = POINTS[r.id];
+      html += `<div class="rest-card"><b>${p.name}</b> — ${r.note}<br>${p.desc}</div>`;
+    });
+  }
+
+  if (d.isDeparture) {
+    html += `<div class="departure-line">🛫 יציאה לנמל התעופה בהתאם לשעת הטיסה חזרה</div>`;
+  } else {
+    html += `<div class="lodging-line">🛏 לינה הלילה: ${d.base}</div>`;
+  }
+
+  html += `<div class="worth-section" id="worthSection"><div class="section-title">עוד דברים ששווה לדעת עליהם</div><div id="worthList">מחשב מרחקים מ${d.base}...</div></div>`;
+
+  el.innerHTML = html;
+  el.querySelectorAll('.poi-card').forEach(card => {
+    card.addEventListener('click', () => focusMapPoint(card.dataset.id));
+  });
+
+  renderWorthSection(d);
+}
+
+function buildScheduleHTML(d) {
+  const legs = dayLegsMinutes[d.id];
+  if (!legs) return '<div class="sched-item"><span class="sched-label">מחשב זמני ${TRIP_TRAVEL_VERB} אמיתיים מול Google Maps...</span></div>';
+
+  const blocks = [];
+  let clock;
+  if (d.wake) {
+    clock = clockToMinutes(d.wake);
+    blocks.push({ time: clock, icon: '⏰', label: 'קימה' });
+    clock += 30;
+    blocks.push({ time: clock, icon: '🥐', label: d.breakfast });
+    clock += 45;
+  } else {
+    clock = clockToMinutes(d.startTime);
+    blocks.push({ time: clock, icon: '🛬', label: d.startLabel });
+  }
+
+  d.route.forEach((id, idx) => {
+    const p = POINTS[id];
+    const walkMin = legs[idx] || 0;
+    clock += walkMin;
+    clock = roundToHalfHour(clock);
+    if (walkMin > 0) {
+      blocks.push({ time: clock, icon: '🚶', label: `${TRIP_TRAVEL_VERB} (${formatHebrewDuration(walkMin * 60)})`, muted: true });
+    }
+    blocks.push({ time: clock, icon: CATEGORY_ICONS[p.category] || '📍', label: (p.rec ? '⭐ ' : '') + p.name });
+    clock += p.visitMin;
+    clock = roundToHalfHour(clock);
+  });
+
+  if (d.isDeparture) {
+    blocks.push({ time: clock, icon: '🛫', label: 'יציאה לנמל התעופה' });
+  }
+
+  return blocks.map(b => `<div class="sched-item">
+      <div class="sched-time">${minutesToClock(b.time)}</div>
+      <div class="sched-icon">${b.icon}</div>
+      <div class="sched-label" style="${b.muted ? 'color:#888;font-size:12px;' : ''}">${b.label}</div>
+    </div>`).join('');
+}
+
+function renderWorthSection(d) {
+  const listEl = document.getElementById('worthList');
+  if (!listEl) return;
+
+  if (!worthCache[d.base]) {
+    worthCache[d.base] = {};
+    let idx = 0;
+    EXTRA_REGIONS.forEach(region => {
+      region.points.forEach(p => {
+        const key = p.name;
+        setTimeout(() => {
+          directionsService.route({
+            origin: d.baseQuery,
+            destination: p.query,
+            travelMode: google.maps.TravelMode.DRIVING
+          }, (result, status) => {
+            if (status === 'OK') {
+              const leg = result.routes[0].legs[0];
+              worthCache[d.base][key] = formatHebrewDuration(leg.duration.value) + ' נסיעה';
+            } else {
+              worthCache[d.base][key] = 'מרחק לא זמין';
+            }
+            if (currentView === d.id) renderWorthList(d);
+          });
+        }, idx * 180);
+        idx++;
+      });
+    });
+    renderWorthList(d);
+  } else {
+    renderWorthList(d);
+  }
+}
+
+function renderWorthList(d) {
+  const listEl = document.getElementById('worthList');
+  if (!listEl) return;
+  const cache = worthCache[d.base] || {};
+  let html = '';
+  EXTRA_REGIONS.forEach(region => {
+    html += `<div class="worth-region">${region.region}</div>`;
+    region.points.forEach(p => {
+      const dist = cache[p.name];
+      html += `<div class="worth-row" data-name="${p.name.replace(/"/g, '&quot;')}" data-query="${p.query.replace(/"/g, '&quot;')}" data-category="${p.category}">
+        <span class="dot" style="background:${CATEGORY_COLORS[p.category] || '#999'}"></span>
+        <span class="worth-name">${p.name}</span>
+        <span class="worth-dist">${dist || '...'}</span>
+      </div>`;
+    });
+  });
+  listEl.innerHTML = html;
+  listEl.querySelectorAll('.worth-row').forEach(row => {
+    row.addEventListener('click', () => focusExtraPoint(row.dataset.name, row.dataset.query, row.dataset.category));
+  });
+}
+
+function animateMarkerScale(marker, fromScale, toScale, duration) {
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    const icon = Object.assign({}, marker.getIcon());
+    icon.scale = fromScale + (toScale - fromScale) * eased;
+    marker.setIcon(icon);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function focusMapPoint(id) {
+  const p = POINTS[id];
+  if (!p || !p.marker || !p.location) return;
+  if (focusedId && focusedId !== id && POINTS[focusedId] && POINTS[focusedId].marker) {
+    const prev = POINTS[focusedId];
+    animateMarkerScale(prev.marker, (prev.rec ? 9 : 7) * 1.9, prev.rec ? 9 : 7, 250);
+  }
+  focusedId = id;
+  const base = p.rec ? 9 : 7;
+  animateMarkerScale(p.marker, base, base * 1.9, 300);
+  map.panTo(p.location);
+  sharedInfoWindow.setContent(p.infoContent);
+  sharedInfoWindow.open(map, p.marker);
+}
+
+function focusExtraPoint(name, query, category) {
+  if (extraMarkers[name]) {
+    map.panTo(extraMarkers[name].getPosition());
+    sharedInfoWindow.setContent(`<div dir="rtl" style="text-align:right;"><b>${name}</b></div>`);
+    sharedInfoWindow.open(map, extraMarkers[name]);
+    return;
+  }
+  geocoder.geocode({ address: query, componentRestrictions: { country: "RO" } }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      const loc = results[0].geometry.location;
+      const marker = new google.maps.Marker({
+        position: loc, map: map,
+        icon: { path: google.maps.SymbolPath.CIRCLE, scale: 7, fillColor: CATEGORY_COLORS[category] || '#999', fillOpacity: 0.85, strokeColor: '#fff', strokeWeight: 2 },
+        title: name
+      });
+      extraMarkers[name] = marker;
+      map.panTo(loc);
+      sharedInfoWindow.setContent(`<div dir="rtl" style="text-align:right;"><b>${name}</b></div>`);
+      sharedInfoWindow.open(map, marker);
+    }
+  });
+}
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjZ4x9SilKEMNW1NByB5YPprLfcDloEFQ&libraries=geometry&language=he&region=RO&callback=initMap">
+</script>
+</body>
+</html>

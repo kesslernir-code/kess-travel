@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KESSLER TRIP — טיול חדש</title>
+<style>
+  :root {
+    --ink: #241f1a;
+    --paper: #faf6ef;
+    --muted: #6b6157;
+    --gold: #c8a24a;
+    --accent: #a13d3d;
+    --ok: #2f6b4f;
+    --ok-bg: #e7f1e8;
+    --err: #a13d3d;
+    --err-bg: #f6e6e2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    direction: rtl;
+    text-align: right;
+    line-height: 1.6;
+    padding: 40px 6vw 60px;
+  }
+  .kicker {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  h1 { margin: 0 0 8px; font-size: 30px; }
+  .sub { color: var(--muted); font-size: 14px; margin-bottom: 30px; max-width: 640px; }
+  form {
+    max-width: 640px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px 30px;
+    box-shadow: 0 2px 14px rgba(60,45,25,0.08);
+  }
+  .field { margin-bottom: 20px; }
+  label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .hint { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  input[type="text"], input[type="number"], textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd3bd;
+    border-radius: 8px;
+    font-size: 14.5px;
+    font-family: inherit;
+    background: #fffdf8;
+    direction: rtl;
+  }
+  textarea { min-height: 80px; resize: vertical; }
+  .radio-row { display: flex; gap: 20px; align-items: center; }
+  .radio-row label { display: flex; align-items: center; gap: 6px; font-weight: normal; margin: 0; cursor: pointer; }
+  .radio-row input { cursor: pointer; }
+  button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  button[type="submit"]:hover { background: #8a3232; }
+  #statusBox {
+    max-width: 640px;
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  #statusBox.ok { display: block; background: var(--ok-bg); color: var(--ok); }
+  #statusBox.err { display: block; background: var(--err-bg); color: var(--err); }
+</style>
+</head>
+<body>
+
+  <div class="kicker">KESSLER TRIP</div>
+  <h1>טיול חדש</h1>
+  <div class="sub">
+    ממלאים כאן, לוחצים "שליחה" — המערכת תמצא מקורות אמיתיים ליעד ותפתח את הדשבורד של הטיול.
+    ודאו שהאייקון על שולחן העבודה כבר פתח את השרת (חלון שחור ברקע).
+  </div>
+
+  <form id="tripForm">
+    <div class="field">
+      <label for="destination">לאיפה</label>
+      <div class="hint">שם היעד (זה גם ישמש כשם התיקייה — עברית או אנגלית, בלי סימני פיסוק מיוחדים)</div>
+      <input type="text" id="destination" name="destination" required>
+    </div>
+
+    <div class="field">
+      <label for="when">מתי</label>
+      <div class="hint">תאריכים אם ידועים, אחרת זמן משוער (עונה/חודש)</div>
+      <input type="text" id="when" name="when" placeholder="לדוגמה: 23–29.8.2026, או 'תחילת אוגוסט'">
+    </div>
+
+    <div class="field" style="display:flex; gap:16px;">
+      <div style="flex:1;">
+        <label for="days">כמה ימים</label>
+        <input type="number" id="days" name="days" min="1" placeholder="לדוגמה: 7">
+      </div>
+      <div style="flex:1;">
+        <label for="nights">כמה לילות</label>
+        <input type="number" id="nights" name="nights" min="0" placeholder="לדוגמה: 6">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="participants">כמה משתתפים</label>
+      <input type="text" id="participants" name="participants" placeholder="לדוגמה: 5">
+    </div>
+
+    <div class="field">
+      <label for="composition">כולל ילדים או מבוגרים</label>
+      <div class="hint">הרכב המשתתפים, וגילאים אם רלוונטי</div>
+      <input type="text" id="composition" name="composition" placeholder="לדוגמה: 2 מבוגרים, 3 ילדים (8, 11, 14)">
+    </div>
+
+    <div class="field">
+      <label>עם רכב או בלי רכב</label>
+      <div class="radio-row">
+        <label><input type="radio" name="car" value="עם רכב" checked> עם רכב</label>
+        <label><input type="radio" name="car" value="בלי רכב"> בלי רכב</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>קצב הטיול</label>
+      <div class="hint">משפיע על כמה פעילויות ייכנסו לכל יום במסלול הסופי</div>
+      <div class="radio-row">
+        <label><input type="radio" name="pace" value="רגוע" checked> רגוע</label>
+        <label><input type="radio" name="pace" value="רגיל"> רגיל</label>
+        <label><input type="radio" name="pace" value="אינטנסיבי"> אינטנסיבי</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="emphases">דגשים מיוחדים</label>
+      <div class="hint">קצב, תחומי עניין, חובות, דברים להימנע מהם, תקציב — כל דבר רלוונטי</div>
+      <textarea id="emphases" name="emphases" placeholder="לדוגמה: לא יותר משעתיים נסיעה ביום, אוהבים טבע וקצת פחות ערים, תקציב בינוני"></textarea>
+    </div>
+
+    <button type="submit">שליחה — צור טיול חדש</button>
+  </form>
+
+  <div id="statusBox"></div>
+
+<script>
+  const SERVER_PORT = 8234;
+  const SERVER_URL = `http://localhost:${SERVER_PORT}/new-trip`;
+
+  document.getElementById('tripForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const statusBox = document.getElementById('statusBox');
+    statusBox.className = '';
+    statusBox.style.display = 'none';
+
+    const payload = {
+      destination: form.destination.value.trim(),
+      when: form.when.value.trim(),
+      days: form.days.value.trim(),
+      nights: form.nights.value.trim(),
+      participants: form.participants.value.trim(),
+      composition: form.composition.value.trim(),
+      car: form.querySelector('input[name="car"]:checked').value,
+      pace: form.querySelector('input[name="pace"]:checked').value,
+      emphases: form.emphases.value.trim()
+    };
+
+    if (!payload.destination) {
+      statusBox.className = 'err';
+      statusBox.textContent = 'צריך למלא לאן נוסעים.';
+      return;
+    }
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'מחפש מקורות ליעד... (יכול לקחת דקה)';
+
+    try {
+      const res = await fetch(SERVER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.ok) {
+        statusBox.className = 'ok';
+        statusBox.textContent = `✅ נמצאו מקורות. פותח את הדשבורד של ${payload.destination}...`;
+        statusBox.style.display = 'block';
+        setTimeout(() => { window.location.href = data.dashboardUrl; }, 1200);
+      } else {
+        statusBox.className = 'err';
+        statusBox.style.display = 'block';
+        statusBox.textContent = '⚠️ השרת הגיב עם שגיאה: ' + (data.error || 'שגיאה לא ידועה');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'שליחה — צור טיול חדש';
+      }
+    } catch (err) {
+      statusBox.className = 'err';
+      statusBox.style.display = 'block';
+      statusBox.textContent = '⚠️ לא הצלחתי להתחבר לשרת. ודאו שהשרת פועל (הפעילו את האייקון בשולחן העבודה), ונסו שוב.';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'שליחה — צור טיול חדש';
+    }
+  });
+</script>
+</body>
+</html>

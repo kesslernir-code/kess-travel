@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<title>Route Planner — Milan</title>
+<style>
+  html, body { height: 100%; margin: 0; font-family: -apple-system, Segoe UI, Arial, sans-serif; }
+  #app { display: flex; height: 100%; }
+  #map { flex: 1 1 auto; height: 100%; }
+  #sidebar { width: 400px; flex: 0 0 400px; height: 100%; overflow-y: auto; border-right: 3px solid #ddd; box-sizing: border-box; padding: 16px; background: #fafafa; direction: rtl; text-align: right; }
+  h2 { margin-top: 0; font-size: 18px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; font-size: 12px; }
+  .legend span { display: inline-flex; align-items: center; gap: 4px; }
+  .legend-rec { font-size: 12px; color: #7a5b00; margin-bottom: 14px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.3); flex-shrink: 0; }
+  .region-title { font-weight: bold; margin: 16px 0 6px; font-size: 14px; color: #222; background: #eee; padding: 4px 8px; border-radius: 4px; }
+  .region-title:hover { background: #e0e0e0; }
+  .region-title-row { display: flex; align-items: center; gap: 6px; }
+  .region-label { cursor: pointer; flex: 1 1 auto; }
+  .region-dist { display: block; font-weight: normal; font-size: 11px; color: #555; margin-top: 2px; margin-inline-start: 24px; }
+  .poi-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 13px; }
+  .poi-row:hover { background: #f0f0f0; }
+  .poi-row .dot { flex: 0 0 auto; cursor: pointer; }
+  .poi-row .poi-name { flex: 1 1 auto; cursor: pointer; }
+  .sleep-tag { font-size: 10px; background: #1a1a4e; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
+  .rec-tag { font-size: 10px; background: #b8860b; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
+  .rec-star { font-size: 12px; margin-inline-start: 4px; flex-shrink: 0; }
+  #confirmBtn { width: 100%; margin-top: 16px; padding: 12px; font-size: 15px; font-weight: bold; background: #1a7a3c; color: white; border: none; border-radius: 6px; cursor: pointer; position: sticky; bottom: 0; }
+  #confirmBtn:hover { background: #145c2d; }
+  #backBtn { width: 100%; margin-top: 8px; padding: 8px; font-size: 13px; background: #eee; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; }
+  #routeSummary { margin-top: 16px; font-size: 13px; }
+  #routeSummary .leg { padding: 8px; margin-bottom: 6px; background: white; border-inline-start: 4px solid #1a7a3c; border-radius: 4px; }
+  #status { font-size: 12px; color: #888; margin-top: 10px; }
+  .hidden { display: none !important; }
+  .info-desc { font-size: 12px; max-width: 260px; line-height: 1.5; }
+  .info-source { font-size: 11px; margin-top: 6px; }
+  .info-rec { font-size: 11px; color: #b8860b; font-weight: bold; margin-top: 4px; }
+  .selectAllRow { font-size: 12px; margin-bottom: 8px; }
+  .selectAllRow a { cursor: pointer; color: #1a5fb4; margin-inline-end: 10px; }
+  .filterRow { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .filterBtn { font-size: 11px; padding: 4px 9px; border-radius: 12px; border: 1.5px solid #ccc; background: #fff; cursor: pointer; color: #333; }
+  .filterBtn[data-cat]:not([data-cat="all"]) { border-color: var(--cat-color); color: var(--cat-color); }
+  .filterBtn.active { color: #fff; background: #555; border-color: #555; font-weight: bold; }
+  .filterBtn.active[data-cat]:not([data-cat="all"]) { background: var(--cat-color); }
+  #suggestBtn { width: 100%; margin-top: 10px; padding: 10px; font-size: 13px; font-weight: bold; background: #1a5fb4; color: white; border: none; border-radius: 6px; cursor: pointer; }
+  #suggestBtn:hover { background: #124a8f; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="map"></div>
+  <div id="sidebar">
+    <h2>מסלול מילאנו — כל נקודות העניין</h2>
+    <div class="filterRow" id="filterRow">
+      <button class="filterBtn active" data-cat="all">הצג הכל</button>
+      <button class="filterBtn" data-cat="Nature" style="--cat-color:#27ae60">טבע</button>
+      <button class="filterBtn" data-cat="City" style="--cat-color:#8e44ad">עיר</button>
+      <button class="filterBtn" data-cat="Beach" style="--cat-color:#2980b9">חוף</button>
+      <button class="filterBtn" data-cat="Attraction" style="--cat-color:#e67e22">אטרקציה</button>
+      <button class="filterBtn" data-cat="Food" style="--cat-color:#c0392b">אוכל</button>
+      <button class="filterBtn" data-cat="Sleep" style="--cat-color:#1a1a4e">לינה</button>
+    </div>
+    <div class="legend">
+      <span><span class="dot" style="background:#27ae60"></span>טבע</span>
+      <span><span class="dot" style="background:#8e44ad"></span>עיר</span>
+      <span><span class="dot" style="background:#2980b9"></span>חוף</span>
+      <span><span class="dot" style="background:#e67e22"></span>אטרקציה</span>
+      <span><span class="dot" style="background:#c0392b"></span>אוכל</span>
+      <span><span class="dot" style="background:#1a1a4e"></span>לינה</span>
+    </div>
+    <div class="legend-rec">⭐ = מומלץ — מקורות מרובים מציינים כ"חובה לראות"</div>
+    <div class="selectAllRow"><a id="selectAll">בחר הכל</a><a id="clearAll">נקה הכל</a></div>
+    <div id="checklist">טוען נקודות...</div>
+    <button id="suggestBtn">💡 הצע בחירה מתאימה לטיול</button>
+    <button id="confirmBtn">✅ נעילת הבחירה הסופית</button>
+    <button id="backBtn" class="hidden">⬅ חזרה לעריכת הרשימה</button>
+    <div id="routeSummary"></div>
+    <div id="status"></div>
+  </div>
+</div>
+
+<script>
+// Sent along with the confirmed selection so the local server knows which
+// destination folder to write <Destination>_Selection.json into. Must match
+// this destination's actual folder name exactly.
+const DESTINATION_NAME = 'מילאנו';
+const LOCAL_SERVER_URL = 'http://localhost:8787/confirm-selection';
+// Computed once from מילאנו_Trip_Input.md at generation time (22-23.7 = two full trip
+// days, inclusive of arrival and departure day; emphases are shopping/walking/food with
+// no car -- a light, unhurried pace) -- the auto-suggest heuristic below reads these but
+// never parses dates itself. Days, not nights: a 2-day/1-night trip plans for 2 full days.
+const TRIP_DAYS = 2;
+const TRIP_PACE = 'רגוע';
+
+const CATEGORY_COLORS = {
+  Nature: '#27ae60', City: '#8e44ad', Beach: '#2980b9',
+  Attraction: '#e67e22', Food: '#c0392b', Sleep: '#1a1a4e'
+};
+const CATEGORY_LABELS_HE = {
+  Nature: 'טבע', City: 'עיר', Beach: 'חוף', Attraction: 'אטרקציה', Food: 'אוכל', Sleep: 'לינה'
+};
+
+// Full point-of-interest list, extracted from מילאנו_Master_Plan.md (all 8 regions).
+const REGIONS = [
+{ region: 'מרכז היסטורי ורובע האופנה', points: [
+  { id:'duomo', name:'הדואומו (Duomo di Milano)', query:'Duomo di Milano, Milan, Italy', category:'Attraction', rec:true,
+    desc:'הקתדרלה הגותית האייקונית של מילאנו, הכנסייה הגדולה באיטליה, עם גג שניתן לטייל עליו ותצפית על העיר. מומלץ להזמין כרטיסים מראש בעונת השיא.', source:'Rick Steves / Lonely Planet / Culture Trip / למטייל', url:'https://www.ricksteves.com/europe/italy/milan' },
+  { id:'duomomuseum', name:'מוזיאון הדואומו', query:'Museo del Duomo, Milan, Italy', category:'Attraction',
+    desc:'מאחורי הקלעים של הקתדרלה: ויטראז\'ים, דגמים והיסטוריה.', source:'מילאנזי', url:'https://milantravelers.com/attractions/duomo-museum-milan' },
+  { id:'galleria', name:'Galleria Vittorio Emanuele II', query:'Galleria Vittorio Emanuele II, Milan, Italy', category:'Attraction', rec:true,
+    desc:'קניון הקניות הפעיל העתיק ביותר באיטליה (נפתח ב-1877), כיפת זכוכית איקונית, פתוח 24/7, כניסה חופשית.', source:'Culture Trip / Rick Steves / GoTravel', url:'https://www.ricksteves.com/europe/italy/milan' },
+  { id:'palazzoreale', name:'Palazzo Reale', query:'Palazzo Reale, Milan, Italy', category:'Attraction',
+    desc:'הארמון המלכותי לשעבר, צמוד לדואומו.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/milan' },
+  { id:'novecento', name:'Museo del Novecento', query:'Museo del Novecento, Milan, Italy', category:'Attraction',
+    desc:'אמנות איטלקית של המאה ה-20, כ-400 יצירות, כולל קומה שלמה המוקדשת ללוצ\'ו פונטנה.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/milan' },
+  { id:'lascala', name:"תיאטרון לה סקאלה (Teatro alla Scala) + מוזיאון", query:'Teatro alla Scala, Milan, Italy', category:'Attraction', rec:true,
+    desc:'בית האופרה המוביל בעולם, עונת פרימיירות מכוכבת. המוזיאון הצמוד מציג מאחורי הקלעים: תלבושות וכלים.', source:'Culture Trip / Rick Steves / מילאנזי', url:'https://theculturetrip.com/europe/italy/milan' },
+  { id:'castellosforzesco', name:'Castello Sforzesco (טירת ספורצה)', query:'Castello Sforzesco, Milan, Italy', category:'Attraction', rec:true,
+    desc:'טירה מהמאה ה-15, חצרות בכניסה חופשית, 7 מוזיאונים ב-5 יורו, כולל פייטה לא גמורה של מיכלאנג\'לו.', source:'Rick Steves / Culture Trip / מילאנזי', url:'https://milantravelers.com/attractions/castello-sforzesco' },
+  { id:'pinacotecacastello', name:'Pinacoteca del Castello Sforzesco', query:'Pinacoteca del Castello Sforzesco, Milan, Italy', category:'Attraction',
+    desc:'גלריית הציורים בתוך הטירה, למעלה מ-1,500 ציורים מהמאה ה-13 עד ה-18.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/milan' },
+  { id:'cenacolo', name:'הסעודה האחרונה של דה וינצ\'י (Cenacolo Vinciano)', query:'Santa Maria delle Grazie Cenacolo Vinciano, Milan, Italy', category:'Attraction', rec:true,
+    desc:'יצירת המופת המפורסמת של לאונרדו דה וינצ\'י; חובה להזמין 2-3 חודשים מראש.', source:'Rick Steves / Lonely Planet / מילאנזי', url:'https://www.ricksteves.com/europe/italy/milan' },
+  { id:'ambrosiana', name:'Pinacoteca Ambrosiana', query:'Pinacoteca Ambrosiana, Milan, Italy', category:'Attraction',
+    desc:'המוזיאון העתיק ביותר במילאנו, יצירות של רפאל, דה וינצ\'י, בוטיצ\'לי, טיציאן וקאראווג\'ו.', source:'Rick Steves', url:'https://www.ricksteves.com/europe/italy/milan' },
+  { id:'gallerieditalia', name:"Gallerie d'Italia", query:"Gallerie d'Italia, Milan, Italy", category:'Attraction',
+    desc:'מוזיאון בנק גדול ב-3 פלאצי היסטוריים מול לה סקאלה, 800 יצירות איטלקיות.', source:'מילאנזי', url:'https://milantravelers.com/attractions/gallerie-ditalia-milan' },
+  { id:'poldipezzoli', name:'Museo Poldi Pezzoli', query:'Museo Poldi Pezzoli, Milan, Italy', category:'Attraction',
+    desc:'בית-מוזיאון אלגנטי עם אוסף קלאסי.', source:'מילאנזי', url:'https://milantravelers.com/attractions/museo-poldi-pezzoli-milan' },
+  { id:'triennale', name:'Triennale di Milano', query:'Triennale di Milano, Milan, Italy', category:'Attraction',
+    desc:'מוסד עיצוב ואדריכלות בפלאצו דל\'ארטה, סמוך לפארק סמפיונה.', source:'מילאנזי', url:'https://milantravelers.com/attractions/triennale-di-milano' },
+  { id:'loggiamercanti', name:'Loggia dei Mercanti (גלריית הלחישה)', query:'Loggia dei Mercanti, Milan, Italy', category:'Attraction',
+    desc:'מערכת תקשורת חשאית מימי הביניים שמעבירה לחישות מעל רעש הקהל.', source:'Atlas Obscura', url:'https://www.atlasobscura.com/places/loggia-dei-mercanti-whispering-gallery' },
+  { id:'sanbernardino', name:'San Bernardino alle Ossa', query:'San Bernardino alle Ossa, Milan, Italy', category:'Attraction',
+    desc:'אוסארי (בית עצמות) שנבנה ב-1210.', source:'Atlas Obscura', url:'https://www.atlasobscura.com/places/san-bernardino-alle-ossa' },
+  { id:'love', name:'L.O.V.E.', query:'L.O.V.E. statue Piazza Affari, Milan, Italy', category:'Attraction',
+    desc:'פסל אצבע משולשת ענק מול הבורסה האיטלקית, פסל מחאה נגד הפשיזם מאת מאוריציו קאטלן.', source:'Atlas Obscura / Culture Trip / מטיילת מחוץ לקופסא', url:'https://www.atlasobscura.com/places/love' },
+  { id:'corsocomo10', name:'10 Corso Como', query:'10 Corso Como, Milan, Italy', category:'City', rec:true,
+    desc:'קונספט סטור אגדי: בוטיק אופנה, חנות ספרים, גלריה וקפה תחת גג אחד.', source:'Time Out', url:'https://www.timeout.com/milan/shopping/10-corso-como' },
+  { id:'rinascente', name:'La Rinascente', query:'La Rinascente, Milan, Italy', category:'City',
+    desc:'כלבו יוקרה מול כיכר הדואומו, 10 קומות, גג עם מסעדות ונוף פנורמי על העיר.', source:'Time Out', url:'https://www.timeout.com/milan/shopping/la-rinascente' },
+  { id:'waitandsee', name:'Wait and See', query:'Wait and See boutique Via Santa Marta, Milan, Italy', category:'City',
+    desc:'בוטיק אקסצנטרי במנזר מהמאה ה-18 באזור Cinque Vie.', source:'Time Out', url:'https://www.timeout.com/milan/shopping/wait-and-see' },
+  { id:'fornasetti', name:'Fornasetti (חנות דגל)', query:'Fornasetti flagship store Corso Venezia, Milan, Italy', category:'City',
+    desc:'בית עיצוב איטלקי מפורסם עם עיצובים סוריאליסטיים ומעוטרים, בין פורטה ונציה לדואומו.', source:'Time Out', url:'https://www.fornasetti.com' },
+  { id:'pupisolari', name:'Pupi Solari', query:'Pupi Solari boutique, Milan, Italy', category:'City',
+    desc:'בוטיק בגדים מינימליסטיים לנשים וילדים.', source:'Time Out', url:'https://pupisolari.com' },
+  { id:'yamamoto', name:'Gastronomia Yamamoto', query:'Gastronomia Yamamoto Via Amedei, Milan, Italy', category:'Food',
+    desc:'מסעדה יפנית אותנטית ממש מאחורי הדואומו, מתמחה בבנטו.', source:'Time Out', url:'https://www.gastronomiayamamoto.it/' },
+  { id:'loste', name:'Loste Café', query:'Loste Cafe, Milan, Italy', category:'Food',
+    desc:'בית קפה עם מאפים טריים וקפה משובח, תור בשבתות בבוקר.', source:'מטיילת מחוץ לקופסא', url:'https://www.trvbox.co.il/things-to-in-milan/' },
+  { id:'remulass', name:'Remulass', query:'Remulass restaurant, Milan, Italy', category:'Food',
+    desc:'מסעדת ביסטרו מודרנית עם תפריט מצומצם ומדויק.', source:'מטיילת מחוץ לקופסא', url:'https://www.trvbox.co.il/things-to-in-milan/' },
+  { id:'qcterme', name:'QC Termemilano', query:'QC Termemilano spa, Milan, Italy', category:'Attraction',
+    desc:'מתחם ספא יוקרתי בתוך מבנה היסטורי מוקף חומות עתיקות, בריכות תרמיות וסאונות.', source:'מטיילת מחוץ לקופסא', url:'https://www.qcterme.com/en/milano/qc-termemilano' },
+  { id:'oneseason', name:'One Season Thai Spa', query:'One Season spa, Milan, Italy', category:'Attraction',
+    desc:'ספא תאילנדי עם עיצוב מרשים, מחירים סבירים (כ-60 יורו לשעה).', source:'מטיילת מחוץ לקופסא', url:'https://www.trvbox.co.il/things-to-in-milan/' },
+  { id:'hamleys', name:'Hamleys Milano', query:'Hamleys Milano toy store, Milan, Italy', category:'City',
+    desc:'חנות צעצועים מרשימה לילדים.', source:'מטיילת מחוץ לקופסא', url:'https://www.trvbox.co.il/things-to-in-milan/' },
+  { id:'archeologico', name:'Museo Archeologico', query:'Civico Museo Archeologico di Milano, Italy', category:'Attraction',
+    desc:'היסטוריה של מילאנו מרומא ועד ימי הביניים.', source:'מילאנזי', url:'https://milantravelers.com/attractions/civico-museo-archeologico-milan' }
+]},
+{ region: 'בררה', points: [
+  { id:'brera', name:'שכונת בררה', query:'Brera district, Milan, Italy', category:'City', rec:true,
+    desc:'שכונת אמנות בוהמית עם סמטאות מרוצפות, בוטיקים וברים לאפריטבו — בדיוק סוג האזור הבוהמייני.', source:'Lonely Planet / מילאנזי', url:'https://www.lonelyplanet.com/articles/best-neighborhoods-in-milan' },
+  { id:'pinacotecabrera', name:'Pinacoteca di Brera', query:'Pinacoteca di Brera, Milan, Italy', category:'Attraction', rec:true,
+    desc:'מוזיאון האמנות הלאומי של מילאנו, יצירות של רפאל (נישואי הבתולה), קאראווג\'ו, טינטורטו; כניסה חופשית ביום ראשון הראשון בחודש.', source:'Culture Trip / מילאנזי', url:'https://theculturetrip.com/europe/italy/articles/top-art-galleries-to-visit-in-milan' },
+  { id:'braidense', name:'Biblioteca Braidense', query:'Biblioteca Nazionale Braidense, Milan, Italy', category:'Attraction',
+    desc:'הספרייה ההיסטורית הצמודה לפינקוטקה די בררה.', source:'מילאנזי', url:'https://milantravelers.com/attractions/brera-district-milan' },
+  { id:'barbasso', name:'Bar Basso', query:'Bar Basso, Milan, Italy', category:'Food',
+    desc:'הבר שבו הומצא הקוקטייל "נגרוני זבליאטו" (Negroni Sbagliato).', source:'Atlas Obscura / Culture Trip', url:'https://www.atlasobscura.com/places/bar-basso-milan' },
+  { id:'massimodecarlo', name:'Massimo De Carlo (Palazzo Belgioioso)', query:'Massimo De Carlo Palazzo Belgioioso, Milan, Italy', category:'Attraction',
+    desc:'גלריית אמנות עכשווית בפלאצו היסטורי מ-1787 שתוכנן ע"י מעצב לה סקאלה.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/milan' },
+  { id:'tornabuoni', name:'Tornabuoni Arte', query:'Tornabuoni Arte Via Fatebenefratelli, Milan, Italy', category:'Attraction',
+    desc:'גלריה המתמחה באמנות איטלקית שלאחר המלחמה.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/milan' },
+  { id:'giomarconi', name:'Gió Marconi Gallery', query:'Gio Marconi Gallery Via Tadino, Milan, Italy', category:'Attraction',
+    desc:'גלריית אמנות עכשווית ותיקה, פועלת מ-1986.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/milan' }
+]},
+{ region: 'נביגלי', points: [
+  { id:'navigli', name:'רובע נביגלי', query:'Navigli district, Milan, Italy', category:'City', rec:true,
+    desc:'שכונת התעלות (Naviglio Grande, Naviglio Pavese), תרבות אפריטיבו תוססת מ-17:00, "מיני-ונציה" עם בתים בגווני חלודה-צהוב-ורוד.', source:'Culture Trip / מילאנזי / Lonely Planet', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  { id:'darsena', name:'Darsena', query:'Darsena Milano, Milan, Italy', category:'City',
+    desc:'הבריכה שמחברת בין שתי התעלות, חודשה לאחרונה, שוק מקורה ואפריטיבו על שפת המים.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  { id:'portaticinese', name:'Corso di Porta Ticinese', query:'Corso di Porta Ticinese, Milan, Italy', category:'City',
+    desc:'רחוב קניות המחבר בין נביגלי למרכז, שילוב של אתרים היסטוריים ואמנות רחוב מודרנית.', source:'Culture Trip / מילאנזי', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  { id:'colonnesanlorenzo', name:'Colonne di San Lorenzo', query:'Colonne di San Lorenzo, Milan, Italy', category:'Attraction', rec:true,
+    desc:'16 עמודים קורינתיים רומיים, מול הבזיליקה — הטראמים חולפים ממש לצד ההריסות העתיקות.', source:'Culture Trip / מילאנזי', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  { id:'sanlorenzobasilica', name:'Basilica di San Lorenzo', query:'Basilica di San Lorenzo Maggiore, Milan, Italy', category:'Attraction',
+    desc:'פסיפס סגנונות אדריכליים משכבות שיקום לאורך 16 מאות.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  { id:'santeustorgio', name:'Basilica di Sant\'Eustorgio', query:'Basilica di Sant\'Eustorgio, Milan, Italy', category:'Attraction',
+    desc:'פרסקאות מהמאה ה-15 וה-Arca di San Pietro Martire מהמאה ה-14.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  { id:'antiquariato', name:'Mercato dell\'Antiquariato', query:'Naviglio Grande antiques market, Milan, Italy', category:'City',
+    desc:'שוק עתיקות חודשי לאורך גדות נביליו גרנדה, ביום ראשון האחרון של כל חודש.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  { id:'gondolatour', name:'סיורי סירה וגונדולה ונציאנית', query:'Alzaia Naviglio Grande boat tours, Milan, Italy', category:'Attraction',
+    desc:'סיורי סירה קיציים, כולל הגונדולה הוונציאנית היחידה במילאנו, כולל שיעורי חתירה.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  { id:'backdoor43', name:'Backdoor 43', query:'Backdoor 43 bar Naviglio Grande, Milan, Italy', category:'Food',
+    desc:'אחד הברים הקטנים בעולם, כ-4 מ"ר, חובה להזמין מקום מראש.', source:'Culture Trip / Atlas Obscura', url:'https://www.atlasobscura.com/places/backdoor-43' },
+  { id:'gelateriamusica', name:'La Gelateria della Musica', query:'La Gelateria della Musica, Milan, Italy', category:'Food', rec:true,
+    desc:'הגלידריה הטובה ביותר בעיר לפי Culture Trip, כל טעם נקרא ע"ש מוזיקאי — הפיסטוק-שוקולד מיוחד.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  { id:'vicololavandai', name:'Vicolo dei Lavandai', query:'Vicolo dei Lavandai, Milan, Italy', category:'Attraction',
+    desc:'סמטה ציורית ששימשה פעם לכביסה — נקודת צילום קלאסית.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  { id:'illibraccio', name:'Il Libraccio', query:'Il Libraccio bookshop Navigli, Milan, Italy', category:'City',
+    desc:'חנות ספרים מאובקת ואינטימית בסמטאות נביגלי.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  { id:'antonioli', name:'Antonioli', query:'Antonioli boutique Via Pasquale Paoli, Milan, Italy', category:'City',
+    desc:'בוטיק אופנה חדשנית וסטריטוור, ליד נביליו גרנדה.', source:'Time Out', url:'https://antonioli.eu' },
+  { id:'erbabrusca', name:'Erba Brusca', query:'Erba Brusca restaurant, Milan, Italy', category:'Food',
+    desc:'מסעדה עם גינת ירק פרטית בקצה נביליו פאווזה, פופולרית בסופי שבוע.', source:'Time Out', url:'https://www.timeout.com/milan/restaurants/erba-brusca' },
+  { id:'nebbia', name:'Nebbia', query:'Nebbia Milano restaurant, Milan, Italy', category:'Food',
+    desc:'נאו-טרטוריה בנביגלי, יין טבעי ומטבח לומברדי מודרני.', source:'Time Out', url:'https://nebbiamilano.com' }
+]},
+{ region: 'איזולה, פורטה נואבה וביקוקה', points: [
+  { id:'isola', name:'שכונת איזולה', query:'Isola district, Milan, Italy', category:'City', rec:true,
+    desc:'שכונה שהייתה קשוחה והפכה לטרנדית ביותר בעיר, אמנים ובוטיקים שיקיים לאחר שהדירות בבררה ובנביגלי התייקרו.', source:'Culture Trip / מילאנזי', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'portanuova', name:'פורטה נואבה', query:'Porta Nuova, Milan, Italy', category:'City',
+    desc:'אזור שנבנה סביב האקספו 2015, שינה את קו הרקיע של העיר.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'boscoverticale', name:'Bosco Verticale (היער האנכי)', query:'Bosco Verticale, Milan, Italy', category:'Attraction', rec:true,
+    desc:'שני גורדי שחקים מכוסים ב-900 עצים ו-20,000 צמחים, מבנה מגדיר של סטפנו בוארי, חיצוני בלבד.', source:'Culture Trip / מילאנזי', url:'https://milantravelers.com/attractions/bosco-verticale-milan' },
+  { id:'monumentale', name:'Cimitero Monumentale', query:'Cimitero Monumentale di Milano, Italy', category:'Attraction',
+    desc:'בית קברות מונומנטלי שהפך למוזיאון פסלים תחת כיפת השמיים, 250,000 מ"ר, כניסה חינם.', source:'מילאנזי', url:'https://milantravelers.com/attractions/cimitero-monumentale-milan' },
+  { id:'hangarbicocca', name:'Pirelli HangarBicocca', query:'Pirelli HangarBicocca, Milan, Italy', category:'Attraction', rec:true,
+    desc:'חלל אמנות עכשווית ללא תשלום במפעל תעשייתי לשעבר, כולל התקנת הקבע "The Seven Heavenly Palaces" של אנסלם קיפר.', source:'Culture Trip / מילאנזי', url:'https://milantravelers.com/attractions/pirelli-hangarbicocca-milan' },
+  { id:'ambroeus', name:'Ambroeus / Live in Vintage', query:'vintage designer shops Isola Milan, Italy', category:'City',
+    desc:'חנויות וינטג\' לתיקי שאנל ונעלי פרגמו.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'barfrida', name:'Bar Frida / Blue Note', query:'Blue Note jazz club Milan, Italy', category:'Food',
+    desc:'בר פרידה ומועדון הג\'אז Blue Note — נקודות חמות ללילה באיזולה.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' }
+]},
+{ region: 'פורטה רומנה, טורטונה ובוקוני', points: [
+  { id:'tortona', name:'טורטונה (Zona Tortona)', query:'Zona Tortona, Milan, Italy', category:'City',
+    desc:'"מחוז המפעל" לשעבר של מילאנו, היום מרכז יצירתיות ועיצוב; מארח את שבוע העיצוב כל אפריל.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'portaromana', name:'פורטה רומנה', query:'Porta Romana, Milan, Italy', category:'City',
+    desc:'צד אחד עם שדרות מגורים מכובדות ובתי אופנה, צד שני קרוב לתחנת Lodi עם ברים ושווקים.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'fondazioneprada', name:'Fondazione Prada', query:'Fondazione Prada, Milan, Italy', category:'Attraction', rec:true,
+    desc:'מרכז אמנות עכשווית שתוכנן ע"י רם קולהאס, מגדל מצופה זהב, בית קפה Bar Luce בעיצוב ווס אנדרסון.', source:'Culture Trip / מילאנזי', url:'https://milantravelers.com/attractions/fondazione-prada-milan' },
+  { id:'mudec', name:'MUDEC (Museo delle Culture)', query:'MUDEC Museo delle Culture, Milan, Italy', category:'Attraction',
+    desc:'מוזיאון תרבויות עולם בעיצוב דיוויד צ\'יפרפילד, תערוכות מתחלפות — מתאים גם למשפחות.', source:'Culture Trip / מילאנזי', url:'https://milantravelers.com/attractions/mudec-museum-of-cultures-milan' },
+  { id:'armanisilos', name:'Armani/Silos', query:'Armani Silos, Milan, Italy', category:'Attraction',
+    desc:'חלל תצוגה של ג\'ורג\'יו ארמני, תערוכות צילום ועיצוב מתחלפות.', source:'Culture Trip / מילאנזי', url:'https://milantravelers.com/attractions/armani-silos-milan' },
+  { id:'cascinacuccagna', name:'Cascina Cuccagna', query:'Cascina Cuccagna, Milan, Italy', category:'Food',
+    desc:'נקודה כפרית לשעבר עם גינה ירוקה ומסעדת פארם-טו-פורק מומלצת ע"י מישלן.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'portafiori', name:'PortaFiori', query:'PortaFiori bistro florist, Milan, Italy', category:'Food',
+    desc:'ביסטרו/פרחייה ייחודי, אוכלים בין פרחים.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'labsolue', name:'LabSolue', query:'LabSolue perfume lab Hotel Magna Pars, Milan, Italy', category:'Attraction',
+    desc:'מעבדת בישום נסתרת בחצר מלון Magna Pars Suites.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'spore', name:'Spore', query:'Spore ristorante Via Passo Buole, Milan, Italy', category:'Food',
+    desc:'מסעדה עם תפריט טעימות מבוסס תסיסה (קימצ\'י, מיסו, שויו ביתי), קרוב לפונדאציונה פראדה.', source:'Time Out', url:'https://www.sporeristorante.it' }
+]},
+{ region: "פורטה ונציה, צ'יינה טאון ו-NoLo", points: [
+  { id:'portavenezia', name:'פורטה ונציה', query:'Porta Venezia, Milan, Italy', category:'City',
+    desc:'מפגש הקהילה האמנותית והלהט"בית, קהילה אריתראית גדולה עם מסעדות ומאפיות אריתראיות.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'paolosarpi', name:"צ'יינה טאון (Paolo Sarpi)", query:'Paolo Sarpi Chinatown, Milan, Italy', category:'City', rec:true,
+    desc:'הרובע הסיני של מילאנו, פנסים אדומים, קניות משתלמות, מסעדות סיניות מגוונות מבארי אטרים ועד fine-dining.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'nolo', name:'NoLo (צפון ללורטו)', query:'NoLo district North of Loreto, Milan, Italy', category:'City',
+    desc:'"המחוז החברתי" הראשון והיחיד של מילאנו, שכונה רב-תרבותית ועולה, ללא ג\'נטריפיקציה מוסדית.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'giardinimontanelli', name:'Giardini Pubblici Indro Montanelli', query:'Giardini Pubblici Indro Montanelli, Milan, Italy', category:'Nature',
+    desc:'הפארק הרומנטי ביותר בעיר, סמוך לפורטה ונציה.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'casagalimberti', name:'Casa Galimberti', query:'Casa Galimberti Via Malpighi, Milan, Italy', category:'Attraction',
+    desc:'פנינת אדריכלות ארט-נובו ב-Via Malpighi 3.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'fabbricavapore', name:'Fabbrica del Vapore', query:'Fabbrica del Vapore, Milan, Italy', category:'Attraction',
+    desc:'מפעל קיטור לשעבר שהפך למרכז יצירתי, סמוך לצ\'יינה טאון.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' },
+  { id:'rost', name:'Røst', query:'Rost Milano restaurant Via Melzo, Milan, Italy', category:'Food',
+    desc:'ביסטרו בהשראה נורדית בפורטה ונציה, תפריט מבוסס פארם-טו-טייבל.', source:'Time Out', url:'https://www.rostmilano.com' },
+  { id:'fanwu', name:'Fan Wu', query:'Fan Wu restaurant Viale Tunisia, Milan, Italy', category:'Food',
+    desc:'מסעדה סינית איכותית ואחת המדוברות בעיר.', source:'Time Out', url:'https://www.timeout.com/milan/restaurants/best-restaurants-in-milan' },
+  { id:'spaziomaiocchi', name:'Spazio Maiocchi', query:'Spazio Maiocchi, Milan, Italy', category:'Food',
+    desc:'מקום מסיבות ואירועים של הקהילה האמנותית בפורטה ונציה.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' }
+]},
+{ region: 'סן סירו', points: [
+  { id:'sansiro', name:'Stadio San Siro', query:'Stadio San Siro, Milan, Italy', category:'Attraction',
+    desc:'האצטדיון האגדי המשותף ל-AC מילאן ואינטר מילאנו, אחד "מקתדרלות הכדורגל" של אירופה; ניתן לעשות סיור באצטדיון גם בלי משחק.', source:'Culture Trip / מילאנזי', url:'https://theculturetrip.com/europe/italy/articles/the-coolest-neighbourhoods-in-milan' }
+]},
+{ region: 'טיולי יום מחוץ למילאנו', points: [
+  { id:'lakecomo', name:'אגם קומו (Lake Como)', query:'Lake Como, Italy', category:'Nature', rec:true,
+    desc:'כ-40 דקות משדה התעופה מלפנסה, כפרים רומנטיים על שפת האגם.', source:'Masa Acher / GoTravel / מטיילת מחוץ לקופסא / Lonely Planet', url:'https://www.lonelyplanet.com/articles/day-trips-from-milan' },
+  { id:'lakemaggiore', name:'אגם מאג\'ורה (Lake Maggiore)', query:'Lake Maggiore, Italy', category:'Nature',
+    desc:'כפר האגם קאנוביו, יעד טיול יום פופולרי נוסף.', source:'מטיילת מחוץ לקופסא', url:'https://www.trvbox.co.il/maggiore-lake/' },
+  { id:'bellagio', name:'כפר בלאנו (Bellagio)', query:'Bellagio, Lake Como, Italy', category:'Nature',
+    desc:'כפר מרהיב על אגם קומו, אחד היעדים המצולמים באיטליה.', source:'מטיילת מחוץ לקופסא', url:'https://www.trvbox.co.il/things-to-in-milan/' },
+  { id:'bergamo', name:'ברגמו (Bergamo)', query:'Bergamo, Italy', category:'City',
+    desc:'עיר עתיקה מוקפת חומות, כ-50 דקות ברכבת ממילאנו.', source:'Masa Acher / GoTravel', url:'https://www.gotravel.co.il/travel/?p=2041' },
+  { id:'bologna', name:'בולוניה (Bologna)', query:'Bologna, Italy', category:'City',
+    desc:'עיר "האדומה, השמנה והמלומדת", יעד טיול יום רחוק יותר.', source:'GoTravel', url:'https://www.gotravel.co.il/travel/?p=4117' },
+  { id:'skiresorts', name:'אתרי סקי בצפון איטליה', query:'ski resorts near Milan, Italy', category:'Attraction',
+    desc:'אתרי סקי נגישים ממילאנו לחורף.', source:'Masa Acher / GoTravel', url:'https://www.masa.co.il/article/%D7%9E%D7%9E%D7%99%D7%9C%D7%90%D7%A0%D7%95-%D7%9C%D7%90%D7%AA%D7%A8%D7%99-%D7%94%D7%A1%D7%A7%D7%99-%D7%91%D7%A6%D7%A4%D7%95%D7%9F-%D7%90%D7%99%D7%98%D7%9C%D7%99%D7%94/' },
+  { id:'sestriere', name:'Sestriere', query:'Sestriere, Italy', category:'Attraction',
+    desc:'אתר סקי על "שביל החלב" בין איטליה לצרפת.', source:'GoTravel', url:'https://www.gotravel.co.il/travel/?p=2447' }
+]}
+];
+// IMPORTANT: keep the same object identity between REGIONS and POINTS (no spread/copy here).
+// The checklist below is built by walking REGIONS, while geocoding/markers are attached to
+// POINTS -- if these were different object copies of the same data, a checkbox toggle would
+// check `.marker` on an object that never actually got a marker, and silently do nothing.
+REGIONS.forEach(r => r.points.forEach(p => { p.regionName = r.region; }));
+
+// Within each region, show recommended (⭐) places first, then group the rest by category
+// (same order as the legend) -- makes the checklist easier to scan than the raw source order.
+const CATEGORY_ORDER = ['Nature', 'City', 'Beach', 'Attraction', 'Food', 'Sleep'];
+REGIONS.forEach(r => {
+  r.points.sort((a, b) => {
+    const recDiff = (b.rec ? 1 : 0) - (a.rec ? 1 : 0);
+    if (recDiff !== 0) return recDiff;
+    return CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category);
+  });
+});
+
+const POINTS = REGIONS.flatMap(r => r.points);
+
+function baseScaleFor(p) {
+  return p.isSleep ? 10 : (p.rec ? 9 : 7);
+}
+
+// Google's localized duration/distance text can come back as a mix of Hebrew and English
+// (e.g. "3 שעות 5 mins") even with &language=he on the API load -- so we build our own
+// fully-Hebrew strings from the raw numeric value instead of trusting that text field.
+function formatHebrewDuration(totalSeconds) {
+  const totalMinutes = Math.round(totalSeconds / 60);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours === 0) return `${minutes} דקות`;
+  if (minutes === 0) return `${hours} שעות`;
+  return `${hours} שעות ו-${minutes} דקות`;
+}
+function formatHebrewDistance(meters) {
+  return `${Math.round(meters / 1000)} ק"מ`;
+}
+
+let map, geocoder, directionsService, sharedInfoWindow, focusedPoint;
+
+// Pure *view* filter -- completely separate from each point's checkbox/selection state.
+// A marker is only ever actually shown on the map when both conditions hold: the user
+// has it checked AND it matches the active category filter (or the filter is 'all').
+// Never flip p.checked because of the filter -- filtering must never uncheck anything.
+let currentFilter = 'all';
+function pointVisible(p) {
+  return !!p.checked && (currentFilter === 'all' || p.category === currentFilter);
+}
+function updateMarkerForPoint(p) {
+  if (p.marker) p.marker.setMap(pointVisible(p) ? map : null);
+}
+
+function setFilter(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.filterBtn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  POINTS.forEach(p => updateMarkerForPoint(p));
+  document.querySelectorAll('.poi-row').forEach(row => {
+    row.classList.toggle('hidden', !(cat === 'all' || row.dataset.category === cat));
+  });
+}
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: 45.4642, lng: 9.19 },
+    zoom: 12
+  });
+  geocoder = new google.maps.Geocoder();
+  directionsService = new google.maps.DirectionsService();
+  // Single shared InfoWindow so opening a new bubble always closes any other open one.
+  sharedInfoWindow = new google.maps.InfoWindow();
+  buildChecklist();
+  geocodeAllPoints();
+  document.getElementById('confirmBtn').addEventListener('click', onConfirm);
+  document.getElementById('backBtn').addEventListener('click', onBack);
+  document.getElementById('selectAll').addEventListener('click', () => setAll(true));
+  document.getElementById('clearAll').addEventListener('click', () => setAll(false));
+  document.getElementById('suggestBtn').addEventListener('click', applySuggestedSelection);
+  document.querySelectorAll('.filterBtn').forEach(b => b.addEventListener('click', () => setFilter(b.dataset.cat)));
+}
+
+function setAll(state) {
+  POINTS.forEach(p => {
+    p.checked = state;
+    const chk = document.getElementById('chk_' + p.id);
+    if (chk) chk.checked = state;
+    updateMarkerForPoint(p);
+  });
+  REGIONS.forEach(r => syncRegionCheckbox(r));
+}
+
+// Straight-line distance in km between two geocoded points -- used only to rank "nearest
+// unused point" candidates within/around a region, not for real routing.
+function haversineKm(a, b) {
+  if (!a || !b) return Infinity;
+  const toRad = d => d * Math.PI / 180;
+  const R = 6371;
+  const dLat = toRad(b.lat() - a.lat());
+  const dLng = toRad(b.lng() - a.lng());
+  const lat1 = toRad(a.lat()), lat2 = toRad(b.lat());
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+// 3 points/day for a relaxed/family/light pace, 5 for a packed/intense pace, 4 otherwise.
+function pointsPerDayFromPace(pace) {
+  const s = (pace || '').toString();
+  if (/רגוע|משפחתי|קל/.test(s)) return 3;
+  if (/עמוס|אינטנסיבי|הרבה/.test(s)) return 5;
+  return 4;
+}
+
+// Pure client-side heuristic -- no network calls. Builds TRIP_DAYS day-shaped geographic
+// clusters (never a flat, ungrouped pick) and stops there; it never auto-confirms, the
+// user still reviews/adjusts every cluster before confirming.
+function applySuggestedSelection() {
+  const pointsPerDay = pointsPerDayFromPace(TRIP_PACE);
+  const nonSleep = p => p.category !== 'Sleep';
+  const allNonSleep = POINTS.filter(nonSleep);
+  const recommendedPool = allNonSleep.filter(p => p.rec);
+
+  const used = new Set();
+  const seededRegions = new Set();
+  const clusters = [];
+
+  function pickSeed() {
+    // Prefer an unused recommended point from a region not yet used as a seed this run,
+    // so days don't all pile into the same corner of the map.
+    let pool = recommendedPool.filter(p => !used.has(p.id) && !seededRegions.has(p.regionName));
+    if (!pool.length) pool = recommendedPool.filter(p => !used.has(p.id));
+    if (!pool.length) pool = allNonSleep.filter(p => !used.has(p.id) && !seededRegions.has(p.regionName));
+    if (!pool.length) pool = allNonSleep.filter(p => !used.has(p.id));
+    return pool[0] || null;
+  }
+
+  for (let day = 1; day <= TRIP_DAYS; day++) {
+    const seed = pickSeed();
+    if (!seed) break; // ran out of points entirely
+    seededRegions.add(seed.regionName);
+    used.add(seed.id);
+    const dayPoints = [seed];
+
+    // Fill the rest of this day's quota with the nearest unused points -- same region first,
+    // spilling into the nearest points from other regions if this region runs out, so every
+    // day ends up genuinely full rather than thin. Mix categories so a day isn't all-Nature
+    // or all-Food.
+    while (dayPoints.length < pointsPerDay) {
+      const sameRegion = allNonSleep.filter(p => !used.has(p.id) && p.regionName === seed.regionName);
+      const pool = sameRegion.length ? sameRegion : allNonSleep.filter(p => !used.has(p.id));
+      if (!pool.length) break;
+
+      const catCounts = {};
+      dayPoints.forEach(p => { catCounts[p.category] = (catCounts[p.category] || 0) + 1; });
+      pool.sort((a, b) => {
+        const ca = catCounts[a.category] || 0, cb = catCounts[b.category] || 0;
+        if (ca !== cb) return ca - cb; // least-represented category in this day first
+        return haversineKm(seed.location, a.location) - haversineKm(seed.location, b.location);
+      });
+      const next = pool[0];
+      dayPoints.push(next);
+      used.add(next.id);
+    }
+    clusters.push({ day, points: dayPoints });
+  }
+
+  // Separately, one Sleep-tagged point per region actually used across the clusters --
+  // a base needs somewhere to sleep even though the lodging point itself isn't a "visit",
+  // and it doesn't count against the per-day point target.
+  const usedRegions = new Set();
+  clusters.forEach(c => c.points.forEach(p => usedRegions.add(p.regionName)));
+  let sleepAdded = 0;
+  usedRegions.forEach(regionName => {
+    const sleepPoint = POINTS.find(p => p.regionName === regionName && p.category === 'Sleep' && !used.has(p.id));
+    if (sleepPoint) {
+      used.add(sleepPoint.id);
+      sleepAdded++;
+    }
+  });
+
+  POINTS.forEach(p => {
+    p.checked = used.has(p.id);
+    const chk = document.getElementById('chk_' + p.id);
+    if (chk) chk.checked = p.checked;
+    updateMarkerForPoint(p);
+  });
+  REGIONS.forEach(r => syncRegionCheckbox(r));
+
+  const perDayText = clusters.map(c => `יום ${c.day}: ${c.points.length} נקודות`).join(', ');
+  let msg = `💡 הצעה ל-${TRIP_DAYS} ימי טיול (קצב ${TRIP_PACE}, ${pointsPerDay} נקודות ליום) -- ${perDayText}. `;
+  msg += `בסה"כ ${used.size - sleepAdded} נקודות ביקור + ${sleepAdded} נקודות לינה, ב-${usedRegions.size} אזורים. `;
+  if (clusters.length < TRIP_DAYS) {
+    msg += `לא נמצאו מספיק נקודות פנויות למלא את כל ${TRIP_DAYS} הימים. `;
+  }
+  msg += 'זו הצעת פתיחה לבדיקה בלבד -- לא שיבוץ ימים סופי ולא בחירה סופית. אפשר לשנות ולסמן/להסיר נקודות לפני האישור.';
+  document.getElementById('status').textContent = msg;
+}
+
+// Keep a region's own master checkbox in sync with its points: checked if every point in the
+// region is checked, unchecked if none are, indeterminate if it's a mix.
+function syncRegionCheckbox(r) {
+  if (!r._regionCheckboxEl) return;
+  const total = r.points.length;
+  const checkedCount = r.points.filter(p => p.checked).length;
+  r._regionCheckboxEl.checked = checkedCount === total;
+  r._regionCheckboxEl.indeterminate = checkedCount > 0 && checkedCount < total;
+}
+
+function buildChecklist() {
+  const container = document.getElementById('checklist');
+  container.innerHTML = '';
+  REGIONS.forEach((r, ri) => {
+    const rTitle = document.createElement('div');
+    rTitle.className = 'region-title';
+    rTitle.innerHTML = `
+      <div class="region-title-row">
+        <input type="checkbox" class="region-check" id="regionchk_${ri}" checked>
+        <span class="region-label" title="לחץ כדי לסמן על המפה את גבולות האזור הזה">${r.region} (${r.points.length})</span>
+      </div>
+      <span class="region-dist" id="regiondist_${ri}"></span>
+    `;
+    container.appendChild(rTitle);
+    r._regionCheckboxEl = rTitle.querySelector('.region-check');
+    r._regionCheckboxEl.addEventListener('change', (e) => {
+      const state = e.target.checked;
+      r.points.forEach(p => {
+        p.checked = state;
+        const chk = document.getElementById('chk_' + p.id);
+        if (chk) chk.checked = state;
+        updateMarkerForPoint(p);
+      });
+    });
+    rTitle.querySelector('.region-label').addEventListener('click', () => focusRegion(r.points));
+    r.points.forEach(p => {
+      const row = document.createElement('div');
+      row.className = 'poi-row';
+      row.dataset.category = p.category;
+      row.innerHTML = `
+        <span class="dot" style="background:${CATEGORY_COLORS[p.category]}"></span>
+        <input type="checkbox" id="chk_${p.id}" checked>
+        <span class="poi-name" dir="rtl" title="לחץ כדי למקד את המפה על המקום הזה">${p.name}</span>
+        ${p.rec ? '<span class="rec-star" title="מומלץ">⭐</span>' : ''}
+        ${p.isSleep ? '<span class="sleep-tag">לינה</span>' : ''}
+        ${p.rec ? '<span class="rec-tag">מומלץ</span>' : ''}
+      `;
+      container.appendChild(row);
+      row.querySelector('input').addEventListener('change', (e) => {
+        p.checked = e.target.checked;
+        updateMarkerForPoint(p);
+        syncRegionCheckbox(r);
+      });
+      row.querySelector('.poi-name').addEventListener('click', () => focusPoint(p));
+      row.querySelector('.dot').addEventListener('click', () => focusPoint(p));
+    });
+  });
+}
+
+// Animate a marker's icon scale from its current size up to a bigger size and back down,
+// so clicking a checklist item visibly "grows" the pin on the map instead of just panning to it.
+function animateMarkerScale(marker, fromScale, toScale, duration) {
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // ease-in-out
+    const icon = Object.assign({}, marker.getIcon());
+    icon.scale = fromScale + (toScale - fromScale) * eased;
+    marker.setIcon(icon);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function focusPoint(p) {
+  if (!p.marker || !p.location) {
+    document.getElementById('status').textContent = 'עדיין מאתר את המיקום של ' + p.name + '...';
+    return;
+  }
+  // Shrink whatever was previously focused back to its normal size.
+  if (focusedPoint && focusedPoint !== p && focusedPoint.marker) {
+    animateMarkerScale(focusedPoint.marker, baseScaleFor(focusedPoint) * 1.9, baseScaleFor(focusedPoint), 250);
+  }
+  focusedPoint = p;
+  const base = baseScaleFor(p);
+  animateMarkerScale(p.marker, base, base * 1.9, 300);
+  map.panTo(p.location);
+  if (map.getZoom() < 12) {
+    map.setZoom(12);
+  }
+  // Clicking the checklist row should feel identical to clicking the marker itself -- both grow
+  // the pin AND pop the info bubble, not just pan the map to it.
+  if (p.infoContent) {
+    sharedInfoWindow.setContent(p.infoContent);
+    sharedInfoWindow.open(map, p.marker);
+  }
+}
+
+// Andrew's monotone-chain convex hull over a set of google.maps.LatLng points -- gives us a
+// simple polygon tracing the outermost points, which reads as "the general area" much better
+// than just tightly zooming in on individual pins.
+function convexHullLatLng(points) {
+  if (points.length < 3) return points;
+  const pts = points.map(p => ({ lng: p.lng(), lat: p.lat(), orig: p }))
+    .sort((a, b) => a.lng - b.lng || a.lat - b.lat);
+  const cross = (o, a, b) => (a.lng - o.lng) * (b.lat - o.lat) - (a.lat - o.lat) * (b.lng - o.lng);
+  const lower = [];
+  for (const p of pts) {
+    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
+    lower.push(p);
+  }
+  const upper = [];
+  for (let i = pts.length - 1; i >= 0; i--) {
+    const p = pts[i];
+    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
+    upper.push(p);
+  }
+  lower.pop();
+  upper.pop();
+  return lower.concat(upper).map(h => h.orig);
+}
+
+let regionOverlay;
+
+function focusRegion(regionPoints) {
+  const locs = regionPoints.filter(p => p.location).map(p => p.location);
+  if (locs.length === 0) {
+    document.getElementById('status').textContent = 'עדיין מאתר את מיקומי האזור הזה...';
+    return;
+  }
+  if (regionOverlay) {
+    regionOverlay.setMap(null);
+    regionOverlay = null;
+  }
+  const bounds = new google.maps.LatLngBounds();
+  locs.forEach(l => bounds.extend(l));
+
+  if (locs.length >= 3) {
+    const hull = convexHullLatLng(locs);
+    regionOverlay = new google.maps.Polygon({
+      paths: hull,
+      strokeColor: '#1a5fb4',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#1a5fb4',
+      fillOpacity: 0.12,
+      map: map
+    });
+  } else {
+    // Not enough points for a meaningful polygon -- draw a circle around them instead.
+    const center = bounds.getCenter();
+    let maxDist = 3000;
+    locs.forEach(l => { maxDist = Math.max(maxDist, google.maps.geometry.spherical.computeDistanceBetween(center, l) * 1.3); });
+    regionOverlay = new google.maps.Circle({
+      center: center,
+      radius: maxDist,
+      strokeColor: '#1a5fb4',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#1a5fb4',
+      fillOpacity: 0.12,
+      map: map
+    });
+  }
+
+  // Deliberately not calling map.fitBounds()/setZoom() here -- the region overlay should be
+  // visible against the whole-city view, not cause the map to zoom into that region.
+}
+
+function geocodeAllPoints() {
+  const status = document.getElementById('status');
+  let done = 0;
+  POINTS.forEach((p, i) => {
+    p.checked = true;
+    // Stagger requests slightly to stay well under geocoding rate limits
+    setTimeout(() => {
+      // componentRestrictions locks results to Italy the country (ISO "IT") -- without this,
+      // a short/ambiguous query can silently resolve to the wrong country, since a status of
+      // "OK" does not mean "found the right country".
+      geocoder.geocode({ address: p.query, componentRestrictions: { country: 'IT' } }, (results, status2) => {
+        done++;
+        status.textContent = `מאתר מיקומים... (${done}/${POINTS.length})`;
+        if (status2 === 'OK' && results[0]) {
+          try {
+            p.location = results[0].geometry.location;
+            const markerOptions = {
+              position: p.location,
+              map: pointVisible(p) ? map : null,
+              title: (p.rec ? '⭐ ' : '') + p.name,
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: baseScaleFor(p),
+                fillColor: CATEGORY_COLORS[p.category],
+                fillOpacity: 1,
+                strokeColor: p.rec ? '#FFD700' : '#fff',
+                strokeWeight: p.rec ? 3 : 2
+              }
+            };
+            // IMPORTANT: only set `label` when there's an actual label to show.
+            // Passing label:null explicitly throws inside the Marker constructor
+            // and silently aborts this whole callback (no info window, no click
+            // listener) for every marker that hits that branch.
+            if (p.isSleep) {
+              markerOptions.label = { text: '🛏', fontSize: '11px' };
+            }
+            p.marker = new google.maps.Marker(markerOptions);
+            // Stored on `p` (not just closed over here) so focusPoint() -- triggered by clicking
+            // the place in the sidebar checklist, not just clicking the marker itself -- can open
+            // the exact same bubble content.
+            p.infoContent = `<div dir="rtl" style="text-align:right; font-family:-apple-system,Segoe UI,Arial,sans-serif;">
+                <b>${p.name}</b> <span style="color:${CATEGORY_COLORS[p.category]}">● ${CATEGORY_LABELS_HE[p.category]}</span>
+                ${p.rec ? '<div class="info-rec">⭐ מומלץ — מקורות מציינים כחובה לראות</div>' : ''}
+                <div class="info-desc">${p.desc}</div>
+                <div class="info-source">מקור: ${p.source}${p.url ? ` — <a href="${p.url}" target="_blank" rel="noopener">קישור</a>` : ''}</div>
+              </div>`;
+            p.marker.addListener('click', () => {
+              sharedInfoWindow.setContent(p.infoContent);
+              sharedInfoWindow.open(map, p.marker);
+            });
+          } catch (err) {
+            p.geocodeFailed = true;
+            console.error('Marker/InfoWindow setup failed for', p.name, err);
+          }
+        } else {
+          p.geocodeFailed = true;
+          console.warn('Geocode failed for', p.name, status2);
+        }
+        if (done === POINTS.length) {
+          const failed = POINTS.filter(x => x.geocodeFailed);
+          status.textContent = 'מוכן. סמן/הסר נקודות ולחץ על אישור.' + (failed.length ? ` (${failed.length} לא אותרו: ${failed.map(f=>f.name).join(', ')})` : '');
+          computeRegionDistances();
+        }
+      });
+    }, i * 150);
+  });
+}
+
+// Shows, under each region's title, the driving time from the Duomo (the city's central
+// reference point) to a representative point in that region -- gives a quick sense of how far
+// a region/day-trip is before deciding whether to include it in the trip at all.
+function computeRegionDistances() {
+  REGIONS.forEach((r, ri) => {
+    const distEl = document.getElementById('regiondist_' + ri);
+    if (!distEl) return;
+    if (r.region === 'מרכז היסטורי ורובע האופנה') {
+      distEl.textContent = 'אזור המרכז (הדואומו)';
+      return;
+    }
+    // Prefer a City-tagged point as the representative for the region (more meaningful
+    // than a random trailhead), falling back to the first successfully geocoded point.
+    const rep = r.points.find(p => p.location && p.category === 'City')
+             || r.points.find(p => p.location);
+    if (!rep) {
+      distEl.textContent = 'לא ניתן היה לחשב מרחק';
+      return;
+    }
+    distEl.textContent = 'מחשב מרחק מהדואומו...';
+    // Stagger these too -- firing several Directions requests at once right when geocoding
+    // finishes risks silent rate-limit failures.
+    setTimeout(() => {
+      directionsService.route({
+        origin: 'Duomo di Milano, Milan, Italy',
+        destination: rep.location,
+        travelMode: google.maps.TravelMode.DRIVING
+      }, (result, status) => {
+        if (status === 'OK') {
+          const leg = result.routes[0].legs[0];
+          distEl.textContent = `כ-${formatHebrewDuration(leg.duration.value)} נסיעה מהדואומו`;
+        } else {
+          console.warn('Distance-from-Duomo failed for region', r.region, status);
+          distEl.textContent = 'זמן נסיעה לא זמין כרגע';
+        }
+      });
+    }, ri * 300);
+  });
+}
+
+// Confirm just locks in the current selection -- it does NOT build a route. Sequencing days
+// and computing walking/driving times between legs is a separate skill's job, one step further
+// down the pipeline; this artifact's whole purpose ends at "here are the curated points."
+function onConfirm() {
+  const checked = POINTS.filter(p => p.checked && p.marker);
+
+  if (checked.length === 0) {
+    alert('סמן לפחות נקודה אחת לפני אישור.');
+    return;
+  }
+
+  document.getElementById('checklist').classList.add('hidden');
+  document.getElementById('filterRow').classList.add('hidden');
+  document.querySelector('.legend').classList.add('hidden');
+  document.querySelector('.legend-rec').classList.add('hidden');
+  document.querySelector('.selectAllRow').classList.add('hidden');
+  document.getElementById('suggestBtn').classList.add('hidden');
+  document.getElementById('confirmBtn').classList.add('hidden');
+  document.getElementById('backBtn').classList.remove('hidden');
+
+  if (regionOverlay) {
+    regionOverlay.setMap(null);
+    regionOverlay = null;
+  }
+
+  const summary = document.getElementById('routeSummary');
+  summary.innerHTML = `<div class="region-title">הבחירה ננעלה (${checked.length} נקודות)</div>
+    <div style="font-size:12px; color:#555; margin:6px 0 12px;">הרשימה הזו היא הקלט לסקיל הבא בפייפליין, שיבנה ממנה את המסלול בפועל (סדר ביקור וזמני הליכה/נסיעה).</div>`;
+
+  REGIONS.forEach(r => {
+    const inRegion = r.points.filter(p => p.checked && p.marker);
+    if (inRegion.length === 0) return;
+    const rTitle = document.createElement('div');
+    rTitle.className = 'region-title';
+    rTitle.textContent = r.region + ' (' + inRegion.length + ')';
+    summary.appendChild(rTitle);
+    inRegion.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'leg';
+      div.style.borderInlineStartColor = CATEGORY_COLORS[p.category];
+      div.innerHTML = `${p.rec ? '⭐ ' : ''}${p.name}${p.isSleep ? ' <span class="sleep-tag">לינה</span>' : ''}`;
+      summary.appendChild(div);
+    });
+  });
+
+  const bounds = new google.maps.LatLngBounds();
+  checked.forEach(p => bounds.extend(p.location));
+  map.fitBounds(bounds);
+
+  sendSelectionToLocalServer(checked);
+}
+
+// Sends the confirmed selection to the local helper server (local_server.js,
+// started via start_local_server.bat) so it gets written straight to
+// <Destination>_Selection.json -- this is what lets the next pipeline stage
+// pick up the confirmed points without the user needing to describe them or
+// screenshot this page. If the local server isn't running, this fails
+// silently into a plain-language status message; the on-screen locked list
+// above still works as a fallback exactly like before.
+function sendSelectionToLocalServer(checked) {
+  const statusEl = document.getElementById('status');
+  const points = checked.map(p => ({
+    id: p.id, name: p.name, category: p.category, region: p.regionName,
+    rec: !!p.rec, isSleep: !!p.isSleep
+  }));
+
+  fetch(LOCAL_SERVER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ destination: DESTINATION_NAME, points })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.ok) {
+        statusEl.textContent = `✅ הבחירה נשלחה ונשמרה אוטומטית (${data.count} נקודות). אפשר לחזור לצ'אט ולומר "תמשיך" — אין צורך לתאר את הבחירה.`;
+      } else {
+        statusEl.textContent = '⚠️ השרת המקומי הגיב עם שגיאה: ' + (data.error || 'שגיאה לא ידועה') + '. הרשימה למעלה עדיין תקפה -- אפשר לדווח עליה בצ\'אט כרגיל.';
+      }
+    })
+    .catch(() => {
+      statusEl.textContent = '⚠️ לא הצלחתי להתחבר לשרת המקומי (ודאו ש-start_local_server.bat פועל). הרשימה למעלה עדיין תקפה -- אפשר לדווח עליה בצ\'אט כרגיל.';
+    });
+}
+
+function onBack() {
+  document.getElementById('checklist').classList.remove('hidden');
+  document.getElementById('filterRow').classList.remove('hidden');
+  document.querySelector('.legend').classList.remove('hidden');
+  document.querySelector('.legend-rec').classList.remove('hidden');
+  document.querySelector('.selectAllRow').classList.remove('hidden');
+  document.getElementById('suggestBtn').classList.remove('hidden');
+  document.getElementById('confirmBtn').classList.remove('hidden');
+  document.getElementById('backBtn').classList.add('hidden');
+  document.getElementById('routeSummary').innerHTML = '';
+}
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjZ4x9SilKEMNW1NByB5YPprLfcDloEFQ&libraries=geometry&language=he&region=IT&callback=initMap">
+</script>
+</body>
+</html>

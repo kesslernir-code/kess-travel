@@ -1,0 +1,111 @@
+[
+  {
+    "name": "Lonely Planet",
+    "domain": "lonelyplanet.com",
+    "urls": [
+      "https://www.lonelyplanet.com/destinations/romania",
+      "https://www.lonelyplanet.com/articles/guide-to-romania",
+      "https://www.lonelyplanet.com/destinations/romania/bucharest",
+      "https://www.lonelyplanet.com/articles/top-things-to-do-in-romania",
+      "https://www.lonelyplanet.com/articles/best-places-to-visit-in-romania"
+    ]
+  },
+  {
+    "name": "Rick Steves' Europe",
+    "domain": "ricksteves.com",
+    "urls": [
+      "https://www.ricksteves.com/watch-read-listen/video/tv-show/romania",
+      "https://blog.ricksteves.com/blog/romania-roma/"
+    ]
+  },
+  {
+    "name": "Atlas Obscura",
+    "domain": "atlasobscura.com",
+    "urls": [
+      "https://www.atlasobscura.com/things-to-do/romania",
+      "https://www.atlasobscura.com/things-to-do/bucharest-romania",
+      "https://www.atlasobscura.com/things-to-do/romania/architecture",
+      "https://www.atlasobscura.com/things-to-do/romania/ruins"
+    ]
+  },
+  {
+    "name": "Culture Trip",
+    "domain": "theculturetrip.com",
+    "urls": [
+      "https://theculturetrip.com/europe/romania/articles/where-you-should-go-in-romania-based-on-your-interests",
+      "https://theculturetrip.com/europe/romania/articles/a-perfect-two-week-itinerary-for-romania",
+      "https://theculturetrip.com/europe/romania/articles/15-fascinating-facts-about-romania",
+      "https://theculturetrip.com/europe/romania/articles/12-reasons-why-you-should-visit-romania"
+    ]
+  },
+  {
+    "name": "Time Out",
+    "domain": "timeout.com",
+    "urls": [
+      "https://www.timeout.com/news/king-charles-iii-owns-a-guesthouse-in-transylvania-and-you-can-go-and-stay-101422",
+      "https://www.timeout.com/news/romanias-epic-new-transylvanian-hiking-trail-is-now-open-012522"
+    ]
+  },
+  {
+    "name": "Nomadic Matt",
+    "domain": "nomadicmatt.com",
+    "urls": [
+      "https://www.nomadicmatt.com/travel-guides/romania-travel-tips/",
+      "https://www.nomadicmatt.com/travel-guides/romania-travel-tips/brasov/",
+      "https://www.nomadicmatt.com/travel-guides/romania-travel-tips/sibiu/",
+      "https://www.nomadicmatt.com/travel-blogs/finding-more-than-dracula-in-romania/"
+    ]
+  },
+  {
+    "name": "AllTrails",
+    "domain": "alltrails.com",
+    "urls": [
+      "https://www.alltrails.com/romania",
+      "https://www.alltrails.com/romania/forest",
+      "https://www.alltrails.com/romania/backpacking",
+      "https://www.alltrails.com/romania/maramures",
+      "https://www.alltrails.com/romania/brasov/brasov"
+    ]
+  },
+  {
+    "name": "Wikiloc",
+    "domain": "wikiloc.com",
+    "urls": [
+      "https://www.wikiloc.com/trails/outdoor/romania",
+      "https://www.wikiloc.com/trails/hiking/romania",
+      "https://www.wikiloc.com/trails/mountain-biking/romania"
+    ]
+  },
+  {
+    "name": "Wine Travel Guides",
+    "domain": "winetravelguides.com",
+    "urls": [
+      "https://winetravelguides.com/festivals/country/romania",
+      "https://winetravelguides.com/cotnari-moldavia",
+      "https://winetravelguides.com/dealu-mare-muntenia",
+      "https://winetravelguides.com/tarnave-transylvania"
+    ]
+  },
+  {
+    "name": "Romanian Friend",
+    "domain": "romanianfriend.com",
+    "urls": [
+      "https://www.romanianfriend.com/blog/best-sights-of-transylvania",
+      "https://www.romanianfriend.com/blog/carpathian-mountains-romania"
+    ]
+  },
+  {
+    "name": "Balkan Trails",
+    "domain": "balkantrails.com",
+    "urls": [
+      "https://www.balkantrails.com/ultimate-travel-guide-to-transylvania/"
+    ]
+  },
+  {
+    "name": "Pure Wander",
+    "domain": "purewander.com",
+    "urls": [
+      "https://purewander.com/romanias-carpathaian-mountains-eat-drink-and-hike/"
+    ]
+  }
+]

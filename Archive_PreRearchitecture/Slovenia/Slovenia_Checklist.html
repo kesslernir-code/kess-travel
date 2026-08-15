@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סלובניה — צ'ק-ליסט הזמנות</title>
+<style>
+  :root {
+    --ink: #241f1a;
+    --paper: #faf6ef;
+    --muted: #6b6157;
+    --gold: #c8a24a;
+    --accent: #a13d3d;
+    --done: #e7f1e8;
+    --done-ink: #2f6b4f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    direction: rtl;
+    text-align: right;
+    line-height: 1.6;
+    padding: 36px 6vw 60px;
+  }
+  .kicker {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  h1 { margin: 0 0 6px; font-size: 30px; }
+  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
+  .progress {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 28px;
+  }
+  table {
+    width: 100%;
+    max-width: 1100px;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(60,45,25,0.07);
+  }
+  thead th {
+    background: #f2ece0;
+    text-align: right;
+    font-size: 12.5px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px;
+    border-bottom: 2px solid var(--gold);
+  }
+  thead th.chk-col { text-align: center; width: 50px; }
+  tbody td {
+    padding: 13px 16px;
+    border-bottom: 1px solid #eee3d0;
+    font-size: 14.5px;
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.section-row td {
+    background: #f7f2e8;
+    font-weight: 700;
+    font-size: 12.5px;
+    letter-spacing: 0.5px;
+    color: var(--accent);
+    text-transform: uppercase;
+    padding: 8px 16px;
+  }
+  td.chk-col { text-align: center; }
+  input[type="checkbox"] {
+    width: 19px;
+    height: 19px;
+    cursor: pointer;
+    accent-color: var(--accent);
+  }
+  .task-name { font-weight: 600; }
+  .task-note { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+  .date-cell { white-space: nowrap; font-size: 13.5px; }
+  tr.done td.task-name, tr.done .task-note { text-decoration: line-through; opacity: 0.55; }
+  tr.done { background: var(--done); }
+</style>
+</head>
+<body>
+
+  <div class="kicker">KESSLER TRIP · סלובניה · Tab 7</div>
+  <h1>צ'ק-ליסט הזמנות</h1>
+  <div class="subtitle">כל מה שצריך להזמין מראש לפני הטיול (23–29.8.2026) — הסימונים נשמרים אוטומטית בדפדפן הזה.</div>
+  <div class="progress" id="progressLine"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th class="chk-col">✓</th>
+        <th>משימה</th>
+        <th>תאריך מ</th>
+        <th>תאריך עד</th>
+      </tr>
+    </thead>
+    <tbody id="checklistBody"></tbody>
+  </table>
+
+<script>
+const ROWS = [
+  { section: 'טיסות ורכב' },
+  { id: 'flights', name: 'טיסות הלוך ושוב', note: 'לטוס אל ומ־שדה התעופה יוז\'ה פוצ\'ניק (LJU), ליובליאנה', from: '23.8.2026', to: '29.8.2026' },
+  { id: 'car', name: 'רכב שכור', note: 'איסוף בשדה התעופה ביום ההגעה, החזרה ביום העזיבה', from: '23.8.2026', to: '29.8.2026' },
+
+  { section: 'לינה' },
+  { id: 'hotel-lj', name: 'מלון — ליובליאנה', note: '2 לילות, בסיס לימים 1–2 (עיר)', from: '23.8.2026', to: '25.8.2026' },
+  { id: 'hotel-po', name: 'מלון — פוסטויna', note: '2 לילות, בסיס לימים 3–4 (פוסטויna, פרדיאמה, שקוצ\'יאן, ליפיצה)', from: '25.8.2026', to: '27.8.2026' },
+  { id: 'hotel-mb', name: 'מלון — מאריבור', note: '2 לילות, בסיס לימים 5–6 (מאריבור + פטוי + דרך היין)', from: '27.8.2026', to: '29.8.2026' },
+
+  { section: "אטרקציות הדורשות הזמנה מראש" },
+  { id: 'postojna-tix', name: 'מערת פוסטויna — כרטיסים מראש', note: 'באוגוסט הסבבים הפופולריים (10:00/12:00) נמכרים 2–3 ימים מראש. מתוכנן ליום 3.', from: 'עד', to: '24.8.2026' },
+  { id: 'skocjan-tour', name: "מערות שקוצ'יאן — הזמנת סיור מראש", note: 'סיור מודרך בלבד, מומלץ להזמין 48 שעות לפחות מראש בקיץ. מתוכנן ליום 4.', from: 'עד', to: '24.8.2026' },
+  { id: 'lipica-show', name: 'ליפיצה — הזמנת סיור/מופע', note: 'סיור מודרך בלבד; הזמנת מקום מראש מומלצת במיוחד למופע הסוסים. מתוכנן ליום 4.', from: 'עד', to: '25.8.2026' },
+
+  { section: 'מסעדות הדורשות הזמנת מקום' },
+  { id: 'spajza', name: 'Špajza — הזמנת מקום לערב הראשון', note: 'מסעדה פופולרית בעיר העתיקה, כדאי להזמין מראש ליום ההגעה.', from: 'עד', to: '22.8.2026' }
+];
+
+const STORAGE_KEY = 'kessler_trip_slovenia_checklist';
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; }
+}
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function render() {
+  const state = loadState();
+  const body = document.getElementById('checklistBody');
+  body.innerHTML = '';
+  let total = 0, done = 0;
+
+  ROWS.forEach(row => {
+    if (row.section) {
+      const tr = document.createElement('tr');
+      tr.className = 'section-row';
+      tr.innerHTML = `<td colspan="4">${row.section}</td>`;
+      body.appendChild(tr);
+      return;
+    }
+    total++;
+    const isDone = !!state[row.id];
+    if (isDone) done++;
+    const tr = document.createElement('tr');
+    tr.className = isDone ? 'done' : '';
+    tr.innerHTML = `
+      <td class="chk-col"><input type="checkbox" id="chk_${row.id}" ${isDone ? 'checked' : ''}></td>
+      <td><div class="task-name">${row.name}</div><div class="task-note">${row.note}</div></td>
+      <td class="date-cell">${row.from}</td>
+      <td class="date-cell">${row.to}</td>
+    `;
+    body.appendChild(tr);
+    tr.querySelector('input').addEventListener('change', (e) => {
+      const s = loadState();
+      s[row.id] = e.target.checked;
+      saveState(s);
+      render();
+    });
+  });
+
+  document.getElementById('progressLine').textContent = `${done} / ${total} משימות הושלמו`;
+}
+
+render();
+</script>
+</body>
+</html>

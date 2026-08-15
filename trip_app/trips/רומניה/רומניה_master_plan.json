@@ -1,0 +1,1235 @@
+{
+  "destination": "רומניה",
+  "regions": [
+    {
+      "name": "בוקרשט וסביבתה",
+      "places": [
+        {
+          "name": "בוקרשט (Bucharest)",
+          "description": "בירת רומניה, המרכז הכלכלי והתרבותי הגדול במדינה. העיר משלבת בין סגנונות בל אפוק וניאו-קלאסי ('פריז של המזרח') לבין שדרות ומונומנטים מתקופת הרודנות הקומוניסטית, וכוללת עיר עתיקה שוקקת חיים, בתי קפה מעולים ומוזיאונים מרכזיים.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "העיר העתיקה של בוקרשט (Bucharest Old Town)",
+          "description": "הרובע ההיסטורי המרוצף באבן ששימש כרובע הסוחרים הימי-ביניימי של הבירה. האזור שופץ ומהווה את הלב הפועם של חיי הלילה, מלא בסמטאות להולכי רגל, מסעדות שף, בתי קפה ומבנים היסטוריים.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "ricksteves.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "ארמון הפרלמנט (Palace of Parliament)",
+          "description": "מבנה ענק שהוקם בעלות של מיליארדי דולרים כמונומנט לפולחן האישיות של הרודן ניקולאה צ'אושסקו. נחשב לאחד המבנים המנהליים הגדולים בעולם וכולל מעל אלף חדרים מפוארים, אולמות נשפים ואת הפרלמנט הרומני.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "ricksteves.com",
+            "atlasobscura.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "האתנאום הרומני (Romanian Athenaeum)",
+          "description": "אולם קונצרטים ומבנה נאו-קלאסי מפואר שנחנך בשנת 1888 בתכנון האדריכל אלברט גלרון. המבנה כולל עמודי שיש דוריים, פרסקו היסטורי באורך 70 מטרים ומשמש משכנה של התזמורת הפילהרמונית ג'ורג'ה אנסקו.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "שדרת הניצחון (Calea Victoriei)",
+          "description": "שדרה מרכזית ואלגנטית המדגימה את תקופת הבל אפוק של בוקרשט, שלאורכה ארמונות, מוזיאונים, מלונות יוקרה ומבנים בסגנון אדריכלות צרפתית.",
+          "category": "Urban",
+          "sources": [
+            "ricksteves.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "כיכר המהפכה (Revolution Square)",
+          "description": "הכיכר המרכזית שבה התחוללה המהפכה העממית בסוף 1989 שהביאה להפלת שלטונו של צ'אושסקו. במקום ניצבת אנדרטת הלידה מחדש להנצחת הנספים במאבק.",
+          "category": "Attraction",
+          "sources": [
+            "ricksteves.com",
+            "atlasobscura.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "תרמה בוקרשט (Therme Bucharest)",
+          "description": "מתחם בריכות וספא מקורה ענק ומתקדם, הכולל בריכות מים תרמיים, מגלשות, סאונות ייחודיות ומיטות מים לעיסוי והרפיה.",
+          "category": "Attraction",
+          "sources": [
+            "purewander.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "קורטאה ווקה וכנסיית סנט אנטון (Curtea Veche & Church)",
+          "description": "שרידי חצר הנסיכות הישנה מימי הביניים שהוקמה על ידי ולאד המשפד (דרקולה), לצד כנסיית סנט אנטון העתיקה.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com",
+            "wikiloc.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "שער הניצחון של בוקרשט (Arcul de Triumf)",
+          "description": "שער ניצחון מונומנטלי המוקדש לניצחון חיילי רומניה במלחמת העולם הראשונה, המציע תצפית רחבה על שדרות העיר.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "ארמון האביב / אחוזת צ'אושסקו (Spring Palace / Palatul Primăverii)",
+          "description": "אחוזת המגורים המפוארת של הרודן ניקולאה צ'אושסקו ברובע פרימוורי, המציגה את אורח החיים הראוותני של המשפחה השלטת.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מוזיאון הכפר הלאומי (Dimitrie Gusti National Village Museum)",
+          "description": "מוזיאון פתוח אתנוגרפי על שפת אגם הראסטראו, המציג מאות בתי עץ אותנטיים, כנסיות ומשקי חווה מכל רחבי רומניה.",
+          "category": "Attraction",
+          "sources": [
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "חנות הספרים קרטורשטי קרוסל (Cărturești Carusel)",
+          "description": "חנות ספרים מרהיבה בת שש קומות השוכנת במבנה מהמאה ה-19 בעיר העתיקה, בעלת מרפסות עקלקלות לבנות ועיצוב פנים מרשים.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "קארו קו ברה (Caru’ cu Bere)",
+          "description": "מבשלת בירה ומסעדה היסטורית מהמפורסמות ברומניה, השוכנת במבנה נאו-גותי מרשים ומגישה אוכל רומני מסורתי.",
+          "category": "Food",
+          "sources": [
+            "lonelyplanet.com",
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "גני צ'ישמיג'יו (Cișmigiu Garden)",
+          "description": "הפארק הציבורי העתיק ביותר בבוקרשט, הכולל אגם מלאכותי, פינות ישיבה מוצלות וגשרים רומנטיים בלב העיר.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "אגם הראסטראו (Lake Herăstrău / King Mihai I Park)",
+          "description": "פארק רחב ידיים ואגם בצפון העיר המוקף וילות יוקרתיות, מסעדות ומוזיאונים מרכזיים.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "פארק הטבע וקרשט (Văcărești Nature Park)",
+          "description": "שמורת טבע ודלתה עירונית ייחודית שנוצרה באופן טבעי בתוך שטח מאגר מים נטוש בלב בוקרשט.",
+          "category": "Nature",
+          "sources": [
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מוזיאון האיכר הרומני (Museum of the Romanian Peasant)",
+          "description": "מוזיאון אתנוגרפי עטור פרסים המציג את ההיסטוריה, הפולקלור, התלבושות והאמנות הכפרית של רומניה.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "המוזיאון הלאומי לאמנות עכשווית (MNAC)",
+          "description": "מוזיאון לאמנות עכשווית הממוקם בחלק ממבנה ארמון הפרלמנט העצום ומציג תערוכות מתחלפות.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "ארמון בנק CEC (CEC Bank Palace)",
+          "description": "מבנה מונומנטלי מרשים בסגנון בוז-אר עם כיפת זכוכית ומתכת על שדרת קאליה ויקטוריי.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "המוזיאון הלאומי להיסטוריה של רומניה (National History Museum)",
+          "description": "מוזיאון היסטורי מרכזי המציג ממצאים מתקופת דאקיה והאימפריה הרומית, כולל שחזור מדויק של עמוד טראיאנוס.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "ארמון מוגושואיה (Mogoșoaia Palace)",
+          "description": "ארמון היסטורי מהמאה ה-17 בסגנון ברנקובניאני ייחודי, הממוקם על שפת אגם צפונית לבוקרשט ומוקף גנים מטופחים.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מנזר סנאגוב (Snagov Monastery)",
+          "description": "מנזר מבודד השוכן על אי בלב אגם סנאגוב מצפון לבוקרשט, המזוהה לפי המסורת כמקום קבורתו של ולאד המשפד.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מסעדת קאיאמו (Kaiamo)",
+          "description": "מסעדת קונספט קולינרית מודרנית בבוקרשט המציעה פרשנות חדשנית למטבח הרומני בגישת Farm-to-table.",
+          "category": "Food",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מסעדת נואה (Noua)",
+          "description": "מסעדת שף מובילה בבירה המציעה מטבח רומני עכשווי המבוסס על חומרי גלם מקומיים מובחרים.",
+          "category": "Food",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מסעדת קאנה (Kané)",
+          "description": "מסעדת פיין דיינינג המציגה תפריטי טעימות מודרניים של מטבח רומני יצירתי.",
+          "category": "Food",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "פסאז' מאקה-וילקרוס (Pasajul Macca-Villacrosse)",
+          "description": "ארקדה מקורה ומרשימה בבוקרשט המעוטרת בחלונות ויטראז' צהובים וכוללת בתי קפה וברים נעימים.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "כנסיית סטברופולאוס (Stavropoleos Church)",
+          "description": "כנסייה אורתודוקסית מהמאה ה-18 בסגנון ברנקובניאני, הידועה בחצר פנימית שלווה עם קשתות מגולפות באבן.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "הקתדרלה הפטריארכלית של רומניה (Romanian Patriarchal Cathedral)",
+          "description": "קתדרלה שנבנתה במאה ה-17 על גבעת המיטרופוליה ומשמשת כמרכז הכנסייה האורתודוקסית הרומנית.",
+          "category": "Attraction",
+          "sources": [
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "בית הקברות בלו (Bellu Cemetery)",
+          "description": "בית קברות היסטורי ומונומנטלי המשמש כפנתיאון הלאומי של רומניה, שבו קבורים סופרים, אמנים ומנהיגים.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "אגם מוריי (Lacul Morii)",
+          "description": "האגם הגדול ביותר בבוקרשט המציע שבילי הליכה וריצה פתוחים וטיילת שקיעה נעימה.",
+          "category": "Nature",
+          "sources": [
+            "wikiloc.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "פארק קומאנה (Comana Park)",
+          "description": "שמורת טבע ויער מדרום לבוקרשט המציעה שבילי רכיבה על אופניים, שיט בביצות ופעילויות בטבע.",
+          "category": "Nature",
+          "sources": [
+            "wikiloc.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        }
+      ]
+    },
+    {
+      "name": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "places": [
+        {
+          "name": "בראשוב (Brașov)",
+          "description": "אחת הערים השמורות והמתוירות ביותר ברומניה, השוכנת למרגלות הרי הקרפטים. העיר כוללת מרכז סקסוני ימי-ביניימי מוקף חומות, כיכר שוק ציורית, מסעדות מעולות ושער יציאה מעולה לטירות ומסלולי טבע.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "ricksteves.com",
+            "nomadicmatt.com",
+            "balkantrails.com",
+            "purewander.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "טירת בראן (Bran Castle)",
+          "description": "המבצר הימי-ביניימי הניצב על צוק סלעי בבראן, הידוע בעולם כמקור ההשראה לטירת דרקולה של בראם סטוקר. הטירה כוללת חדרים תקופתיים, מעברים סודיים ותערוכות על בית המלוכה הרומני.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "ricksteves.com",
+            "atlasobscura.com",
+            "timeout.com",
+            "nomadicmatt.com",
+            "wikiloc.com",
+            "romanianfriend.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "טירת פלש (Peleș Castle)",
+          "description": "מעון הקיץ המלכותי המפואר של המלך קרול הראשון בסינאיה. נחשבת לאחת הטירות היפות והמרשימות באירופה, עם אדריכלות נאו-רנסאנסית, חדר נשק עשיר, גנים מטופחים ועיטורי עץ יוקרתיים.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "ricksteves.com",
+            "atlasobscura.com",
+            "nomadicmatt.com",
+            "balkantrails.com",
+            "purewander.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הכנסייה השחורה (Black Church / Biserica Neagră)",
+          "description": "הכנסייה הגותית הגדולה ביותר ברומניה, שנבנתה במאה ה-14 בבראשוב. שמה ניתן לה לאחר שקירותיה הושחרו בשריפה הגדולה של 1689. היא מכילה עוגב ענק מהמאה ה-19 ואוסף נדיר של שטיחים אנטוליים.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "atlasobscura.com",
+            "nomadicmatt.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מבצר רשנוב (Râșnov Fortress)",
+          "description": "מבצר צלבני-טבטוני מהמאה ה-13 השוכן על ראש גבעה סלעית מעל העיירה רשנוב. המתחם תיפקד כעיר מקלט קהילתית מבוצרת ומציע תצפית פנורמית על הרי בוצ'ג'י.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "nomadicmatt.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הפארק הלאומי פיאטרה קראיולוי (Piatra Craiului National Park)",
+          "description": "פארק לאומי דרמטי המתאפיין ברכס אבן גיר צר ומשונן באורך 25 ק\"מ. האזור מציע טרקים אלפיניים מאתגרים, קניונים עמוקים, יערות עשירים בדובי בר ובקתות הרים ציוריות.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com",
+            "romanianfriend.com",
+            "balkantrails.com",
+            "purewander.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "קניון זרנשט (Zărnești Gorges / Prăpăstiile Zărneștiului)",
+          "description": "קניון סלעי צר ומרהיב המוקף מצוקי גיר אנכיים גבוהים, המהווה את אחד ממסלולי ההליכה הפופולריים ביותר בפיאטרה קראיולוי.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com",
+            "wikiloc.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "שמורת מקלט הדובים ליברטי (Libearty Bear Sanctuary)",
+          "description": "מקלט הדובים החומים הגדול בעולם הממוקם ביערות זרנשט, המשמש בית מוגן למעל 100 דובים שניצלו מתנאי שבי קשים.",
+          "category": "Attraction",
+          "sources": [
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "קניון שבעת הסולמות (Seven Ladders Canyon)",
+          "description": "קניון צר ברכס פיאטרה מארה ליד בראשוב, המאפשר טיפוס חווייתי לצד מפלים שוצפים באמצעות סדרת סולמות וגשרוני מתכת.",
+          "category": "Nature",
+          "sources": [
+            "wikiloc.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הרי בוצ'ג'י, הספינקס והבאבלה (Bucegi Mountains, Sphinx & Babele)",
+          "description": "רכס הרים פראי בעמק פראחובה הנגיש ברכבל מסינאיה או בושטני. על הרמה הגבוהה ניצבות תצורות סלע מפורסמות שפוסלו על ידי הרוח והטבע, וכן שבילים לפסגת אומו.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com",
+            "wikiloc.com",
+            "romanianfriend.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הר טמפה (Mount Tâmpa)",
+          "description": "הר המתנשא ישירות מעל העיר בראשוב ומציע תצפית פנורמית מרהיבה על העיר העתיקה לצד השלט המפורסם 'Brașov'. העלייה אפשרית ברגל או ברכבל.",
+          "category": "Nature",
+          "sources": [
+            "nomadicmatt.com",
+            "wikiloc.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "כיכר המועצה בראשוב (Piața Sfatului)",
+          "description": "הכיכר המרכזית בלב העיר העתיקה של בראשוב, המוקפת מבנים סקסוניים צבעוניים ובמרכזה בית המועצה ההיסטורי.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "רחוב החבל (Strada Sforii)",
+          "description": "אחת הסמטאות הצרות ביותר באירופה, שרוחבה נע בין 111 ל-135 ס\"מ, ששימשה במקור כמעבר חירום לכבאים בבראשוב.",
+          "category": "Urban",
+          "sources": [
+            "atlasobscura.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "סינאיה (Sinaia)",
+          "description": "עיירת נופש הררית יוקרתית בעמק פראחובה, ששימשה כעיירת הקיץ של משפחת המלוכה הרומנית ומשמשת מרכז לסקי ולטיולים.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "balkantrails.com",
+            "purewander.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "פויאנה בראשוב (Poiana Brașov)",
+          "description": "אתר הסקי והנופש ההררי הפופולרי ביותר ברומניה, השוכן 12 ק\"מ מעל העיר בראשוב ומציע מסלולי סקי, רכיבת אופניים ומלונות נופש.",
+          "category": "Attraction",
+          "sources": [
+            "wikiloc.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הכפר מגורה (Măgura)",
+          "description": "כפר הררי פסטורלי ושליו בתוך הפארק הלאומי פיאטרה קראיולוי, המציע נופי מרעה ירוקים, בקתות מסורתיות ושקט כפרי מוחלט.",
+          "category": "Urban",
+          "sources": [
+            "wikiloc.com",
+            "purewander.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "בקתת קורמטורה (Cabana Curmătura)",
+          "description": "בקתת הרים מסורתית ואהובה ברכס פיאטרה קראיולוי, המהווה צומת שבילים מרכזי למטיילים ומציעה ארוחות חמות ולינה.",
+          "category": "Sleep",
+          "sources": [
+            "lonelyplanet.com",
+            "wikiloc.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "טירת קנטקוזינו (Cantacuzino Castle)",
+          "description": "טירה מרשימה בסגנון נאו-רומני בעיירה בושטני, המוקפת גנים ומזרקות עם נוף ישיר למצוקי הרי בוצ'ג'י.",
+          "category": "Attraction",
+          "sources": [
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "הרי צ'יוקאש (Ciucaș Mountains)",
+          "description": "רכס הרים פוטוגני ליד בראשוב הידוע בתצורות סלע קרסטיות מרהיבות, עמקים ירוקים ומסלולי הליכה נוחים.",
+          "category": "Nature",
+          "sources": [
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הכנסייה המבוצרת בפרז'מר (Prejmer Fortified Church)",
+          "description": "כנסייה סקסונית מבוצרת במיוחד שהוכרזה כאתר מורשת עולמית של אונסק\"ו, בעלת חומות מגן עבות ומאות תאי מגורים לתושבי הכפר בעת מצור.",
+          "category": "Attraction",
+          "sources": [
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מסעדת סרג'יאנה (Sergiana)",
+          "description": "מסעדה מסורתית מובילה בבראשוב השוכנת במרתף לבנים עתיק ומגישה מאכלים טרנסילבניים, רומניים והונגריים עשירים.",
+          "category": "Food",
+          "sources": [
+            "purewander.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        }
+      ]
+    },
+    {
+      "name": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "places": [
+        {
+          "name": "סיביו (Sibiu)",
+          "description": "אחת הערים היפות ברומניה ובירת התרבות האירופית לשעבר. מרכזה ההיסטורי מאופיין בסמטאות אבן, כיכרות מרשימות, חומות ימי-ביניימיות וגגות בעלי חלונות ייחודיים הידועים כ'עיניים של סיביו'.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "nomadicmatt.com",
+            "romanianfriend.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "סיגישוארה (Sighișoara)",
+          "description": "עיר מצודה ימי-ביניימית שמורה במלואה שהוכרזה כאתר מורשת עולמית של אונסק\"ו. העיר מתאפיינת ברחובות מרוצפי אבן, בתים צבועים בגוני פסטל, מגדלי שמירה ומגדל שעון מפורסם, ומוכרת כמקום הולדתו של ולאד המשפד.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "ricksteves.com",
+            "nomadicmatt.com",
+            "winetravelguides.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "כביש טרנספגרשאן ואגם בלאה (Transfăgărășan & Lake Bâlea)",
+          "description": "כביש נופי מפותל והרפתקני החוצה את הרי פגראש בגובה מעל 2,000 מטר, ומגיע אל אגם בלאה הקרחוני. נחשב לאחד מנתיבי הנסיעה היפים בעולם (פתוח בקיץ ובסתיו).",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "wikiloc.com",
+            "romanianfriend.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "טירת קורבין (Corvin Castle / Castelul Corvinilor)",
+          "description": "טירה גותית-רנסנסית מונומנטלית בחונדוארה, הנחשבת למבצר הימי-ביניימי המרשים ביותר ברומניה, עם גשר מתרומם, צריחים נישאים ואולמות אבירים.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "atlasobscura.com",
+            "romanianfriend.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הרי פגראש ופסגת מולדובאנו (Făgăraș Mountains & Moldoveanu Peak)",
+          "description": "הרכס הגבוה ביותר ברומניה הכולל את הפסגה הגבוהה במדינה (מולדובאנו, 2,544 מ') ואגמים קרחוניים מרהיבים, המהווים גן עדן לטרקים ומטפסי הרים.",
+          "category": "Nature",
+          "sources": [
+            "nomadicmatt.com",
+            "wikiloc.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מוזיאון אסטרה הפתוח (ASTRA National Museum Complex)",
+          "description": "המוזיאון הפתוח הגדול באירופה, המשתרע על פני עשרות דונמים ביער מדרום לסיביו ומציג מאות טחנות רוח ומים, בתי חווה ובתי מלאכה מסורתיים.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הכנסייה המבוצרת בבירטאן (Biertan Fortified Church)",
+          "description": "כנסייה גותית מבוצרת ומוקפת שלוש חומות הגנה בכפר בירטאן, אתר מורשת עולמית של אונסק\"ו המייצג את המורשת הסקסונית של טרנסילבניה.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "romanianfriend.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הכפר ויסקרי (Viscri)",
+          "description": "כפר סקסוני אותנטי ומשומר בעל כנסייה מבוצרת של אונסק\"ו, בתי חווה מסורתיים ופרויקטים לשימור מורשת הנתמכים על ידי המלך צ'ארלס השלישי.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "wikiloc.com",
+            "romanianfriend.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "המוזיאון הלאומי ברוקנטל (Brukenthal National Museum)",
+          "description": "המוזיאון הוותיק ביותר ברומניה, השוכן בארמון בארוקי בכיכר פיאצה מארה בסיביו ומציג אוספי אמנות אירופית ורומנית יקרי ערך.",
+          "category": "Attraction",
+          "sources": [
+            "nomadicmatt.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "גשר השקרים בסיביו (Bridge of Lies)",
+          "description": "גשר הברזל היצוק הראשון ברומניה, הממוקם בעיר העתיקה של סיביו וקשור באגדות מקומיות לפיהן הגשר יקרוס אם ייאמר עליו שקר.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מגדל השעון בסיגישוארה (Clock Tower)",
+          "description": "סמלה של מצודת סיגישוארה מהמאה ה-14, הכולל גג רעפים צבעוני, מנגנון בובות עץ מכני ותצפית פנורמית על העיר.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "atlasobscura.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מצודת אלבה יוליה (Alba Iulia Citadel)",
+          "description": "מצודת כוכב ענקית ושמורה היטב בסגנון וובאן, שבה הוכרז איחוד רומניה ב-1918, הכוללת שערים מונומנטליים, קתדרלות וטקסי חילופי משמר.",
+          "category": "Attraction",
+          "sources": [
+            "romanianfriend.com",
+            "winetravelguides.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מצודת פוינארי (Poenari Fortress)",
+          "description": "מבצר הררי תלול על ראש צוק מעל עמק ארג'ש, ששימש כמעוזו ההיסטורי האותנטי של ולאד המשפד ודורש טיפוס של 1,480 מדרגות.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com",
+            "romanianfriend.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מנזר קורטאה דה ארג'ש (Curtea de Argeș Monastery)",
+          "description": "קתדרלה מהמאה ה-16 בעלת אדריכלות ייחודית וצריחים מפותלים, המשמשת כמקום קבורתם של מלכי רומניה.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מרג'ינימאה סיביולוי (Mărginimea Sibiului)",
+          "description": "אזור כפרים ציוריים למרגלות הרי קינדרל ליד סיביו, הידוע בשימור מסורות רועים, גבינות מקומיות משובחות ואירוח כפרי.",
+          "category": "Food",
+          "sources": [
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "יקב וטירת ז'ידוויי (Castel Jidvei)",
+          "description": "טירה מהמאה ה-16 ואחוזת יין בולטת באזור נהר טארנאבה, המפורסמת ביינות לבנים איכותיים ובסיורי טעימות במרתפיה ההיסטוריים.",
+          "category": "Attraction",
+          "sources": [
+            "winetravelguides.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מצודת דווה (Deva Citadel)",
+          "description": "שרידי מבצר היסטורי הניצב בראש הר געש כבוי מעל העיר דווה, אליו ניתן להעפיל ברכבל תלול.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "סרמיזגטוסה רג'יה (Sarmizegetusa Regia)",
+          "description": "הבירה הצבאית, הדתית והפוליטית של ממלכת דאקיה הקדומה לפני הכיבוש הרומי, השוכנת בהרי אורשטיה ומוכרזת כאתר אונסק\"ו.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        }
+      ]
+    },
+    {
+      "name": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "places": [
+        {
+          "name": "קלוז'-נאפוקה (Cluj-Napoca)",
+          "description": "העיר הגדולה והחשובה ביותר בטרנסילבניה, מרכז תרבותי, אקדמי וטכנולוגי תוסס המציע אדריכלות היסטורית, בתי קפה מעולים וחיי לילה עשירים.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "nomadicmatt.com",
+            "romanianfriend.com",
+            "balkantrails.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מכרה המלח בטורדה (Salina Turda)",
+          "description": "מכרה מלח עתיק ועצום שהוסב לפארק שעשועים ומרכז בריאות תת-קרקעי עתידני, הכולל אגם עם סירות משוטים, גלגל ענק ומתקני ספורט בתוך אולמות מלח מוארים.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com",
+            "nomadicmatt.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "אוראדיה (Oradea)",
+          "description": "פנינה אדריכלית סמוך לגבול הונגריה, המפורסמת באוסף המבנים המרהיב שלה בסגנון ארט נובו וזצסיון וינאי שעברו שחזור קפדני.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "wikiloc.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הפארק הלאומי אפוסני (Apuseni Natural Park)",
+          "description": "פארק טבע מרהיב במערב הקרפטים המתאפיין בכפרי עץ מסורתיים, עמקי קרסט ומאות מערות נטיפים וקרח תת-קרקעיות.",
+          "category": "Nature",
+          "sources": [
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מערת הקרח סקרישוארה (Scărișoara Ice Cave)",
+          "description": "מערה טבעית בהרי אפוסני המכילה את אחד מקרחוני הקרסט התת-קרקעיים הגדולים בעולם, אליה יורדים במדרגות עץ אל עולם קפוא.",
+          "category": "Nature",
+          "sources": [
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מערת הדובים (Peștera Urșilor)",
+          "description": "מערת נטיפים שמורה להפליא שבה התגלו שלדים ומאובנים של מאות דובי מערות שחיו באזור בתקופת הקרח.",
+          "category": "Attraction",
+          "sources": [
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "קניון טורדה (Cheile Turzii)",
+          "description": "שמורת טבע מרשימה של קניון צר בעל מצוקי גיר תלולים המתנשאים לגובה מאות מטרים מעל נחל האשדאט, עם שבילי הליכה וגשרים תלויים.",
+          "category": "Nature",
+          "sources": [
+            "wikiloc.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "יער הויה-באצ'ו (Hoia-Baciu Forest)",
+          "description": "יער מסתורי סמוך לקלוז'-נאפוקה הידוע בעציו המפותלים בצורה מוזרה ובסיפורי פולקלור על תופעות על-טבעיות.",
+          "category": "Nature",
+          "sources": [
+            "atlasobscura.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "ארמון הנשר השחור (Black Eagle Palace)",
+          "description": "מתחם ארכיטקטוני מרהיב בסגנון ארט נובו בכיכר אונירי שבאוראדיה, הכולל גלריית זכוכית מעוטרת בוויטראז'ים.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "הגן הבוטני של קלוז' (Alexandru Borza Botanical Garden)",
+          "description": "גן בוטני רחב ידיים שנוסד במאה ה-19, הכולל אלפי מיני צמחים, גן יפני אותנטי וחממות טרופיות.",
+          "category": "Attraction",
+          "sources": [
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "פסטיבל אנטולד (Untold Festival)",
+          "description": "אחד מפסטיבלי המוזיקה האלקטרונית הגדולים והמובילים באירופה, הנערך מדי קיץ במרכז קלוז'-נאפוקה.",
+          "category": "Other",
+          "sources": [
+            "lonelyplanet.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "אתר המרחצאות ביילה פליקס (Băile Felix)",
+          "description": "אתר נופש וספא תרמי מפורסם סמוך לאוראדיה המציע בריכות מים גיאותרמיים הפתוחות לאורך כל השנה.",
+          "category": "Attraction",
+          "sources": [
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        }
+      ]
+    },
+    {
+      "name": "מרמורש ובוקובינה",
+      "places": [
+        {
+          "name": "המנזרים המצוירים בבוקובינה (Painted Monasteries of Bucovina)",
+          "description": "קבוצת מנזרים מבוצרים שהוכרזו כאתר מורשת עולמית של אונסק\"ו (כולל סוצ'ביצה, וורונץ, מולדובוצה והומור), המפורסמים בציורי קיר חיצוניים מרהיבים מהמאות ה-15 וה-16.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מרמורש (Maramureș)",
+          "description": "חבל ארץ צפוני וכפרי המשמר אורח חיים מסורתי וייחודי ברומניה, הידוע בשערי עץ מגולפים, לבוש מסורתי עממי, עמקים פסטורליים וכנסיות עץ מרשימות.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "בית הקברות השמח בספנצה (Merry Cemetery)",
+          "description": "בית קברות ייחודי בכפר ספנצה שבמרמורש, שבו מאות צלבי עץ צבועים בכחול עז מעוטרים בציורים נאיביים ובשירים הומוריסטיים המתארים את חיי הנפטרים.",
+          "category": "Attraction",
+          "sources": [
+            "ricksteves.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "כנסיות העץ של מרמורש (Wooden Churches of Maramureș)",
+          "description": "עשרות כנסיות עץ גותיות-אורתודוקסיות בעלות צריחים גבוהים ומחודדים וגגות רעפי עץ, שחלקן הוכרזו כאתרי מורשת עולמית של אונסק\"ו.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "ricksteves.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "רכבת הקיטור מוקניצה (Mocănița Steam Train)",
+          "description": "נסיעה חווייתית ברכבת קיטור עתיקה הנוסעת על מסילה צרה לאורך עמק נהר הוואסר בהרי מרמורש הפראיים.",
+          "category": "Attraction",
+          "sources": [
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "אנדרטת קורבנות הקומוניזם בסיגט (Sighet Memorial Museum)",
+          "description": "מוזיאון הנצחה עוצמתי השוכן במבנה כלא פוליטי לשעבר בעיר סיגטו מרמאציאי, המוקדש לקורבנות המשטר הקומוניסטי וההתנגדות ברומניה.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הרי רודנה (Rodna Mountains)",
+          "description": "הפארק הלאומי והרכס האלפיני הגבוה והפראי ביותר בצפון הקרפטים הרומניים, המציע אגמים קרחוניים ופסגות נישאות מעל 2,300 מטר.",
+          "category": "Nature",
+          "sources": [
+            "wikiloc.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הרי צ'חלאו והאגם האדום (Ceahlău Mountains & Red Lake)",
+          "description": "מסיב הררי דרמטי במזרח הקרפטים המאופיין בצוקים בולטים, מפלים שוצפים וקרבה לאגם האדום (Lacul Roșu) וקניון ביקאז.",
+          "category": "Nature",
+          "sources": [
+            "wikiloc.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "יאשי (Iași)",
+          "description": "הבירה ההיסטורית של חבל מולדובה, עיר אלגנטית ותרבותית המציעה ארמונות מרשימים, כנסיות עתיקות ואוניברסיטאות מובילות.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "אזור היין של קוטנרי (Cotnari Wine Region)",
+          "description": "אזור כרמים עתיק בגבעות מולדובה המפורסם מאז המאה ה-15 ביינות הקינוח הלבנים המסורתיים שלו ובסיורי יקבים היסטוריים.",
+          "category": "Food",
+          "sources": [
+            "winetravelguides.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הכפר ברב (Breb)",
+          "description": "כפר מסורתי וציורי בעמק מארה שבמרמורש, המהווה מוקד למלאכות יד מסורתיות, נגרות עץ ואירוח כפרי אותנטי.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        }
+      ]
+    },
+    {
+      "name": "דלתת הדנובה וחוף הים השחור",
+      "places": [
+        {
+          "name": "שמורת הביוספרה של דלתת הדנובה (Danube Delta)",
+          "description": "שמורת הביוספרה ודלתת הנהר הגדולה והשמורה ביותר באירופה. גן עדן לצפרות ולטבע פראי הכולל מבוך תעלות, אגמים, איים צפים ומושבות שקנאים הגדולות באירופה.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com",
+            "nomadicmatt.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "קונסטנצה (Constanța)",
+          "description": "עיר הנמל והחוף הראשית של רומניה לחוף הים השחור, שנוסדה בעת העתיקה ומציעה מוזיאונים היסטוריים, טיילת חוף ומבנים ארכיטקטוניים מרשימים.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "קזינו קונסטנצה (Constanța Casino)",
+          "description": "מבנה אר נובו איקוני ומפואר הניצב על שפת הים השחור בטיילת של קונסטנצה, שנחשב לאחד המונומנטים המפורסמים ברומניה.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "טולצ'אה (Tulcea)",
+          "description": "עיר נמל על גדות הדנובה המשמשת כשער הכניסה הראשי לסיורי שיט ולחקר שמורת דלתת הדנובה.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "יער לטאה (Letea Forest)",
+          "description": "יער קדום ייחודי בדלתת הדנובה הגדל על דיונות חול, המפורסם בסוסי הבר החופשיים המשוטטים בו ובצמחייה הסובטרופית שבו.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מבצר אניסלה והעיר העתיקה היסטריה (Enisala Fortress & Histria)",
+          "description": "אתרים ארכיאולוגיים מרשימים בדוברוג'ה, הכוללים מצודה ימי-ביניימית של בני גנואה המשקיפה על הלגונות ושרידי עיר נמל יוונית-רומית עתיקה.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "גורה פורטיציי וואמה וקה (Gura Portiței & Vama Veche)",
+          "description": "חופי רחצה בולטים על הים השחור – החל מרצועת חול שקטה ובתולית בין הלגונה לים בגורה פורטיציי ועד לחוף הבוהמי והתוסס בואמה וקה.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "סולינה וספנטו גאורגה (Sulina & Sfântu Gheorghe)",
+          "description": "כפרי דייגים ועיירות חוף מבודדות בקצות ערוצי הדנובה, אליהם ניתן להגיע בשיט בלבד, המציעים חופי ים בתוליים ואווירה שלווה.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        }
+      ]
+    },
+    {
+      "name": "באנאט, שערי הברזל ודרום-מערב רומניה",
+      "places": [
+        {
+          "name": "הפארק הלאומי שערי הברזל ופסל דצ'באל (Iron Gates & Decebal Sculpture)",
+          "description": "קניון נהר הדנובה הדרמטי בגבול רומניה וסרביה, שבו נחצב בסלע צוק ענק בדמותו של המלך הדאקי דצ'באל, לצד מערות ומסלולי שיט במעוק הנהר.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "הפארק הלאומי רטזאט (Retezat National Park)",
+          "description": "פארק לאומי אלפיני פראי בקרפטים הדרומיים, הכולל עשרות אגמים קרחוניים צלולים, יערות עתיקים ופסגות תלולות מעל 2,500 מטר.",
+          "category": "Nature",
+          "sources": [
+            "wikiloc.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "טימישוארה (Timișoara)",
+          "description": "העיר המרכזית בחבל באנאט, עיר בעלת היסטוריה עשירה וכיכרות רחבות ידיים, שהייתה מוקד פרוץ המהפכה הרומנית בשנת 1989.",
+          "category": "Urban",
+          "sources": [
+            "lonelyplanet.com",
+            "winetravelguides.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "עמוד האינסוף בטרגו ז'יו (Endless Column)",
+          "description": "פסל מונומנטלי מפורסם מעשה ידי הפסל קונסטנטין ברנקושי בעיר טרגו ז'יו, המהווה יצירת מופת של האמנות המודרנית להנצחת גיבורי רומניה.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "כביש טרנסאלפינה (Transalpina / DN 67C)",
+          "description": "כביש הנסיעה ההררי הסלול הגבוה ביותר ברומניה, החוצה את הרי פארנג בגובה שיא של 2,145 מטר ומציע נופים הרריים עוצרי נשימה.",
+          "category": "Attraction",
+          "sources": [
+            "lonelyplanet.com",
+            "romanianfriend.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "אזור היין דיאלו מארה (Dealu Mare Wine Region)",
+          "description": "אזור כרמים וייצור יין מוביל במורדות הדרומיים של הקרפטים, המפורסם ביינות האדומים האיכותיים שלו (בעיקר פטסקה נגרה) ודרך היין של פראחובה.",
+          "category": "Food",
+          "sources": [
+            "lonelyplanet.com",
+            "winetravelguides.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "שביל ויה טרנסילבניקה (Via Transilvanica)",
+          "description": "שביל מסעות והליכה לאומי באורך 1,400 ק\"מ החוצה את רומניה מצפון לדרום (מפוטנה עד דרובטה-טורנו סברין) ועובר דרך קהילות כפריות ואתרי אונסק\"ו.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com",
+            "timeout.com",
+            "wikiloc.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מפל ביגאר (Bigăr Waterfall)",
+          "description": "מפל מים ייחודי בעמק מיניש הזורם על גבי סלע חרוטי המכוסה באזוב ירוק עשיר.",
+          "category": "Nature",
+          "sources": [
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        }
+      ]
+    }
+  ]
+}

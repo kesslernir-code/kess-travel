@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מילאנו — עמוד רקע</title>
+<style>
+  :root {
+    --ink: #241f1a;
+    --paper: #faf6ef;
+    --muted: #6b6157;
+    --gold: #c8a24a;
+    --accent: #a13d3d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    direction: rtl;
+    text-align: right;
+    line-height: 1.7;
+  }
+  .hero {
+    position: relative;
+    height: 62vh;
+    min-height: 380px;
+    display: flex;
+    align-items: flex-end;
+    background-size: cover;
+    background-position: center;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(20,15,10,0.85) 0%, rgba(20,15,10,0.25) 55%, rgba(20,15,10,0.05) 100%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 40px 6vw 44px;
+    color: #fff;
+  }
+  .hero .kicker {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    margin: 0 0 10px;
+    font-size: 58px;
+    font-weight: 800;
+  }
+  .hero .tagline {
+    font-size: 19px;
+    font-weight: 400;
+    max-width: 640px;
+    opacity: 0.95;
+  }
+  .background-section {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 52px 6vw 20px;
+  }
+  .background-section p {
+    font-size: 17px;
+    margin-bottom: 20px;
+    color: #3a332b;
+  }
+  .section-title {
+    max-width: 1200px;
+    margin: 20px auto 6px;
+    padding: 0 6vw;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 6vw 70px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 26px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 3px 16px rgba(60,45,25,0.09);
+  }
+  .card img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    display: block;
+  }
+  .card-body {
+    padding: 18px 20px 22px;
+  }
+  .cat-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 9px;
+    margin-bottom: 10px;
+  }
+  .card h3 {
+    margin: 0 0 8px;
+    font-size: 19px;
+  }
+  .card p {
+    font-size: 14.5px;
+    color: var(--muted);
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+  <div class="hero" style="background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Duomo_di_Milano.JPG');">
+    <div class="hero-content">
+      <div class="kicker">KESSLER TRIP</div>
+      <h1>מילאנו</h1>
+      <div class="tagline">בירת האופנה והעיצוב של איטליה — קתדרלה גותית מרהיבה, רבעים בוהמייניים לשוטט בהם, ותרבות אפריטיבו על גדות תעלות עתיקות.</div>
+    </div>
+  </div>
+
+  <div class="background-section">
+    <p>מילאנו היא איטליה בגרסה אחרת לגמרי מזו שרוב המטיילים מכירים: לא עיר של חורבות עתיקות אלא עיר שמתקדמת קדימה — בירת האופנה והעיצוב העולמית, מרכז כלכלי ותעשייתי, ועיר שמשלבת היסטוריה עשירה עם אדריכלות עכשווית נועזת. מעל הכל מתנשאת קתדרלת הדואומו הגותית העצומה, אך מסביבה נפרשת עיר שמתגאה באותה מידה בגלריות אמנות עולמיות, ברבעים בוהמייניים ובתרבות רחוב תוססת.</p>
+    <p>העיר בנויה מפסיפס של שכונות בעלות אופי משלהן: בררה הבוהמיינית עם הגלריות והסמטאות המרוצפות, נביגלי עם התעלות ההיסטוריות והאפריטיבו על המים, איזולה התוססת עם ה"יער האנכי" האדריכלי המפורסם, וצ'יינה טאון הססגוני ברחוב פאולו סארפי. לצד זה, רובע האופנה (Quadrilatero d'Oro) הוא חלום קניות בעולם עצמו — אך גם הסמטאות הפחות יוקרתיות של Cinque Vie מציעות בוטיקים וחנויות וינטג' ייחודיות.</p>
+    <p>מילאנו קומפקטית ונוחה מאוד להליכה ולתחבורה ציבורית, מה שהופך אותה לבסיס מצוין לטיול משפחתי קצר וממוקד — בלי צורך ברכב. והיא גם שער נוח לטיולי יום אל אגמי הצפון (קומו, מאג'ורה) למי שרוצה לשלב מעט טבע בתוך חוויה עירונית.</p>
+  </div>
+
+  <div class="section-title">נקודות מומלצות</div>
+  <div class="grid">
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Duomo_di_Milano.JPG" alt="הדואומו">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>הדואומו (Duomo di Milano)</h3>
+        <p>הקתדרלה הגותית האייקונית של מילאנו והכנסייה הגדולה באיטליה — יער של פסלים ואבן שיש שאפשר גם לטפס על גגו ולצפות בעיר מלמעלה. הלב הפועם והסמל המיידי של העיר, ונקודת המוצא הטבעית לכל סיור בה.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Galleria_Vittorio_Emanuele_II.jpg" alt="גלריה ויטוריו עמנואלה השני">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>Galleria Vittorio Emanuele II</h3>
+        <p>קניון הקניות הפעיל העתיק ביותר באיטליה, שנפתח כבר ב-1877, עם כיפת זכוכית מרהיבה וחנויות יוקרה תחתיה. פתוח 24/7 וממוקם ממש ליד הדואומו — עצירת חובה גם רק לצילום.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Castello_sforzesco,_milano.JPG" alt="טירת ספורצה">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>Castello Sforzesco (טירת ספורצה)</h3>
+        <p>טירה מהמאה ה-15 בלב העיר, עם חצרות שכניסתן חופשית ושבעה מוזיאונים קטנים תמורת 5 יורו בלבד — כולל פייטה לא גמורה של מיכלאנג'לו. מקום נהדר לשלב הליכה, היסטוריה ומעט צל בין נקודות אחרות.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Leonardo_da_Vinci_-_The_Last_Supper_high_res.jpg" alt="הסעודה האחרונה">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>הסעודה האחרונה (Cenacolo Vinciano)</h3>
+        <p>יצירת המופת המפורסמת של לאונרדו דה וינצ'י, מצוירת ישירות על קיר חדר האוכל של מנזר סנטה מריה דלה גראציה. הביקוש עצום ולכן חובה להזמין כרטיסים חודשים מראש אם רוצים לראות אותה בזמן הביקור.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Milano_Pinacoteca_di_Brera1.JPG" alt="בררה">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#8e44ad">עיר</span>
+        <h3>בררה — שכונת האמנים</h3>
+        <p>הרובע הבוהמייני הקלאסי של מילאנו: סמטאות מרוצפות, בוטיקים קטנים וברים לאפריטבו, ובלב הכל הפינקוטקה די בררה — מוזיאון האמנות הלאומי עם יצירות של רפאל וקאראווג'ו. בדיוק סוג האזור ה"בוהמייני" ששווה לשוטט בו לאט.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Milano,_casa_sui_navigli.JPG" alt="נביגלי">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#8e44ad">עיר</span>
+        <h3>רובע נביגלי</h3>
+        <p>שכונת התעלות ההיסטוריות של מילאנו, שנקראת לפעמים "מיני-ונציה" — בתים בגווני חלודה-ורוד-צהוב לאורך נביליו גרנדה ונביליו פאווזה, וכשהשעה מתקרבת ל-17:00 כל המקומיים יוצאים לאפריטיבו על גדות המים.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Bosco_verticale,_Milan,_Italy_(Unsplash).jpg" alt="היער האנכי">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#8e44ad">עיר</span>
+        <h3>איזולה והיער האנכי (Bosco Verticale)</h3>
+        <p>שכונה שהייתה פעם מהקשות בעיר והפכה לטרנדית ביותר בה, עם בוטיקים וינטג' וברים איכותיים. הסמל האדריכלי שלה הוא ה"יער האנכי" — שני גורדי שחקים מכוסים ב-900 עצים אמיתיים, אחד ממבני המגורים המצולמים בעולם.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The_Seven_Heavenly_Palaces_(3641).jpg" alt="Pirelli HangarBicocca">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>Pirelli HangarBicocca</h3>
+        <p>חלל אמנות עכשווית ענק בתוך מפעל תעשייתי לשעבר, עם כניסה חופשית לגמרי — כולל התקנת הענק הקבועה "The Seven Heavenly Palaces" של אמן הגרמני אנסלם קיפר. חוויה שונה לגמרי מהמוזיאונים הקלאסיים של העיר.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Milano_-_Fondazione_Prada_-_Facciata.jpg" alt="Fondazione Prada">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>Fondazione Prada</h3>
+        <p>מרכז אמנות עכשווית מרשים שתוכנן ע"י האדריכל רם קולהאס, ומשלב מבני תעשייה היסטוריים עם מגדל מצופה זהב. בקומת הקרקע יושב בית הקפה Bar Luce, שעוצב במיוחד ע"י הבמאי ווס אנדרסון.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Via_Paolo_Sarpi_(Chinatown)_Milano.jpg" alt="פאולו סארפי">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#8e44ad">עיר</span>
+        <h3>צ'יינה טאון (Via Paolo Sarpi)</h3>
+        <p>הרובע הסיני התוסס של מילאנו: פנסים אדומים, קניות משתלמות במיוחד וטווח עצום של מסעדות סיניות — מדוכני נודלס מהירים ועד fine-dining. אזור שונה לגמרי מהתדמית האופנתית של שאר העיר.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Stadio_San_Siro_-_Giuseppe_Meazza,_Milano.jpg" alt="סן סירו">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>אצטדיון סן סירו</h3>
+        <p>האצטדיון האגדי שחולק בין שתי קבוצות הכדורגל היריבות של העיר, AC מילאן ואינטר — אחד "מקתדרלות הכדורגל" הגדולות באירופה. אפשר לעשות סיור באצטדיון גם ללא משחק, לחוויה שונה לגמרי מהמרכז ההיסטורי.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Bellagio,_Lake_Como,_Italy_(51180622244).jpg" alt="אגם קומו">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#27ae60">טבע</span>
+        <h3>אגם קומו (Lake Como)</h3>
+        <p>כ-40 דקות בלבד משדה התעופה מלפנסה, אגם קומו הוא ההפוגה הטבעית הקרובה ביותר למילאנו — כפרים רומנטיים על שפת המים, נופים שהופיעו באינספור סרטים, וטיול יום קליל למי שרוצה לגוון את חוויית העיר.</p>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

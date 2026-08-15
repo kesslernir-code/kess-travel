@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<title>מסלול סופי — מילאנו</title>
+<style>
+  html, body { height: 100%; margin: 0; font-family: -apple-system, Segoe UI, Arial, sans-serif; }
+  #app { display: flex; height: 100%; }
+  #map { flex: 1 1 auto; height: 100%; }
+  #sidebar { width: 460px; flex: 0 0 460px; height: 100%; overflow-y: auto; border-right: 3px solid #ddd; box-sizing: border-box; padding: 16px; background: #fafafa; direction: rtl; text-align: right; }
+  h2 { margin-top: 0; font-size: 18px; }
+  .dayTabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .dayTabs button { flex: 1 1 auto; padding: 10px 6px; font-size: 13px; font-weight: 700; border: 1px solid #ccc; background: #fff; border-radius: 6px; cursor: pointer; color: #333; }
+  .dayTabs button.active { color: #fff; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; font-size: 12px; }
+  .legend span { display: inline-flex; align-items: center; gap: 4px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.3); flex-shrink: 0; }
+  .section-title { font-weight: bold; margin: 16px 0 8px; font-size: 14px; color: #222; background: #eee; padding: 6px 8px; border-radius: 4px; }
+  .day-summary-row { display: flex; align-items: center; gap: 8px; padding: 10px; margin-bottom: 8px; background: #fff; border-radius: 6px; border-inline-start: 5px solid #999; cursor: pointer; }
+  .day-summary-row:hover { background: #f0f0f0; }
+  .day-summary-row .dsr-title { font-weight: 700; font-size: 13.5px; }
+  .day-summary-row .dsr-meta { font-size: 11.5px; color: #555; margin-top: 3px; }
+  .trip-total { font-size: 13px; font-weight: 700; margin: 10px 0; padding: 8px; background: #eef4ff; border-radius: 6px; }
+  .pie-wrap { display: flex; align-items: center; gap: 14px; margin: 10px 0 16px; }
+  .pie-legend { font-size: 11.5px; }
+  .pie-legend div { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; }
+  .intro-line { font-size: 14px; background: #fff8e8; border-radius: 6px; padding: 10px 12px; margin-bottom: 12px; line-height: 1.6; }
+  .field-block { margin-bottom: 10px; font-size: 13px; }
+  .field-block b { display: block; font-size: 11.5px; color: #777; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .schedule { margin: 12px 0; }
+  .sched-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; }
+  .sched-time { font-weight: 700; font-size: 13px; min-width: 46px; color: #1a5fb4; }
+  .sched-icon { font-size: 16px; }
+  .sched-label { font-size: 13px; flex: 1 1 auto; }
+  .poi-card { background: #fff; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; border-inline-start: 4px solid #999; cursor: pointer; }
+  .poi-card:hover { background: #f5f5f5; }
+  .poi-card h4 { margin: 0 0 4px; font-size: 13.5px; }
+  .poi-card p { margin: 0; font-size: 12px; color: #555; line-height: 1.5; }
+  .rest-card { background: #fff3f0; border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; font-size: 12.5px; }
+  .lodging-line { margin-top: 14px; padding: 10px 12px; background: #1a1a4e; color: #fff; border-radius: 6px; font-size: 13px; font-weight: 700; }
+  .departure-line { margin-top: 14px; padding: 10px 12px; background: #a13d3d; color: #fff; border-radius: 6px; font-size: 13px; font-weight: 700; }
+  .worth-section { margin-top: 20px; border-top: 2px solid #ddd; padding-top: 12px; }
+  .worth-region { font-weight: 700; font-size: 12.5px; color: #444; margin: 10px 0 4px; }
+  .worth-row { display: flex; align-items: center; gap: 6px; padding: 3px 0; font-size: 12px; cursor: pointer; }
+  .worth-row:hover { background: #f0f0f0; }
+  .worth-row .worth-name { flex: 1 1 auto; }
+  .worth-dist { font-size: 11px; color: #777; }
+  .worth-hint { font-size: 12px; color: #777; font-style: italic; padding: 6px 0; }
+  #status { font-size: 12px; color: #888; margin-top: 10px; }
+  .info-desc { font-size: 12px; max-width: 260px; line-height: 1.5; }
+  .info-source { font-size: 11px; margin-top: 6px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="map"></div>
+  <div id="sidebar">
+    <h2>מסלול מילאנו — 22–23.7</h2>
+    <div class="dayTabs" id="dayTabs"></div>
+    <div class="legend">
+      <span><span class="dot" style="background:#8e44ad"></span>עיר</span>
+      <span><span class="dot" style="background:#e67e22"></span>אטרקציה</span>
+      <span><span class="dot" style="background:#c0392b"></span>אוכל</span>
+    </div>
+    <div id="content"></div>
+    <div id="status"></div>
+  </div>
+</div>
+
+<script>
+const DESTINATION_NAME = 'מילאנו';
+const BASE_ADDRESS = 'Piazza Duomo, Milan, Italy';
+const BASE_NAME = 'מרכז מילאנו (אזור הדואומו)';
+
+const CATEGORY_COLORS = { City: '#8e44ad', Attraction: '#e67e22', Food: '#c0392b' };
+const CATEGORY_LABELS_HE = { City: 'עיר', Attraction: 'אטרקציה', Food: 'אוכל' };
+const CATEGORY_ICONS = { City: '🛍️', Attraction: '🏛️', Food: '🍽️' };
+const DAY_COLORS = { 1: '#1a7a3c', 2: '#1a5fb4' };
+
+// Kept points carried forward from מילאנו_Route_Map.html / מילאנו_Selection.json,
+// with full id/name/query/category/desc/source/url/rec preserved from the map data.
+const POINTS = {
+  duomo: { id:'duomo', name:'הדואומו (Duomo di Milano)', query:'Duomo di Milano, Milan, Italy', category:'Attraction', rec:true, visitMin:90,
+    desc:'הקתדרלה הגותית האייקונית של מילאנו, הכנסייה הגדולה באיטליה, עם גג שניתן לטייל עליו ותצפית על העיר. מומלץ להזמין כרטיסים מראש בעונת השיא.', source:'Rick Steves / Lonely Planet / Culture Trip / למטייל', url:'https://www.ricksteves.com/europe/italy/milan' },
+  galleria: { id:'galleria', name:'Galleria Vittorio Emanuele II', query:'Galleria Vittorio Emanuele II, Milan, Italy', category:'Attraction', rec:true, visitMin:30,
+    desc:'קניון הקניות הפעיל העתיק ביותר באיטליה (נפתח ב-1877), כיפת זכוכית איקונית, פתוח 24/7, כניסה חופשית.', source:'Culture Trip / Rick Steves / GoTravel', url:'https://www.ricksteves.com/europe/italy/milan' },
+  corsocomo10: { id:'corsocomo10', name:'10 Corso Como', query:'10 Corso Como, Milan, Italy', category:'City', rec:true, visitMin:60,
+    desc:'קונספט סטור אגדי: בוטיק אופנה, חנות ספרים, גלריה וקפה תחת גג אחד.', source:'Time Out', url:'https://www.timeout.com/milan/shopping/10-corso-como' },
+  yamamoto: { id:'yamamoto', name:'Gastronomia Yamamoto', query:'Gastronomia Yamamoto Via Amedei, Milan, Italy', category:'Food', rec:false, visitMin:60,
+    desc:'מסעדה יפנית אותנטית ממש מאחורי הדואומו, מתמחה בבנטו.', source:'Time Out', url:'https://www.gastronomiayamamoto.it/' },
+  ambrosiana: { id:'ambrosiana', name:'Pinacoteca Ambrosiana', query:'Pinacoteca Ambrosiana, Milan, Italy', category:'Attraction', rec:false, visitMin:60,
+    desc:'המוזיאון העתיק ביותר במילאנו, יצירות של רפאל, דה וינצ\'י, בוטיצ\'לי, טיציאן וקאראווג\'ו.', source:'Rick Steves', url:'https://www.ricksteves.com/europe/italy/milan' },
+  love: { id:'love', name:'L.O.V.E.', query:'L.O.V.E. statue Piazza Affari, Milan, Italy', category:'Attraction', rec:false, visitMin:30,
+    desc:'פסל אצבע משולשת ענק מול הבורסה האיטלקית, פסל מחאה נגד הפשיזם מאת מאוריציו קאטלן.', source:'Atlas Obscura / Culture Trip / מטיילת מחוץ לקופסא', url:'https://www.atlasobscura.com/places/love' },
+  castellosforzesco: { id:'castellosforzesco', name:'Castello Sforzesco (טירת ספורצה)', query:'Castello Sforzesco, Milan, Italy', category:'Attraction', rec:true, visitMin:90,
+    desc:'טירה מהמאה ה-15, חצרות בכניסה חופשית, 7 מוזיאונים ב-5 יורו, כולל פייטה לא גמורה של מיכלאנג\'לו.', source:'Rick Steves / Culture Trip / מילאנזי', url:'https://milantravelers.com/attractions/castello-sforzesco' },
+  cenacolo: { id:'cenacolo', name:'הסעודה האחרונה של דה וינצ\'י (Cenacolo Vinciano)', query:'Santa Maria delle Grazie Cenacolo Vinciano, Milan, Italy', category:'Attraction', rec:true, visitMin:60,
+    desc:'יצירת המופת המפורסמת של לאונרדו דה וינצ\'י; חובה להזמין 2-3 חודשים מראש — כניסה בזמן קבוע מראש בלבד.', source:'Rick Steves / Lonely Planet / מילאנזי', url:'https://www.ricksteves.com/europe/italy/milan' },
+  qcterme: { id:'qcterme', name:'QC Termemilano', query:'QC Termemilano spa, Milan, Italy', category:'Attraction', rec:false, visitMin:120,
+    desc:'מתחם ספא יוקרתי בתוך מבנה היסטורי מוקף חומות עתיקות, בריכות תרמיות וסאונות.', source:'מטיילת מחוץ לקופסא', url:'https://www.qcterme.com/en/milano/qc-termemilano' },
+  colonnesanlorenzo: { id:'colonnesanlorenzo', name:'Colonne di San Lorenzo', query:'Colonne di San Lorenzo, Milan, Italy', category:'Attraction', rec:true, visitMin:30,
+    desc:'16 עמודים קורינתיים רומיים, מול הבזיליקה — הטראמים חולפים ממש לצד ההריסות העתיקות.', source:'Culture Trip / מילאנזי', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  navigli: { id:'navigli', name:'רובע נביגלי', query:'Navigli district, Milan, Italy', category:'City', rec:true, visitMin:90,
+    desc:'שכונת התעלות (Naviglio Grande, Naviglio Pavese), תרבות אפריטיבו תוססת מ-17:00, "מיני-ונציה" עם בתים בגווני חלודה-צהוב-ורוד.', source:'Culture Trip / מילאנזי / Lonely Planet', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  antiquariato: { id:'antiquariato', name:'Mercato dell\'Antiquariato', query:'Naviglio Grande antiques market, Milan, Italy', category:'City', rec:false, visitMin:30,
+    desc:'שוק עתיקות חודשי לאורך גדות נביליו גרנדה, ביום ראשון האחרון של כל חודש — בתאריכי הטיול (רביעי-חמישי) השוק עצמו לא פעיל, אבל התעלה יפה לטיול רגל בכל מקרה.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  illibraccio: { id:'illibraccio', name:'Il Libraccio', query:'Il Libraccio bookshop Navigli, Milan, Italy', category:'City', rec:false, visitMin:30,
+    desc:'חנות ספרים מאובקת ואינטימית בסמטאות נביגלי.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  gelateriamusica: { id:'gelateriamusica', name:'La Gelateria della Musica', query:'La Gelateria della Musica, Milan, Italy', category:'Food', rec:true, visitMin:30,
+    desc:'הגלידריה הטובה ביותר בעיר לפי Culture Trip, כל טעם נקרא ע"ש מוזיקאי — הפיסטוק-שוקולד מיוחד.', source:'Culture Trip', url:'https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan' },
+  backdoor43: { id:'backdoor43', name:'Backdoor 43', query:'Backdoor 43 bar Naviglio Grande, Milan, Italy', category:'Food', rec:false, visitMin:60,
+    desc:'אחד הברים הקטנים בעולם, כ-4 מ"ר, חובה להזמין מקום מראש.', source:'Culture Trip / Atlas Obscura', url:'https://www.atlasobscura.com/places/backdoor-43' }
+};
+
+// Not-kept points from the Route Map's other regions, carried forward lightly
+// (name/category/query/region only) for the "worth knowing about" section.
+const EXTRA_REGIONS = [
+  { region: 'מרכז היסטורי ורובע האופנה', points: [
+    { name:'מוזיאון הדואומו', category:'Attraction', query:'Museo del Duomo, Milan, Italy' },
+    { name:'Palazzo Reale', category:'Attraction', query:'Palazzo Reale, Milan, Italy' },
+    { name:'Museo del Novecento', category:'Attraction', query:'Museo del Novecento, Milan, Italy' },
+    { name:"תיאטרון לה סקאלה (Teatro alla Scala) + מוזיאון", category:'Attraction', query:'Teatro alla Scala, Milan, Italy' },
+    { name:'Pinacoteca del Castello Sforzesco', category:'Attraction', query:'Pinacoteca del Castello Sforzesco, Milan, Italy' },
+    { name:"Gallerie d'Italia", category:'Attraction', query:"Gallerie d'Italia, Milan, Italy" },
+    { name:'Museo Poldi Pezzoli', category:'Attraction', query:'Museo Poldi Pezzoli, Milan, Italy' },
+    { name:'Triennale di Milano', category:'Attraction', query:'Triennale di Milano, Milan, Italy' },
+    { name:'Loggia dei Mercanti (גלריית הלחישה)', category:'Attraction', query:'Loggia dei Mercanti, Milan, Italy' },
+    { name:'San Bernardino alle Ossa', category:'Attraction', query:'San Bernardino alle Ossa, Milan, Italy' },
+    { name:'La Rinascente', category:'City', query:'La Rinascente, Milan, Italy' },
+    { name:'Wait and See', category:'City', query:'Wait and See boutique Via Santa Marta, Milan, Italy' },
+    { name:'Fornasetti (חנות דגל)', category:'City', query:'Fornasetti flagship store Corso Venezia, Milan, Italy' },
+    { name:'Pupi Solari', category:'City', query:'Pupi Solari boutique, Milan, Italy' },
+    { name:'Loste Café', category:'Food', query:'Loste Cafe, Milan, Italy' },
+    { name:'Remulass', category:'Food', query:'Remulass restaurant, Milan, Italy' },
+    { name:'One Season Thai Spa', category:'Attraction', query:'One Season spa, Milan, Italy' },
+    { name:'Hamleys Milano', category:'City', query:'Hamleys Milano toy store, Milan, Italy' },
+    { name:'Museo Archeologico', category:'Attraction', query:'Civico Museo Archeologico di Milano, Italy' }
+  ]},
+  { region: 'בררה', points: [
+    { name:'שכונת בררה', category:'City', query:'Brera district, Milan, Italy' },
+    { name:'Pinacoteca di Brera', category:'Attraction', query:'Pinacoteca di Brera, Milan, Italy' },
+    { name:'Biblioteca Braidense', category:'Attraction', query:'Biblioteca Nazionale Braidense, Milan, Italy' },
+    { name:'Bar Basso', category:'Food', query:'Bar Basso, Milan, Italy' },
+    { name:'Massimo De Carlo (Palazzo Belgioioso)', category:'Attraction', query:'Massimo De Carlo Palazzo Belgioioso, Milan, Italy' },
+    { name:'Tornabuoni Arte', category:'Attraction', query:'Tornabuoni Arte Via Fatebenefratelli, Milan, Italy' },
+    { name:'Gió Marconi Gallery', category:'Attraction', query:'Gio Marconi Gallery Via Tadino, Milan, Italy' }
+  ]},
+  { region: 'נביגלי', points: [
+    { name:'Darsena', category:'City', query:'Darsena Milano, Milan, Italy' },
+    { name:'Corso di Porta Ticinese', category:'City', query:'Corso di Porta Ticinese, Milan, Italy' },
+    { name:'Basilica di San Lorenzo', category:'Attraction', query:'Basilica di San Lorenzo Maggiore, Milan, Italy' },
+    { name:"Basilica di Sant'Eustorgio", category:'Attraction', query:"Basilica di Sant'Eustorgio, Milan, Italy" },
+    { name:'סיורי סירה וגונדולה ונציאנית', category:'Attraction', query:'Alzaia Naviglio Grande boat tours, Milan, Italy' },
+    { name:'Vicolo dei Lavandai', category:'Attraction', query:'Vicolo dei Lavandai, Milan, Italy' },
+    { name:'Antonioli', category:'City', query:'Antonioli boutique Via Pasquale Paoli, Milan, Italy' },
+    { name:'Erba Brusca', category:'Food', query:'Erba Brusca restaurant, Milan, Italy' },
+    { name:'Nebbia', category:'Food', query:'Nebbia Milano restaurant, Milan, Italy' }
+  ]},
+  { region: 'איזולה, פורטה נואבה וביקוקה', points: [
+    { name:'שכונת איזולה', category:'City', query:'Isola district, Milan, Italy' },
+    { name:'פורטה נואבה', category:'City', query:'Porta Nuova, Milan, Italy' },
+    { name:'Bosco Verticale (היער האנכי)', category:'Attraction', query:'Bosco Verticale, Milan, Italy' },
+    { name:'Cimitero Monumentale', category:'Attraction', query:'Cimitero Monumentale di Milano, Italy' },
+    { name:'Pirelli HangarBicocca', category:'Attraction', query:'Pirelli HangarBicocca, Milan, Italy' },
+    { name:'Ambroeus / Live in Vintage', category:'City', query:'vintage designer shops Isola Milan, Italy' },
+    { name:'Bar Frida / Blue Note', category:'Food', query:'Blue Note jazz club Milan, Italy' }
+  ]},
+  { region: 'פורטה רומנה, טורטונה ובוקוני', points: [
+    { name:'טורטונה (Zona Tortona)', category:'City', query:'Zona Tortona, Milan, Italy' },
+    { name:'פורטה רומנה', category:'City', query:'Porta Romana, Milan, Italy' },
+    { name:'Fondazione Prada', category:'Attraction', query:'Fondazione Prada, Milan, Italy' },
+    { name:'MUDEC (Museo delle Culture)', category:'Attraction', query:'MUDEC Museo delle Culture, Milan, Italy' },
+    { name:'Armani/Silos', category:'Attraction', query:'Armani Silos, Milan, Italy' },
+    { name:'Cascina Cuccagna', category:'Food', query:'Cascina Cuccagna, Milan, Italy' },
+    { name:'PortaFiori', category:'Food', query:'PortaFiori bistro florist, Milan, Italy' },
+    { name:'LabSolue', category:'Attraction', query:'LabSolue perfume lab Hotel Magna Pars, Milan, Italy' },
+    { name:'Spore', category:'Food', query:'Spore ristorante Via Passo Buole, Milan, Italy' }
+  ]},
+  { region: "פורטה ונציה, צ'יינה טאון ו-NoLo", points: [
+    { name:'פורטה ונציה', category:'City', query:'Porta Venezia, Milan, Italy' },
+    { name:"צ'יינה טאון (Paolo Sarpi)", category:'City', query:'Paolo Sarpi Chinatown, Milan, Italy' },
+    { name:'NoLo (צפון ללורטו)', category:'City', query:'NoLo district North of Loreto, Milan, Italy' },
+    { name:'Giardini Pubblici Indro Montanelli', category:'Nature', query:'Giardini Pubblici Indro Montanelli, Milan, Italy' },
+    { name:'Casa Galimberti', category:'Attraction', query:'Casa Galimberti Via Malpighi, Milan, Italy' },
+    { name:'Fabbrica del Vapore', category:'Attraction', query:'Fabbrica del Vapore, Milan, Italy' },
+    { name:'Røst', category:'Food', query:'Rost Milano restaurant Via Melzo, Milan, Italy' },
+    { name:'Fan Wu', category:'Food', query:'Fan Wu restaurant Viale Tunisia, Milan, Italy' },
+    { name:'Spazio Maiocchi', category:'Food', query:'Spazio Maiocchi, Milan, Italy' }
+  ]},
+  { region: 'סן סירו', points: [
+    { name:'Stadio San Siro', category:'Attraction', query:'Stadio San Siro, Milan, Italy' }
+  ]},
+  { region: 'טיולי יום מחוץ למילאנו', points: [
+    { name:'אגם קומו (Lake Como)', category:'Nature', query:'Lake Como, Italy' },
+    { name:"אגם מאג'ורה (Lake Maggiore)", category:'Nature', query:'Lake Maggiore, Italy' },
+    { name:'כפר בלאג\'ו (Bellagio)', category:'Nature', query:'Bellagio, Lake Como, Italy' },
+    { name:'ברגמו (Bergamo)', category:'City', query:'Bergamo, Italy' },
+    { name:'בולוניה (Bologna)', category:'City', query:'Bologna, Italy' },
+    { name:'אתרי סקי בצפון איטליה', category:'Attraction', query:'ski resorts near Milan, Italy' },
+    { name:'Sestriere', category:'Attraction', query:'Sestriere, Italy' }
+  ]}
+];
+
+const DAYS = [
+  {
+    id: 1, label: 'יום 1', date: '22.7 (רביעי)', color: DAY_COLORS[1], base: BASE_NAME, isDeparture: false,
+    intro: '🛬 יום ההגעה למילאנו: מהכיכר האייקונית של הדואומו, דרך רובע האופנה ובוטיק הקונספט-סטור המיתולוגי, ועד לחצרות טירת ספורצה — ומסיימים בפינוק ספא איטלקי מפואר.',
+    startLabel: 'הגעה למילאנו, אחסון מזוודות בבסיס ותחילת הסיור', startTime: '10:30',
+    wake: null, breakfast: null,
+    route: ['duomo', 'galleria', 'corsocomo10', 'yamamoto', 'ambrosiana', 'love', 'castellosforzesco', 'cenacolo', 'qcterme'],
+    restaurants: [{ id:'yamamoto', note:'ארוחת צהריים' }],
+    note: 'יום עשיר ומלא — QC Terme בערב הוא הצעה גמישה; אם האנרגיה אוזלת אחרי יום הליכה ארוך, אפשר לוותר עליה או לקצר.'
+  },
+  {
+    id: 2, label: 'יום 2', date: '23.7 (חמישי)', color: DAY_COLORS[2], base: BASE_NAME, isDeparture: true,
+    intro: '🛶 יום שיט בין התעלות של נביגלי — עמודים רומיים עתיקים, קניות בוטיקים בוהמייניים, גלידה אגדית ולסיום כוסית אפריטיבו בבר הכי קטן בעולם, לפני הטיסה חזרה.',
+    wake: '08:30', breakfast: 'ארוחת בוקר בבסיס הלינה',
+    route: ['colonnesanlorenzo', 'navigli', 'antiquariato', 'illibraccio', 'gelateriamusica', 'backdoor43'],
+    restaurants: [{ id:'gelateriamusica', note:'הפסקת גלידה' }, { id:'backdoor43', note:'אפריטיבו לפני היציאה' }],
+    note: null
+  }
+];
+
+function formatHebrewDuration(totalSeconds) {
+  const totalMinutes = Math.round(totalSeconds / 60);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours === 0) return `${minutes} דקות`;
+  if (minutes === 0) return `${hours} שעות`;
+  return `${hours} שעות ו-${minutes} דקות`;
+}
+function formatHebrewDistance(meters) {
+  return `${Math.round(meters / 1000)} ק"מ`;
+}
+function roundToHalfHour(mins) {
+  return Math.round(mins / 30) * 30;
+}
+function minutesToClock(mins) {
+  const m = ((mins % 1440) + 1440) % 1440;
+  const h = Math.floor(m / 60);
+  const mm = m % 60;
+  return `${String(h).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+}
+function clockToMinutes(hhmm) {
+  const [h, m] = hhmm.split(':').map(Number);
+  return h * 60 + m;
+}
+
+let map, geocoder, directionsService, sharedInfoWindow, focusedId;
+let DistanceLabel;
+let currentView = 'overview'; // 'overview' | 1 | 2
+const dayRenderers = {};   // day.id -> google.maps.DirectionsRenderer
+const dayLabelOverlays = {}; // day.id -> [DistanceLabel,...]
+const dayLegsMinutes = {}; // day.id -> [minutes,...] real walking legs from Directions
+const worthCache = {}; // baseName -> { pointName: distanceText }
+const extraMarkers = {}; // lazy markers for "worth knowing about" points, keyed by name
+
+function initMap() {
+  // Must be defined here, not as a top-level class -- google isn't defined yet
+  // when this script block's top-level statements first run (async Maps script tag).
+  DistanceLabel = class extends google.maps.OverlayView {
+    constructor(position, text) {
+      super();
+      this.position = position;
+      this.text = text;
+    }
+    onAdd() {
+      this.div = document.createElement('div');
+      this.div.style.position = 'absolute';
+      this.div.style.background = '#fff';
+      this.div.style.border = '1px solid #999';
+      this.div.style.borderRadius = '10px';
+      this.div.style.padding = '1px 6px';
+      this.div.style.fontSize = '11px';
+      this.div.style.fontWeight = '700';
+      this.div.style.whiteSpace = 'nowrap';
+      this.div.style.transform = 'translate(-50%, -50%)';
+      this.div.textContent = this.text;
+      this.getPanes().overlayLayer.appendChild(this.div);
+    }
+    draw() {
+      const proj = this.getProjection();
+      if (!proj || !this.div) return;
+      const pos = proj.fromLatLngToDivPixel(this.position);
+      this.div.style.left = pos.x + 'px';
+      this.div.style.top = pos.y + 'px';
+    }
+    onRemove() {
+      if (this.div) { this.div.parentNode.removeChild(this.div); this.div = null; }
+    }
+  };
+
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: 45.4642, lng: 9.19 },
+    zoom: 13
+  });
+  geocoder = new google.maps.Geocoder();
+  directionsService = new google.maps.DirectionsService();
+  sharedInfoWindow = new google.maps.InfoWindow();
+
+  buildDayTabs();
+  geocodeAllPoints();
+  fetchAllDayRoutes();
+}
+
+function buildDayTabs() {
+  const wrap = document.getElementById('dayTabs');
+  const allBtn = document.createElement('button');
+  allBtn.textContent = 'כל הימים';
+  allBtn.className = 'active';
+  allBtn.style.background = '#333';
+  allBtn.style.color = '#fff';
+  allBtn.addEventListener('click', () => selectView('overview', allBtn));
+  wrap.appendChild(allBtn);
+  DAYS.forEach(d => {
+    const btn = document.createElement('button');
+    btn.textContent = d.label;
+    btn.addEventListener('click', () => selectView(d.id, btn));
+    wrap.appendChild(btn);
+    d._tabBtn = btn;
+  });
+  allBtn._isAll = true;
+  wrap._allBtn = allBtn;
+}
+
+function selectView(view, btnEl) {
+  currentView = view;
+  document.querySelectorAll('#dayTabs button').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = '#fff';
+    b.style.color = '#333';
+  });
+  btnEl.classList.add('active');
+  if (view === 'overview') {
+    btnEl.style.background = '#333';
+    btnEl.style.color = '#fff';
+  } else {
+    const d = DAYS.find(x => x.id === view);
+    btnEl.style.background = d.color;
+    btnEl.style.color = '#fff';
+  }
+  render();
+}
+
+function geocodeAllPoints() {
+  const ids = Object.keys(POINTS);
+  let done = 0;
+  const status = document.getElementById('status');
+  ids.forEach((id, i) => {
+    setTimeout(() => {
+      const p = POINTS[id];
+      geocoder.geocode({ address: p.query, componentRestrictions: { country: 'IT' } }, (results, status2) => {
+        done++;
+        status.textContent = `מאתר מיקומים... (${done}/${ids.length})`;
+        if (status2 === 'OK' && results[0]) {
+          p.location = results[0].geometry.location;
+          const dayObj = DAYS.find(d => d.route.includes(id));
+          const markerOptions = {
+            position: p.location,
+            map: null,
+            title: (p.rec ? '⭐ ' : '') + p.name,
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: p.rec ? 9 : 7,
+              fillColor: CATEGORY_COLORS[p.category],
+              fillOpacity: 1,
+              strokeColor: dayObj ? dayObj.color : '#fff',
+              strokeWeight: 3
+            }
+          };
+          p.marker = new google.maps.Marker(markerOptions);
+          p.infoContent = `<div dir="rtl" style="text-align:right; font-family:-apple-system,Segoe UI,Arial,sans-serif;">
+              <b>${p.name}</b> <span style="color:${CATEGORY_COLORS[p.category]}">● ${CATEGORY_LABELS_HE[p.category]}</span>
+              ${p.rec ? '<div style="font-size:11px;color:#b8860b;font-weight:bold;margin-top:4px;">⭐ מומלץ</div>' : ''}
+              <div class="info-desc">${p.desc}</div>
+              <div class="info-source">מקור: ${p.source}${p.url ? ` — <a href="${p.url}" target="_blank" rel="noopener">קישור</a>` : ''}</div>
+            </div>`;
+          p.marker.addListener('click', () => focusMapPoint(id));
+        } else {
+          p.geocodeFailed = true;
+          console.warn('Geocode failed for', p.name, status2);
+        }
+        if (done === ids.length) {
+          status.textContent = 'מוכן.';
+          render();
+        }
+      });
+    }, i * 150);
+  });
+}
+
+function fetchAllDayRoutes() {
+  DAYS.forEach((d, di) => {
+    setTimeout(() => {
+      const waypoints = d.route.slice(0, -1).map(id => ({ location: POINTS[id].query, stopover: true }));
+      const destination = POINTS[d.route[d.route.length - 1]].query;
+      directionsService.route({
+        origin: BASE_ADDRESS,
+        destination: destination,
+        waypoints: waypoints,
+        travelMode: google.maps.TravelMode.WALKING
+      }, (result, status) => {
+        if (status === 'OK') {
+          d._directionsResult = result;
+          const legs = result.routes[0].legs;
+          dayLegsMinutes[d.id] = legs.map(l => Math.round(l.duration.value / 60));
+          d._totalSeconds = legs.reduce((sum, l) => sum + l.duration.value, 0);
+          d._totalMeters = legs.reduce((sum, l) => sum + l.distance.value, 0);
+
+          const renderer = new google.maps.DirectionsRenderer({
+            suppressMarkers: true,
+            preserveViewport: true,
+            polylineOptions: { strokeColor: d.color, strokeWeight: 4, strokeOpacity: 0.8 }
+          });
+          renderer.setDirections(result);
+          dayRenderers[d.id] = renderer;
+
+          dayLabelOverlays[d.id] = legs.map(leg => {
+            const mid = google.maps.geometry
+              ? google.maps.geometry.spherical.interpolate(leg.start_location, leg.end_location, 0.5)
+              : leg.start_location;
+            const overlay = new DistanceLabel(mid, formatHebrewDistance(leg.distance.value));
+            return overlay;
+          });
+        } else {
+          console.warn('Directions failed for day', d.id, status);
+        }
+        render();
+      });
+    }, di * 400);
+  });
+}
+
+function render() {
+  DAYS.forEach(d => {
+    const show = currentView === 'overview' || currentView === d.id;
+    d.route.forEach(id => { if (POINTS[id].marker) POINTS[id].marker.setMap(show ? map : null); });
+    if (dayRenderers[d.id]) dayRenderers[d.id].setMap(show ? map : null);
+    if (dayLabelOverlays[d.id]) dayLabelOverlays[d.id].forEach(o => o.setMap(show ? map : null));
+  });
+
+  if (currentView === 'overview') {
+    fitBoundsToAll();
+    renderOverviewContent();
+  } else {
+    const d = DAYS.find(x => x.id === currentView);
+    fitBoundsToDay(d);
+    renderDayContent(d);
+  }
+}
+
+function fitBoundsToAll() {
+  const locs = Object.values(POINTS).filter(p => p.location).map(p => p.location);
+  if (!locs.length) return;
+  const bounds = new google.maps.LatLngBounds();
+  locs.forEach(l => bounds.extend(l));
+  map.fitBounds(bounds);
+}
+
+function fitBoundsToDay(d) {
+  const locs = d.route.map(id => POINTS[id]).filter(p => p.location).map(p => p.location);
+  if (!locs.length) return;
+  const bounds = new google.maps.LatLngBounds();
+  locs.forEach(l => bounds.extend(l));
+  map.fitBounds(bounds);
+}
+
+function buildPieSVG(counts, size) {
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  if (!total) return '';
+  const r = size / 2;
+  let angle = -90;
+  const paths = [];
+  Object.keys(counts).forEach(cat => {
+    const val = counts[cat];
+    if (!val) return;
+    const frac = val / total;
+    const startAngle = angle;
+    const endAngle = angle + frac * 360;
+    angle = endAngle;
+    const large = (endAngle - startAngle) > 180 ? 1 : 0;
+    const toXY = (a) => [r + r * Math.cos(a * Math.PI / 180), r + r * Math.sin(a * Math.PI / 180)];
+    const [x1, y1] = toXY(startAngle);
+    const [x2, y2] = toXY(endAngle);
+    if (frac >= 0.999) {
+      paths.push(`<circle cx="${r}" cy="${r}" r="${r}" fill="${CATEGORY_COLORS[cat]}" />`);
+    } else {
+      paths.push(`<path d="M${r},${r} L${x1},${y1} A${r},${r} 0 ${large} 1 ${x2},${y2} Z" fill="${CATEGORY_COLORS[cat]}" />`);
+    }
+  });
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${paths.join('')}</svg>`;
+}
+
+function categoryCounts(ids) {
+  const counts = { City: 0, Attraction: 0, Food: 0 };
+  ids.forEach(id => { const c = POINTS[id].category; counts[c] = (counts[c] || 0) + 1; });
+  return counts;
+}
+
+function renderOverviewContent() {
+  const el = document.getElementById('content');
+  const allIds = DAYS.flatMap(d => d.route);
+  const totalSeconds = DAYS.reduce((s, d) => s + (d._totalSeconds || 0), 0);
+  let html = `<div class="section-title">כל הימים — סקירה</div>`;
+  html += `<div class="pie-wrap">${buildPieSVG(categoryCounts(allIds), 90)}
+    <div class="pie-legend">
+      <div><span class="dot" style="background:${CATEGORY_COLORS.City}"></span>עיר</div>
+      <div><span class="dot" style="background:${CATEGORY_COLORS.Attraction}"></span>אטרקציה</div>
+      <div><span class="dot" style="background:${CATEGORY_COLORS.Food}"></span>אוכל</div>
+    </div></div>`;
+  if (totalSeconds) {
+    html += `<div class="trip-total">סה"כ הליכה בין הנקודות בכל הטיול: ${formatHebrewDuration(totalSeconds)}</div>`;
+  }
+  DAYS.forEach(d => {
+    const stopsNames = d.route.map(id => POINTS[id].name).join(' ← ');
+    const timeText = d._totalSeconds ? formatHebrewDuration(d._totalSeconds) : 'מחשב...';
+    html += `<div class="day-summary-row" data-day="${d.id}" style="border-inline-start-color:${d.color}">
+      <div>
+        <div class="dsr-title">${d.label} — ${d.date}</div>
+        <div class="dsr-meta">${stopsNames}</div>
+        <div class="dsr-meta">🚶 ${timeText} הליכה בין הנקודות</div>
+      </div>
+    </div>`;
+  });
+  html += `<div class="worth-hint">כדי לראות מרחקים מבסיס הלינה ל"עוד דברים ששווה לדעת עליהם", פתחו יום ספציפי.</div>`;
+  el.innerHTML = html;
+  el.querySelectorAll('.day-summary-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const d = DAYS.find(x => x.id == row.dataset.day);
+      selectView(d.id, d._tabBtn);
+    });
+  });
+}
+
+function renderDayContent(d) {
+  const el = document.getElementById('content');
+  let html = `<div class="section-title">${d.label} — ${d.date}</div>`;
+  html += `<div class="intro-line">${d.intro}</div>`;
+  html += `<div class="pie-wrap">${buildPieSVG(categoryCounts(d.route), 70)}
+    <div class="pie-legend">
+      <div><span class="dot" style="background:${CATEGORY_COLORS.City}"></span>עיר</div>
+      <div><span class="dot" style="background:${CATEGORY_COLORS.Attraction}"></span>אטרקציה</div>
+      <div><span class="dot" style="background:${CATEGORY_COLORS.Food}"></span>אוכל</div>
+    </div></div>`;
+
+  if (d.note) html += `<div class="intro-line" style="background:#f0f0ff;">💡 ${d.note}</div>`;
+
+  html += `<div class="field-block"><b>ארוחת בוקר</b>${d.breakfast || 'לפי שעת הנחיתה — ראו הערה בלוח הזמנים'}</div>`;
+
+  html += `<div class="section-title">לוח זמנים</div><div class="schedule">${buildScheduleHTML(d)}</div>`;
+
+  html += `<div class="section-title">נקודות עניין</div>`;
+  d.route.forEach(id => {
+    const p = POINTS[id];
+    html += `<div class="poi-card" data-id="${id}" style="border-inline-start-color:${CATEGORY_COLORS[p.category]}">
+      <h4>${p.rec ? '⭐ ' : ''}${p.name}</h4>
+      <p>${p.desc}</p>
+    </div>`;
+  });
+
+  if (d.restaurants && d.restaurants.length) {
+    html += `<div class="section-title">מסעדות מומלצות</div>`;
+    d.restaurants.forEach(r => {
+      const p = POINTS[r.id];
+      html += `<div class="rest-card"><b>${p.name}</b> — ${r.note}<br>${p.desc}</div>`;
+    });
+  }
+
+  if (d.isDeparture) {
+    html += `<div class="departure-line">🛫 יציאה לנמל התעופה בהתאם לשעת הטיסה חזרה</div>`;
+  } else {
+    html += `<div class="lodging-line">🛏 לינה הלילה: ${d.base}</div>`;
+  }
+
+  html += `<div class="worth-section" id="worthSection"><div class="section-title">עוד דברים ששווה לדעת עליהם</div><div id="worthList">מחשב מרחקים מ${d.base}...</div></div>`;
+
+  el.innerHTML = html;
+  el.querySelectorAll('.poi-card').forEach(card => {
+    card.addEventListener('click', () => focusMapPoint(card.dataset.id));
+  });
+
+  renderWorthSection(d);
+}
+
+function buildScheduleHTML(d) {
+  const legs = dayLegsMinutes[d.id];
+  if (!legs) return '<div class="sched-item"><span class="sched-label">מחשב זמני הליכה אמיתיים מול Google Maps...</span></div>';
+
+  const blocks = [];
+  let clock;
+  if (d.wake) {
+    clock = clockToMinutes(d.wake);
+    blocks.push({ time: clock, icon: '⏰', label: 'קימה' });
+    clock += 30;
+    blocks.push({ time: clock, icon: '🥐', label: d.breakfast });
+    clock += 45;
+  } else {
+    clock = clockToMinutes(d.startTime);
+    blocks.push({ time: clock, icon: '🛬', label: d.startLabel });
+  }
+
+  d.route.forEach((id, idx) => {
+    const p = POINTS[id];
+    const walkMin = legs[idx] || 0;
+    clock += walkMin;
+    clock = roundToHalfHour(clock);
+    if (walkMin > 0) {
+      blocks.push({ time: clock, icon: '🚶', label: `הליכה (${formatHebrewDuration(walkMin * 60)})`, muted: true });
+    }
+    blocks.push({ time: clock, icon: CATEGORY_ICONS[p.category] || '📍', label: (p.rec ? '⭐ ' : '') + p.name });
+    clock += p.visitMin;
+    clock = roundToHalfHour(clock);
+  });
+
+  if (d.isDeparture) {
+    blocks.push({ time: clock, icon: '🛫', label: 'יציאה לנמל התעופה' });
+  }
+
+  return blocks.map(b => `<div class="sched-item">
+      <div class="sched-time">${minutesToClock(b.time)}</div>
+      <div class="sched-icon">${b.icon}</div>
+      <div class="sched-label" style="${b.muted ? 'color:#888;font-size:12px;' : ''}">${b.label}</div>
+    </div>`).join('');
+}
+
+function renderWorthSection(d) {
+  const listEl = document.getElementById('worthList');
+  if (!listEl) return;
+
+  if (!worthCache[d.base]) {
+    worthCache[d.base] = {};
+    let idx = 0;
+    EXTRA_REGIONS.forEach(region => {
+      region.points.forEach(p => {
+        const key = p.name;
+        setTimeout(() => {
+          directionsService.route({
+            origin: BASE_ADDRESS,
+            destination: p.query,
+            travelMode: google.maps.TravelMode.DRIVING
+          }, (result, status) => {
+            if (status === 'OK') {
+              const leg = result.routes[0].legs[0];
+              worthCache[d.base][key] = formatHebrewDuration(leg.duration.value) + ' נסיעה';
+            } else {
+              worthCache[d.base][key] = 'מרחק לא זמין';
+            }
+            if (currentView === d.id) renderWorthList(d);
+          });
+        }, idx * 180);
+        idx++;
+      });
+    });
+    renderWorthList(d);
+  } else {
+    renderWorthList(d);
+  }
+}
+
+function renderWorthList(d) {
+  const listEl = document.getElementById('worthList');
+  if (!listEl) return;
+  const cache = worthCache[d.base] || {};
+  let html = '';
+  EXTRA_REGIONS.forEach(region => {
+    html += `<div class="worth-region">${region.region}</div>`;
+    region.points.forEach(p => {
+      const dist = cache[p.name];
+      html += `<div class="worth-row" data-name="${p.name.replace(/"/g, '&quot;')}" data-query="${p.query.replace(/"/g, '&quot;')}" data-category="${p.category}">
+        <span class="dot" style="background:${CATEGORY_COLORS[p.category] || '#999'}"></span>
+        <span class="worth-name">${p.name}</span>
+        <span class="worth-dist">${dist || '...'}</span>
+      </div>`;
+    });
+  });
+  listEl.innerHTML = html;
+  listEl.querySelectorAll('.worth-row').forEach(row => {
+    row.addEventListener('click', () => focusExtraPoint(row.dataset.name, row.dataset.query, row.dataset.category));
+  });
+}
+
+function animateMarkerScale(marker, fromScale, toScale, duration) {
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    const icon = Object.assign({}, marker.getIcon());
+    icon.scale = fromScale + (toScale - fromScale) * eased;
+    marker.setIcon(icon);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function focusMapPoint(id) {
+  const p = POINTS[id];
+  if (!p || !p.marker || !p.location) return;
+  if (focusedId && focusedId !== id && POINTS[focusedId] && POINTS[focusedId].marker) {
+    const prev = POINTS[focusedId];
+    animateMarkerScale(prev.marker, (prev.rec ? 9 : 7) * 1.9, prev.rec ? 9 : 7, 250);
+  }
+  focusedId = id;
+  const base = p.rec ? 9 : 7;
+  animateMarkerScale(p.marker, base, base * 1.9, 300);
+  map.panTo(p.location);
+  sharedInfoWindow.setContent(p.infoContent);
+  sharedInfoWindow.open(map, p.marker);
+}
+
+function focusExtraPoint(name, query, category) {
+  if (extraMarkers[name]) {
+    map.panTo(extraMarkers[name].getPosition());
+    sharedInfoWindow.setContent(`<div dir="rtl" style="text-align:right;"><b>${name}</b></div>`);
+    sharedInfoWindow.open(map, extraMarkers[name]);
+    return;
+  }
+  geocoder.geocode({ address: query, componentRestrictions: { country: 'IT' } }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      const loc = results[0].geometry.location;
+      const marker = new google.maps.Marker({
+        position: loc, map: map,
+        icon: { path: google.maps.SymbolPath.CIRCLE, scale: 7, fillColor: CATEGORY_COLORS[category] || '#999', fillOpacity: 0.85, strokeColor: '#fff', strokeWeight: 2 },
+        title: name
+      });
+      extraMarkers[name] = marker;
+      map.panTo(loc);
+      sharedInfoWindow.setContent(`<div dir="rtl" style="text-align:right;"><b>${name}</b></div>`);
+      sharedInfoWindow.open(map, marker);
+    }
+  });
+}
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjZ4x9SilKEMNW1NByB5YPprLfcDloEFQ&libraries=geometry&language=he&region=IT&callback=initMap">
+</script>
+</body>
+</html>

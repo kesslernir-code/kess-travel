@@ -1,0 +1,107 @@
+{
+  "destinationEn": "Romania",
+  "countryCode": "RO",
+  "mainCityName": "בוקרשט",
+  "mainCityEn": "Bucharest",
+  "mainCityCenter": {
+    "lat": 44.4323,
+    "lng": 26.1063
+  },
+  "mapCenter": {
+    "lat": 45.9432,
+    "lng": 24.9668
+  },
+  "tagline": "שילוב מסעיר של רכסי קרפטים פראיים, טירות ומבצרי אגדות, מסורות כפריות שמורות וערים תוססות.",
+  "background": [
+    "רומניה היא אחת המדינות המגוונות והמרתקות ביותר במזרח אירופה, המציעה ניגוד עשיר בין טבע דרמטי להיסטוריה רב-תרבותית מרתקת. לאורך עמוד השדרה של המדינה מתנשא רכס הרי הקרפטים, המאופיין ביערות בתוליים, אגמים קרחוניים, כבישי הרים מרהיבים ואוכלוסיית דובים חומה משגשגת, לצד מערות קרסט ושמורות טבע אלפיניות.",
+    "בתוך עמקי טרנסילבניה וחבלי הארץ הצפוניים מרמורש ובוקובינה, נשמר קצב חיים כפרי עתיק עם כנסיות עץ ומנזרים מצוירים שהוכרזו כאתרי מורשת עולמית. לצדם מתבלטות ערי מצודה סקסוניות כמו בראשוב, סיביו וסיגישוארה, המשלבות סמטאות מרוצפות אבן, חומות ימי-ביניימיות וטירות אגדיות ששמן נקשר במיתוסים על דרקולה ואירועים היסטוריים מכוננים.",
+    "מנגד, רומניה מציעה גם עושר עירוני מודרני ותרבותי – מבוקרשט הבירה המכונה 'פריז של המזרח' עם שדרותיה האלגנטיות וארמון הפרלמנט המונומנטלי, דרך ערי סטודנטים ותרבות כמו קלוז'-נאפוקה, ועד לשקט הפראי של דלתת הדנובה לחוף הים השחור. הטיול במדינה מתאים במיוחד לנסיעות כביש נופיות, טרקים רגליים וטבילה באותנטיות אירופית חמה."
+  ],
+  "highlights": [
+    {
+      "name": "טירת בראן (Bran Castle)",
+      "showcaseDesc": "המבצר הימי-ביניימי האייקוני הניצב בראש צוק תלול, שזכה לתהילת עולם כמקור ההשראה לטירת דרקולה. המבנה מציע מסדרונות סודיים, חדרים תקופתיים ותצפיות מרהיבות על הרי הקרפטים.",
+      "category": "Attraction",
+      "imageQuery": "Bran Castle Romania",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Castelul_Bran2.jpg/960px-Castelul_Bran2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "טירת פלש (Peleș Castle)",
+      "showcaseDesc": "מעון הקיץ המלכותי המפואר של מלכי רומניה בעיירה סינאיה, הנחשב לאחת הטירות היפות והשמורות באירופה. הטירה מתאפיינת באדריכלות נאו-רנסאנסית, עבודות עץ מורכבות ואוספי אמנות עשירים.",
+      "category": "Attraction",
+      "imageQuery": "Peles Castle Sinaia",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/01_Chateau_Peles.jpg/960px-01_Chateau_Peles.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "כביש טרנספגרשאן ואגם בלאה (Transfăgărășan & Lake Bâlea)",
+      "showcaseDesc": "אחד מנתיבי הנסיעה ההרריים המרהיבים והמפורסמים בעולם, המתפתל בין פסגות הרי פגראש בגובה מעל 2,000 מטר. בשיא הגובה מחכה אגם בלאה הקרחוני עם נופים עוצרי נשימה.",
+      "category": "Attraction",
+      "imageQuery": "Transfagarasan Highway Balea Lake",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/7/74/Romania-roads-DN7C.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
+    },
+    {
+      "name": "סיגישוארה (Sighișoara)",
+      "showcaseDesc": "עיר מצודה ימי-ביניימית שמורה להפליא ואתר מורשת עולמית של אונסק\"ו. המקום מפורסם בבתיו הצבעוניים, מגדל השעון העתיק ובהיותו מקום הולדתו של ולאד המשפד.",
+      "category": "Urban",
+      "imageQuery": "Sighisoara medieval citadel",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Sighisoara_-_Strada_Turnului.jpg/960px-Sighisoara_-_Strada_Turnului.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מכרה המלח בטורדה (Salina Turda)",
+      "showcaseDesc": "מכרה מלח עתיק ועצום שהוסב לפארק שעשועים תת-קרקעי עתידני מתחת לפני האדמה. המתחם כולל אגם תת-קרקעי לשיט בסירות, גלגל ענק וחללי מלח מוארים ומרשימים.",
+      "category": "Attraction",
+      "imageQuery": "Salina Turda Salt Mine",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/6/69/Salina_Turda_045.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
+    },
+    {
+      "name": "שמורת הביוספרה של דלתת הדנובה (Danube Delta)",
+      "showcaseDesc": "דלתת הנהר הגדולה והשמורה ביותר באירופה, המהווה מבוך תעלות, אגמים ויערות מים פראיים. זהו גן עדן לצפרות עם מושבות שקנאים ובעלי כנף נדירים.",
+      "category": "Nature",
+      "imageQuery": "Danube Delta pelicans Romania",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Danube_Delta_ESA23450088.jpeg/960px-Danube_Delta_ESA23450088.jpeg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "בראשוב (Brașov)",
+      "showcaseDesc": "עיר סקסונית ציורית ומוקפת הרים, המהווה בסיס מצוין לחקר טרנסילבניה. המרכז ההיסטורי כולל את הכנסייה השחורה, כיכר שוק צבעונית ורכבל לתצפית מהר טמפה.",
+      "category": "Urban",
+      "imageQuery": "Brasov Old Town Romania",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Bra%C5%9Fov_%28Kronstadt%2C_Brass%C3%B3%29_-_city_hall_%28Casa_Sfatului%29.JPG/960px-Bra%C5%9Fov_%28Kronstadt%2C_Brass%C3%B3%29_-_city_hall_%28Casa_Sfatului%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "ארמון הפרלמנט (Palace of Parliament)",
+      "showcaseDesc": "המבנה המנהלי הענק בבוקרשט שהוקם בימי שלטונו של צ'אושסקו ונחשב לאחד הבניינים הגדולים בעולם. הסיור במקום חושף אולמות נשפים מפוארים, שיש יוקרתי ושטיחי ענק.",
+      "category": "Attraction",
+      "imageQuery": "Palace of the Parliament Bucharest",
+      "image": "https://upload.wikimedia.org/wikipedia/en/thumb/1/18/Bucharest_-_Palace_of_the_Parliament_%282024%29_%282%29.jpg/960px-Bucharest_-_Palace_of_the_Parliament_%282024%29_%282%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "טירת קורבין (Corvin Castle / Castelul Corvinilor)",
+      "showcaseDesc": "מבצר גותי-רנסנסי מרשים בחונדוארה עם גשר הרמה ארוך, צריחים נישאים וחצר אבירים מרשימה. הטירה נחשבת לדוגמה מופתית של אדריכלות צבאית ימי-ביניימית.",
+      "category": "Attraction",
+      "imageQuery": "Corvin Castle Hunedoara",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Hunedoara_castle.jpg/960px-Hunedoara_castle.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "סיביו (Sibiu)",
+      "showcaseDesc": "פנינה ארכיטקטונית בטרנסילבניה ובירת תרבות אירופית לשעבר, הידועה בגגותיה הייחודיים המכונים 'העיניים של סיביו'. העיר מציעה גשרים היסטוריים, מוזיאונים איכותיים וכיכרות רחבות.",
+      "category": "Urban",
+      "imageQuery": "Sibiu Grand Square Romania",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Hermannstadt_Romania%2C_the_Small_Plaza.jpg/960px-Hermannstadt_Romania%2C_the_Small_Plaza.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "בית הקברות השמח בספנצה (Merry Cemetery)",
+      "showcaseDesc": "אתר פולקלור ייחודי במרמורש המציג מאות צלבי עץ צבועים בכחול עז ומעוטרים בציורים נאיביים ושירים הומוריסטיים. המקום מציג גישה מסורתית ומקורית לחיים ולמוות.",
+      "category": "Attraction",
+      "imageQuery": "Merry Cemetery Sapanta Romania",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Peri_monastery_seen_from_the_entrance%2C_S%C4%83p%C3%A2n%C8%9Ba%2C_2017.jpg/960px-Peri_monastery_seen_from_the_entrance%2C_S%C4%83p%C3%A2n%C8%9Ba%2C_2017.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הפארק הלאומי שערי הברזל ופסל דצ'באל (Iron Gates & Decebal Sculpture)",
+      "showcaseDesc": "קניון נהר מרשים על גבול סרביה שבו נהר הדנובה חוצה את רכסי ההרים. בתוך מצוק הסלע מעל המים חצוב פסלו העצום של מלך דאקיה הקדום, דצ'באל.",
+      "category": "Attraction",
+      "imageQuery": "Decebalus Rock Sculpture Iron Gates",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Statuia_Chipul_lui_Decebal_-_Cazanele_Dun%C4%83rii%2C_Rom%C3%A2nia.jpg/960px-Statuia_Chipul_lui_Decebal_-_Cazanele_Dun%C4%83rii%2C_Rom%C3%A2nia.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    }
+  ],
+  "_fallbackImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bucharest_University_Square_%28cropped%29.jpg/960px-Bucharest_University_Square_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+}

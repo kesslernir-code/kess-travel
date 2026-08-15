@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<title>מסלול סופי — סלובניה</title>
+<style>
+  html, body { height: 100%; margin: 0; font-family: -apple-system, Segoe UI, Arial, sans-serif; }
+  #app { display: flex; height: 100%; }
+  #map { flex: 1 1 auto; height: 100%; }
+  #sidebar { width: 440px; flex: 0 0 440px; height: 100%; overflow-y: auto; border-right: 3px solid #ddd; box-sizing: border-box; padding: 16px; background: #fafafa; direction: rtl; text-align: right; }
+  h2 { margin-top: 0; font-size: 18px; }
+  .sub { font-size: 12px; color: #888; margin-bottom: 14px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; font-size: 12px; }
+  .legend span { display: inline-flex; align-items: center; gap: 4px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.3); flex-shrink: 0; }
+  .day-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .day-btn { appearance: none; border: 1px solid #ccc; background: #fff; border-radius: 20px; padding: 7px 14px; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .day-btn.active { background: #1a1a4e; color: #fff; border-color: #1a1a4e; }
+  .day-btn.all-days { font-weight: bold; }
+  .day-btn:hover:not(.active) { background: #eee; }
+  .day-card { background: #fff; border-radius: 10px; padding: 16px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+  .day-card h3 { margin: 0 0 4px; font-size: 17px; }
+  .day-card .base-tag { font-size: 12px; color: #1a1a4e; font-weight: bold; margin-bottom: 14px; }
+  .info-row { display: flex; gap: 8px; margin-bottom: 10px; font-size: 13.5px; align-items: flex-start; }
+  .info-row .ic { flex: 0 0 22px; font-size: 15px; }
+  .info-row .lbl { font-weight: bold; flex: 0 0 78px; color: #555; }
+  .info-row .val { flex: 1 1 auto; }
+  .poi-list { margin: 4px 0 0; padding-inline-start: 0; list-style: none; }
+  .poi-list li { padding: 6px 0; border-bottom: 1px dashed #e5e5e5; font-size: 13.5px; }
+  .poi-list li:last-child { border-bottom: none; }
+  .poi-list .poi-name { font-weight: bold; cursor: pointer; }
+  .poi-list .poi-name:hover { text-decoration: underline; }
+  .poi-list .poi-desc { color: #666; font-size: 12.5px; margin-top: 2px; }
+  .travel-legs { font-size: 12.5px; color: #333; margin-top: 4px; }
+  .travel-legs .leg { padding: 4px 0; }
+  .travel-legs .leg b { color: #1a5fb4; }
+  .restaurant { background: #fff8ea; border-radius: 6px; padding: 8px 10px; margin-top: 4px; font-size: 12.5px; }
+  .restaurant b { display: block; margin-bottom: 2px; }
+  #status { font-size: 12px; color: #888; margin-top: 14px; }
+  /* Overview (all-days) summary rows */
+  .overview-row { display: flex; align-items: center; gap: 10px; padding: 10px 4px; border-bottom: 1px solid #eee; cursor: pointer; }
+  .overview-row:hover { background: #f5f5f5; }
+  .overview-row .route-dot { width: 14px; height: 14px; border-radius: 50%; flex: 0 0 auto; }
+  .overview-row .ov-main { flex: 1 1 auto; }
+  .overview-row .ov-day-title { font-weight: bold; font-size: 13.5px; }
+  .overview-row .ov-day-sub { font-size: 12px; color: #777; margin-top: 2px; }
+  .overview-row .ov-time { font-size: 12.5px; color: #1a5fb4; font-weight: bold; white-space: nowrap; }
+  .overview-total { font-size: 13px; font-weight: bold; margin-top: 10px; padding-top: 10px; border-top: 2px solid #1a1a4e; }
+  /* Category pie charts (whole-trip in overview, per-day in day view) */
+  .pie-block { background: #fff; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; border: 1px solid #eee; }
+  .pie-title { font-size: 12.5px; font-weight: bold; color: #555; margin-bottom: 10px; }
+  .pie-flex { display: flex; align-items: center; gap: 16px; }
+  .pie-legend { flex: 1 1 auto; }
+  .pie-legend-row { display: flex; align-items: center; gap: 6px; font-size: 12.5px; padding: 3px 0; }
+  /* Spaced-out day schedule (timeline) */
+  .schedule { margin: 10px 0 16px; }
+  .schedule-title { font-size: 12.5px; font-weight: bold; color: #555; margin-bottom: 10px; }
+  .sched-block { display: flex; gap: 12px; padding: 10px 0; border-right: 3px solid #e2e2e2; padding-right: 12px; margin-bottom: 4px; }
+  .sched-block.travel { border-right-color: #1a5fb4; }
+  .sched-block.visit { border-right-color: #e67e22; }
+  .sched-block .sched-time { flex: 0 0 52px; font-weight: bold; font-size: 13px; color: #1a1a4e; white-space: nowrap; }
+  .sched-block .sched-body { flex: 1 1 auto; }
+  .sched-block .sched-label { font-size: 13.5px; font-weight: 600; }
+  .sched-block .sched-sub { font-size: 12px; color: #888; margin-top: 2px; }
+  .lodging-note { background: #eef1fb; border-radius: 8px; padding: 10px 14px; margin-top: 16px; font-size: 13.5px; font-weight: 600; color: #1a1a4e; display: flex; align-items: center; gap: 8px; }
+  .day-blurb { font-size: 13.5px; font-style: italic; color: #5a4a1a; background: #fdf6e3; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; line-height: 1.5; }
+  /* Extra places (not selected) section, pinned at the bottom of the sidebar */
+  .extra-section { margin-top: 20px; padding-top: 16px; border-top: 2px dashed #ccc; }
+  .extra-section-title { font-size: 14px; font-weight: bold; margin-bottom: 4px; }
+  .extra-section-sub { font-size: 12px; color: #888; margin-bottom: 10px; }
+  .extra-region-title { font-size: 12.5px; font-weight: bold; color: #555; background: #f0f0f0; padding: 4px 8px; border-radius: 4px; margin: 10px 0 4px; }
+  .extra-row { display: flex; align-items: center; gap: 8px; padding: 5px 2px; font-size: 12.5px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+  .extra-row:hover { background: #f5f5f5; }
+  .extra-row .dot { flex: 0 0 auto; }
+  .extra-row .extra-name { flex: 1 1 auto; }
+  .extra-row .extra-dist { font-size: 11.5px; color: #1a5fb4; font-weight: bold; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="map"></div>
+  <div id="sidebar">
+    <h2>מסלול סופי — 13 נקודות, 7 ימים</h2>
+    <div class="sub">23–29.8.2026 · 5 מבוגרים · רכב שכור</div>
+    <div class="legend">
+      <span><span class="dot" style="background:#27ae60"></span>טבע</span>
+      <span><span class="dot" style="background:#8e44ad"></span>עיר</span>
+      <span><span class="dot" style="background:#e67e22"></span>אטרקציה</span>
+      <span><span class="dot" style="background:#c0392b"></span>אוכל</span>
+    </div>
+    <div class="day-tabs" id="dayTabs"></div>
+    <div class="day-card" id="dayCard">טוען...</div>
+    <div id="status"></div>
+    <div id="extraPlaces"></div>
+  </div>
+</div>
+
+<script>
+const CATEGORY_COLORS = { Nature: '#27ae60', City: '#8e44ad', Attraction: '#e67e22', Food: '#c0392b' };
+const CATEGORY_LABELS_HE = { Nature: 'טבע', City: 'עיר', Attraction: 'אטרקציה', Food: 'אוכל' };
+const DAY_ROUTE_COLORS = ['#1a5fb4','#1a7a3c','#a13d3d','#b8860b','#6a3d9a','#c2185b','#00796b'];
+
+// The 13 points Nir confirmed on the Tab 4 map (trip-master-plan's selection tool), carried
+// forward with their original id/query/category/desc/source/url from Slovenia_Route_Map.html --
+// no re-research needed, this skill only sequences and schedules what was already curated.
+const POINTS = {
+  tromostovje: { name:"גשר השלושה ושוק המרכזי (Plečnik Market)", query:'Triple Bridge, Ljubljana, Slovenia', category:'City',
+    desc:'עיצוב האדריכל פלצ׳ניק האייקוני: שלושה גשרים צמודים חוצים את נהר ליובליאניצה, ולצדם שוק בוקר תוסס.', url:'https://www.ricksteves.com/europe/slovenia' },
+  ljcastle: { name:'טירת ליובליאנה', query:'Ljubljana Castle, Slovenia', category:'Attraction',
+    desc:'טירה מוגבהת מעל העיר העתיקה, נגישה ברכבל. תצפית פנורמית על העיר ועל ההרים ברקע.', url:'https://www.ricksteves.com/europe/slovenia' },
+  tivoli: { name:'פארק טיבולי (Tivoli Park)', query:'Tivoli Park, Ljubljana, Slovenia', category:'Nature',
+    desc:'הפארק המרכזי הגדול של ליובליאנה, שבילי הליכה מוצלים ומרחבי דשא.', url:'https://www.ricksteves.com/europe/slovenia' },
+  metelkova: { name:'מטלקובה מסטו (Metelkova)', query:'Metelkova, Ljubljana, Slovenia', category:'City',
+    desc:'שכונת אמנות/סקווטרים לשעבר שהפכה למרכז תרבות אלטרנטיבי: גרפיטי, ברים ואווירת לילה ייחודית.', url:'https://theculturetrip.com/europe/slovenia' },
+  trnovo: { name:'שכונות טרנובו וקרקובו', query:'Krakovo, Ljubljana, Slovenia', category:'City',
+    desc:'שכונות ציוריות על גדות נהר ליובליאניצה, בתים צבעוניים וגינות ירק עירוניות.', url:'https://theculturetrip.com/europe/slovenia' },
+  railwaymuseum: { name:'מוזיאון הרכבות של סלובניה', query:'Slovenian Railway Museum, Ljubljana, Slovenia', category:'Attraction',
+    desc:'מוזיאון קטן וייחודי לקטרי קיטור היסטוריים, בתוך מבנה משומר מתחילת המאה ה-20.', url:'https://www.atlasobscura.com/places/slovenian-railway-museum' },
+  postojna: { name:'מערת פוסטויna (Postojna Cave)', query:'Postojna Cave, Slovenia', category:'Attraction',
+    desc:'מערכת המערות המתויירת ביותר באירופה, עם רכבת פנימית תת-קרקעית לאולמות נטיפים ענקיים.', url:'https://www.ricksteves.com/europe/slovenia' },
+  skocjan: { name:"מערות שקוצ'יאן (Škocjan Caves)", query:'Škocjan Caves, Slovenia', category:'Attraction',
+    desc:'אתר מורשת עולמית של אונסק"ו: קניון תת-קרקעי עצום עם נהר רקה שנעלם באדמה.', url:'https://www.lonelyplanet.com/destinations/slovenia' },
+  predjama: { name:'טירת פרדיאמה (Predjama Castle)', query:'Predjama Castle, Slovenia', category:'Attraction',
+    desc:'טירה בנויה בתוך פתח מערה בצוק אנכי — אחת מטירות המערה הגדולות בעולם.', url:'https://www.ricksteves.com/europe/slovenia' },
+  lipica: { name:'ליפיצה (Lipica)', query:'Lipica, Slovenia', category:'Attraction',
+    desc:'חוות הסוסים הלבנים המקוריים (ליפיצאנר), סיורים ומופעי אילוף בסביבה כפרית.', url:'https://www.gotravel.co.il/' },
+  maribor: { name:'מאריבור (Maribor)', query:'Maribor, Slovenia', category:'City',
+    desc:'העיר השנייה בגודלה בסלובניה, גפן היין העתיקה בעולם (מעל 400 שנה), נהר דראווה.', url:'https://theculturetrip.com/europe/slovenia' },
+  ptuj: { name:'פטוי (Ptuj)', query:'Ptuj, Slovenia', category:'City',
+    desc:'העיר העתיקה ביותר בסלובניה, טירה מוגבהת ורחוב ראשי ימי-ביניימי משומר.', url:'https://theculturetrip.com/europe/slovenia' },
+  winetrail: { name:'דרך היין המזרחית (Jeruzalem-Ormož)', query:'Jeruzalem wine road, Slovenia', category:'Food',
+    desc:'כרמים מדורגים, יקבים בוטיקיים ונופי גבעות ירוקים — אזור יין ציורי ופחות מוכר לתיירים.', url:'https://theculturetrip.com/europe/slovenia' }
+};
+
+// Day-by-day plan. `route` is the literal driving order for the day (base -> stops -> back to
+// base where relevant) that gets rendered as one DirectionsRenderer leg per consecutive pair.
+const DAYS = [
+  { day: 1, label: 'הגעה + ליובליאנה', dateLabel: 'שבת, 23.8.2026', base: 'ליובליאנה',
+    blurb: '🛬 נוחתים, תופסים רכב, וישר לגשר השלושה ולטירה שמשקיפה על העיר — יום היכרות קליל אחרי הטיסה.',
+    wake: 'לפי זמן הנחיתה', breakfast: 'בטיסה / לפני ההמראה',
+    travelNote: 'נחיתה בשדה התעופה יוז\'ה פוצ\'ניק (LJU), איסוף רכב שכור, כ-30–40 דק\' נסיעה למרכז ליובליאנה.',
+    points: ['tromostovje','ljcastle'],
+    route: [ {label:"שדה התעופה", query:'Ljubljana Airport, Slovenia'}, {label:"גשר השלושה", query:'Triple Bridge, Ljubljana, Slovenia'}, {label:"טירת ליובליאנה", query:'Ljubljana Castle, Slovenia'} ],
+    restaurants: [ {name:'Špajza', note:'מסעדה קלאסית בבית בן 300 שנה בעיר העתיקה — מומלץ להזמין מקום מראש לערב הראשון.'} ] },
+  { day: 2, label: 'ליובליאנה לעומק', dateLabel: 'ראשון, 24.8.2026', base: 'ליובליאנה',
+    blurb: '🚶 יום הליכה עירוני — פארקים ירוקים, שכונה בוהמיינית עם גרפיטי, שכונה ציורית על הנהר, ומוזיאון קטנטן וייחודי לקטרי קיטור.',
+    wake: '08:00', breakfast: 'במקום הלינה',
+    travelNote: 'יום הליכה בעיר, כל הנקודות במרחק הליכה/נסיעה קצרה זו מזו.',
+    points: ['tivoli','trnovo','metelkova','railwaymuseum'],
+    route: [ {label:"בסיס — ליובליאנה", query:'Ljubljana, Slovenia'}, {label:"פארק טיבולי", query:'Tivoli Park, Ljubljana, Slovenia'}, {label:"קרקובו", query:'Krakovo, Ljubljana, Slovenia'}, {label:"מטלקובה", query:'Metelkova, Ljubljana, Slovenia'}, {label:"מוזיאון הרכבות", query:'Slovenian Railway Museum, Ljubljana, Slovenia'} ],
+    restaurants: [ {name:'Pri Škofu', note:'אוכל סלובני מסורתי בלי תוספת מחיר תיירותית, בשכונת קרקובו — לצהריים.'}, {name:'Breg Restaurant', note:'לצד נהר ליובליאניצה, בשר ים ותפוחי אדמה בטראפל — לערב.'} ] },
+  { day: 3, label: 'מעבר לפוסטויna + טירת פרדיאמה', dateLabel: 'שני, 25.8.2026', base: 'פוסטויna',
+    blurb: '🕳️ עוברים בסיס לעולם תת-קרקעי: מערת ענק עם רכבת פנימית, ואז טירה בנויה ממש בתוך צוק מערה — אחת המוזרות והמרשימות באירופה.',
+    wake: '08:00', breakfast: 'במקום הלינה בליובליאנה, לפני הצ\'ק-אאוט',
+    travelNote: 'מעבר בסיס לפוסטויna (כ-50 ד\' נסיעה) — מכאן והלאה כל נקודות הקארסט הן נסיעות קצרות מקומיות, בלי לחזור לליובליאנה. מומלץ להזמין מראש כרטיסים למערת פוסטויna (סבב 10:00 או 12:00 נמכר מראש באוגוסט).',
+    points: ['postojna','predjama'],
+    route: [ {label:"ליובליאנה", query:'Ljubljana, Slovenia'}, {label:"מערת פוסטויna", query:'Postojna Cave, Slovenia'}, {label:"טירת פרדיאמה", query:'Predjama Castle, Slovenia'}, {label:"בסיס — פוסטויna", query:'Postojna, Slovenia'} ],
+    restaurants: [ {name:'Okrepčevalnica Prepih', note:'ליד טירת פרדיאמה, מנות סלובניות אותנטיות במחיר הוגן — לצהריים.'}, {name:'Bistro Perspektiva', note:'ליד מערת פוסטויna, תפריט סלובני איכותי — לערב בבסיס החדש.'} ] },
+  { day: 4, label: "שקוצ'יאן וליפיצה (יום מקומי מפוסטויna)", dateLabel: 'שלישי, 26.8.2026', base: 'פוסטויna',
+    blurb: '🐎 יום קארסט שני, בלי לזוז מהאזור: קניון תת-קרקעי דרמטי באונסק"ו, ואחר כך חוות הסוסים הלבנים המפורסמים של סלובניה.',
+    wake: '07:00', breakfast: 'במקום הלינה בפוסטויna',
+    travelNote: 'יום מקומי לגמרי — כל הנסיעות קצרות (20-25 ד\') כי הבסיס עצמו בלב אזור הקארסט. הזמנה מראש חובה בפועל: סיורי שקוצ\'יאן נמכרים מראש בקיץ (מומלץ 48 שעות לפחות). הסיור עצמו כ-2.5-3 שעות.',
+    points: ['skocjan','lipica'],
+    route: [ {label:"בסיס — פוסטויna", query:'Postojna, Slovenia'}, {label:"מערות שקוצ'יאן", query:'Škocjan Caves, Slovenia'}, {label:"ליפיצה", query:'Lipica, Slovenia'}, {label:"חזרה לפוסטויna", query:'Postojna, Slovenia'} ],
+    restaurants: [ {name:'Modrijan Homestead', note:'בלב פארק פוסטויna, מטבח סלובני מסורתי וצלייה על האש — לערב.'} ] },
+  { day: 5, label: 'נסיעה למאריבור', dateLabel: 'רביעי, 27.8.2026', base: 'מאריבור',
+    blurb: '🚗 יום מעבר לצד המזרחי של המדינה — נסיעה נופית, ואחר הצהריים חופשי להתרשם מהעיר עם גפן היין העתיקה בעולם.',
+    wake: '08:00', breakfast: 'במקום הלינה, לפני הצ\'ק-אאוט',
+    travelNote: 'נסיעה ארוכה יחסית מפוסטויna למאריבור, כשעתיים ורבע — כדאי לתכנן עצירת ביניים. אחר הצהריים חופשי לעיר העתיקה.',
+    points: ['maribor'],
+    route: [ {label:"פוסטויna", query:'Postojna, Slovenia'}, {label:"מאריבור", query:'Maribor, Slovenia'} ],
+    restaurants: [ {name:'Poper', note:'פיצה נפוליטנית איכותית במרכז מאריבור, אווירה נעימה — לערב.'} ] },
+  { day: 6, label: 'פטוי ודרך היין', dateLabel: 'חמישי, 28.8.2026', base: 'מאריבור',
+    blurb: '🍇 העיר העתיקה ביותר בסלובניה בבוקר, ואחר הצהריים גבעות כרמים ויקבים בוטיקיים — יום קליל וטעים לפני הערב האחרון.',
+    wake: '08:30', breakfast: 'במקום הלינה',
+    travelNote: 'פטוי קרובה למאריבור (כ-28 ד\'), ודרך היין עוד כ-35 ד\' משם — יום קליל יחסית.',
+    points: ['ptuj','winetrail'],
+    route: [ {label:"בסיס — מאריבור", query:'Maribor, Slovenia'}, {label:"פטוי", query:'Ptuj, Slovenia'}, {label:"דרך היין — ירושלים הסלובנית", query:'Jeruzalem, Slovenia'}, {label:"חזרה למאריבור", query:'Maribor, Slovenia'} ],
+    restaurants: [ {name:'Restavracija Sedem', note:'מטבח שטיירי אותנטי במרכז מאריבור, מוכר במדריך מישלן — לערב אחרון.'} ] },
+  { day: 7, label: 'עזיבה', dateLabel: 'שישי, 29.8.2026', base: 'מאריבור → נמל תעופה',
+    blurb: '👋 יום פרידה — נסיעה חזרה לכיוון שדה התעופה, עם קצת מרווח בטן לזיכרונות מהטיול.',
+    wake: '07:30', breakfast: 'במקום הלינה, לפני הצ\'ק-אאוט',
+    travelNote: 'נסיעה חזרה לשדה התעופה ליד ליובליאנה, כשעה וארבעים דקות ממאריבור — יש להשאיר מרווח לפני הטיסה.',
+    points: [],
+    route: [ {label:"מאריבור", query:'Maribor, Slovenia'}, {label:"שדה התעופה", query:'Ljubljana Airport, Slovenia'} ],
+    restaurants: [] }
+];
+
+let map, geocoder, directionsService, sharedInfoWindow;
+const dayMarkers = {};        // day number -> [markers]
+const dayRenderers = {};      // day number -> google.maps.DirectionsRenderer
+const dayLegData = {};        // day number -> {legs:[...], totalSeconds}
+const dayDistanceLabels = {}; // day number -> [DistanceLabel overlays], one per leg
+let activeView = 'all';    // 'all' or a day number
+let allPointsBounds = null;
+
+// Click-to-focus infrastructure shared by both the day's own POI list and the "worth knowing
+// about" extra-places list at the bottom: same "marker grows + info bubble pops" behavior for
+// both, same pattern used on Slovenia_Route_Map.html. Keyed by a single id namespace -- kept
+// points use their POINTS key (e.g. 'tromostovje'), extra (not-selected) points use 'extra_<idx>'
+// since they're geocoded lazily on first click rather than all up front.
+const MARKER_BASE_SCALE = 9;
+const pointMarkers = {};      // id -> google.maps.Marker
+const pointInfoContent = {};  // id -> info window HTML
+let focusedMarkerId = null;
+
+function buildInfoContent(name, category, desc, url) {
+  return `<div dir="rtl" style="text-align:right; font-family:-apple-system,Segoe UI,Arial,sans-serif; max-width:260px;">
+      <b>${name}</b> <span style="color:${CATEGORY_COLORS[category]}">● ${CATEGORY_LABELS_HE[category]}</span>
+      ${desc ? `<div style="font-size:12px; margin-top:6px; line-height:1.5;">${desc}</div>` : ''}
+      ${url ? `<div style="font-size:11px; margin-top:6px;"><a href="${url}" target="_blank" rel="noopener">מקור</a></div>` : ''}
+    </div>`;
+}
+
+// Same easing/animation pattern as Slovenia_Route_Map.html's focusPoint -- grows the marker's
+// icon scale up then leaves it grown (the "return to normal size" happens the next time a
+// *different* marker gets focused, via the shrink call inside focusMapPoint below).
+function animateMarkerScale(marker, fromScale, toScale, duration) {
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    const icon = Object.assign({}, marker.getIcon());
+    icon.scale = fromScale + (toScale - fromScale) * eased;
+    marker.setIcon(icon);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// The actual "grow + pan + pop info bubble" behavior, given a marker that already exists.
+function focusMapPoint(id) {
+  const marker = pointMarkers[id];
+  if (!marker) return;
+  if (focusedMarkerId && focusedMarkerId !== id && pointMarkers[focusedMarkerId]) {
+    animateMarkerScale(pointMarkers[focusedMarkerId], MARKER_BASE_SCALE * 1.9, MARKER_BASE_SCALE, 250);
+  }
+  focusedMarkerId = id;
+  animateMarkerScale(marker, MARKER_BASE_SCALE, MARKER_BASE_SCALE * 1.9, 300);
+  map.panTo(marker.getPosition());
+  if (map.getZoom() < 12) map.setZoom(12);
+  if (pointInfoContent[id]) {
+    sharedInfoWindow.setContent(pointInfoContent[id]);
+    sharedInfoWindow.open(map, marker);
+  }
+}
+
+// Used by the day's own POI list -- that marker was already created up front by geocodeAllPoints().
+function focusPointById(id) {
+  if (pointMarkers[id]) { focusMapPoint(id); return; }
+  const status = document.getElementById('status');
+  if (status) status.textContent = 'עדיין מאתר את המיקום...';
+}
+
+// Used by the "worth knowing about" extra-places rows -- those points were never geocoded up
+// front (only their distance was, and only once a day using that base was opened), so the first
+// click has to geocode + create the marker on demand, then focus it exactly like any other point.
+function focusExtraPoint(idx) {
+  const id = 'extra_' + idx;
+  if (pointMarkers[id]) { focusMapPoint(id); return; }
+  const p = ALL_EXTRA[idx];
+  const status = document.getElementById('status');
+  if (status) status.textContent = 'מאתר את ' + p.name + '...';
+  geocoder.geocode({ address: p.query, componentRestrictions: { country: 'SI' } }, (results, gstatus) => {
+    if (status) status.textContent = '';
+    if (gstatus === 'OK' && results[0]) {
+      const marker = new google.maps.Marker({
+        position: results[0].geometry.location,
+        map: map,
+        title: p.name,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: MARKER_BASE_SCALE,
+          fillColor: CATEGORY_COLORS[p.category],
+          fillOpacity: 1,
+          strokeColor: '#FFD700',
+          strokeWeight: 2
+        }
+      });
+      pointMarkers[id] = marker;
+      pointInfoContent[id] = buildInfoContent(p.name, p.category, null, null);
+      marker.addListener('click', () => focusMapPoint(id));
+      focusMapPoint(id);
+    } else {
+      if (status) status.textContent = 'לא ניתן היה לאתר את ' + p.name;
+    }
+  });
+}
+
+// A small always-visible "12 ק"מ" pill drawn at a leg's midpoint, so driving distances are
+// readable straight off the map itself, not only from the sidebar's travel-legs text list.
+// Plain OverlayView (no charting/label library) to stay consistent with the rest of the page.
+//
+// IMPORTANT: this can't be a top-level `class DistanceLabel extends google.maps.OverlayView`
+// declaration. The Google Maps script tag is loaded async/defer, so this inline <script> block
+// runs and gets fully parsed BEFORE `google` exists on window -- a class's `extends` clause is
+// evaluated the moment the class statement executes, so referencing google.maps.OverlayView at
+// the top level throws "google is not defined" immediately and silently kills every top-level
+// statement after it (constants like EXTRA_REGIONS declared later never get initialized, even
+// though hoisted function declarations like initMap still exist and still get called by the
+// Maps callback -- so the map/markers/routes look fine, but anything depending on those later
+// constants, like the extra-places section, just hangs on its "computing..." placeholder
+// forever). Fix: only build this class once google.maps definitely exists, i.e. inside initMap.
+let DistanceLabel;
+function defineDistanceLabelClass() {
+  DistanceLabel = class extends google.maps.OverlayView {
+    constructor(position, text, color) {
+      super();
+      this.position = position;
+      this.text = text;
+      this.color = color || '#1a1a4e';
+    }
+    onAdd() {
+      this.div = document.createElement('div');
+      Object.assign(this.div.style, {
+        position: 'absolute', background: '#fff', border: `1.5px solid ${this.color}`,
+        borderRadius: '10px', padding: '1px 6px', fontSize: '11px', fontWeight: 'bold',
+        color: this.color, whiteSpace: 'nowrap', transform: 'translate(-50%, -50%)',
+        pointerEvents: 'none', boxShadow: '0 1px 3px rgba(0,0,0,0.15)'
+      });
+      this.div.textContent = this.text;
+      this.getPanes().overlayLayer.appendChild(this.div);
+    }
+    draw() {
+      const proj = this.getProjection();
+      if (!proj || !this.div) return;
+      const pos = proj.fromLatLngToDivPixel(this.position);
+      if (pos) { this.div.style.left = pos.x + 'px'; this.div.style.top = pos.y + 'px'; }
+    }
+    onRemove() {
+      if (this.div) { this.div.parentNode.removeChild(this.div); this.div = null; }
+    }
+  };
+}
+
+function initMap() {
+  defineDistanceLabelClass();
+  map = new google.maps.Map(document.getElementById('map'), { center: { lat: 46.1, lng: 15.0 }, zoom: 8 });
+  geocoder = new google.maps.Geocoder();
+  directionsService = new google.maps.DirectionsService();
+  sharedInfoWindow = new google.maps.InfoWindow();
+
+  buildDayTabs();
+  geocodeAllPoints();
+  loadAllDayRoutes();
+  renderOverview(); // default view: whole trip, all days, before drilling into one day
+}
+
+function buildDayTabs() {
+  const wrap = document.getElementById('dayTabs');
+  const allBtn = document.createElement('button');
+  allBtn.className = 'day-btn all-days active';
+  allBtn.textContent = 'כל הימים';
+  allBtn.id = 'daybtn_all';
+  allBtn.addEventListener('click', () => showView('all'));
+  wrap.appendChild(allBtn);
+
+  DAYS.forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'day-btn';
+    btn.textContent = 'יום ' + d.day;
+    btn.id = 'daybtn_' + d.day;
+    btn.addEventListener('click', () => showView(d.day));
+    wrap.appendChild(btn);
+  });
+}
+
+function setActiveTab(view) {
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  const id = view === 'all' ? 'daybtn_all' : 'daybtn_' + view;
+  document.getElementById(id).classList.add('active');
+}
+
+function showView(view) {
+  activeView = view;
+  setActiveTab(view);
+  if (view === 'all') {
+    renderOverview();
+  } else {
+    renderDay(DAYS.find(d => d.day === view));
+  }
+}
+
+// Geocode every point across all 7 days once, up front, and keep every marker visible/hidden
+// according to whichever view is active. Doing this once (rather than per-day, re-geocoding on
+// every tab switch) is both faster and avoids flicker when moving between the overview and a
+// single day.
+function geocodeAllPoints() {
+  const status = document.getElementById('status');
+  let done = 0, totalPoints = 0;
+  DAYS.forEach(d => { totalPoints += d.points.length; });
+  if (totalPoints === 0) { status.textContent = ''; return; }
+
+  const bounds = new google.maps.LatLngBounds();
+  let i = 0;
+  DAYS.forEach(day => {
+    day.points.forEach(id => {
+      const p = POINTS[id];
+      setTimeout(() => {
+        geocoder.geocode({ address: p.query, componentRestrictions: { country: 'SI' } }, (results, gstatus) => {
+          done++;
+          if (gstatus === 'OK' && results[0]) {
+            try {
+              const loc = results[0].geometry.location;
+              bounds.extend(loc);
+              const marker = new google.maps.Marker({
+                position: loc,
+                map: (activeView === 'all' || activeView === day.day) ? map : null,
+                title: p.name,
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: MARKER_BASE_SCALE,
+                  fillColor: CATEGORY_COLORS[p.category],
+                  fillOpacity: 1,
+                  strokeColor: '#fff',
+                  strokeWeight: 2
+                }
+              });
+              // Registered into the shared pointMarkers/pointInfoContent maps (not just a local
+              // click listener) so clicking this point's name in the day-card POI list -- not
+              // just clicking the marker itself -- can trigger the same grow+bubble behavior.
+              pointMarkers[id] = marker;
+              pointInfoContent[id] = buildInfoContent(p.name, p.category, p.desc, p.url);
+              marker.addListener('click', () => focusMapPoint(id));
+              if (!dayMarkers[day.day]) dayMarkers[day.day] = [];
+              dayMarkers[day.day].push(marker);
+            } catch (err) {
+              console.error('Marker setup failed for', p.name, err);
+            }
+          } else {
+            console.warn('Geocode failed for', p.name, gstatus);
+          }
+          if (done === totalPoints) {
+            allPointsBounds = bounds;
+            status.textContent = '';
+            if (activeView === 'all') map.fitBounds(allPointsBounds);
+          }
+        });
+      }, (i++) * 150);
+    });
+  });
+}
+
+// Fetch driving directions for all 7 days up front (staggered), so the all-days overview can
+// show every day's route + total travel time immediately without waiting for a click.
+function loadAllDayRoutes() {
+  DAYS.forEach((day, idx) => {
+    if (day.route.length < 2) return;
+    setTimeout(() => fetchDayRoute(day), idx * 400);
+  });
+}
+
+function fetchDayRoute(day) {
+  const waypoints = day.route.slice(1, -1).map(stop => ({ location: stop.query, stopover: true }));
+  const request = {
+    origin: day.route[0].query,
+    destination: day.route[day.route.length - 1].query,
+    waypoints: waypoints,
+    optimizeWaypoints: false,
+    travelMode: google.maps.TravelMode.DRIVING
+  };
+  directionsService.route(request, (result, status) => {
+    if (status !== 'OK') {
+      console.warn('Directions failed for day', day.day, status);
+      dayLegData[day.day] = { legs: [], totalSeconds: 0, failed: true };
+      if (activeView === 'all') renderOverview();
+      return;
+    }
+    const renderer = new google.maps.DirectionsRenderer({
+      suppressMarkers: true,
+      preserveViewport: true,
+      polylineOptions: { strokeColor: DAY_ROUTE_COLORS[(day.day - 1) % DAY_ROUTE_COLORS.length], strokeWeight: 4 }
+    });
+    renderer.setDirections(result);
+    renderer.setMap(activeView === 'all' || activeView === day.day ? map : null);
+    dayRenderers[day.day] = renderer;
+
+    const legs = result.routes[0].legs;
+    let totalSeconds = 0;
+    const routeColor = DAY_ROUTE_COLORS[(day.day - 1) % DAY_ROUTE_COLORS.length];
+    const labels = [];
+    const legSummaries = legs.map((leg, i) => {
+      totalSeconds += leg.duration.value;
+      // Midpoint between leg start/end is a good-enough anchor for the distance pill -- doesn't
+      // need to trace the actual curved road, just needs to sit roughly on that stretch.
+      const mid = google.maps.geometry.spherical.interpolate(leg.start_location, leg.end_location, 0.5);
+      const lbl = new DistanceLabel(mid, formatHebrewDistance(leg.distance.value), routeColor);
+      lbl.setMap(activeView === 'all' || activeView === day.day ? map : null);
+      labels.push(lbl);
+      return { from: day.route[i].label, to: day.route[i + 1].label, seconds: leg.duration.value, meters: leg.distance.value };
+    });
+    dayLegData[day.day] = { legs: legSummaries, totalSeconds };
+    dayDistanceLabels[day.day] = labels;
+
+    if (activeView === 'all') renderOverview();
+    if (activeView === day.day) renderDay(day);
+  });
+}
+
+// Default landing view: the whole trip at once -- every day's route drawn in its own color,
+// every marker visible, map fit to the whole selection (effectively most of Slovenia), plus a
+// compact per-day travel-time summary so the total shape of the trip is visible before drilling
+// into any single day's detail.
+function renderOverview() {
+  Object.keys(dayMarkers).forEach(dayNum => {
+    dayMarkers[dayNum].forEach(m => m.setMap(map));
+  });
+  Object.keys(dayRenderers).forEach(dayNum => {
+    dayRenderers[dayNum].setMap(map);
+  });
+  Object.keys(dayDistanceLabels).forEach(dayNum => {
+    dayDistanceLabels[dayNum].forEach(l => l.setMap(map));
+  });
+  if (allPointsBounds) map.fitBounds(allPointsBounds);
+
+  const card = document.getElementById('dayCard');
+  let html = `<h3>כל 7 הימים</h3><div class="base-tag">23–29.8.2026 · ליובליאנה (2 לילות) → פוסטויna (2 לילות) → מאריבור (2 לילות)</div>`;
+  const allTripPointIds = DAYS.reduce((acc, d) => acc.concat(d.points), []);
+  html += renderPieBlock(categoryCounts(allTripPointIds), 'התפלגות סוגי אטרקציה — כל המסלול הסופי');
+  let tripTotalSeconds = 0;
+  DAYS.forEach(day => {
+    const routeColor = DAY_ROUTE_COLORS[(day.day - 1) % DAY_ROUTE_COLORS.length];
+    const legInfo = dayLegData[day.day];
+    let timeLabel = 'מחשב זמני נסיעה...';
+    if (legInfo) {
+      if (legInfo.failed) timeLabel = 'זמן נסיעה לא זמין';
+      else { timeLabel = formatHebrewDuration(legInfo.totalSeconds); tripTotalSeconds += legInfo.totalSeconds; }
+    } else if (day.route.length < 2) {
+      timeLabel = '—';
+    }
+    const stopNames = day.points.map(id => POINTS[id].name).join(', ') || 'יום נסיעה';
+    html += `
+      <div class="overview-row" data-day="${day.day}">
+        <span class="route-dot" style="background:${routeColor}"></span>
+        <div class="ov-main">
+          <div class="ov-day-title">יום ${day.day} — ${day.label}</div>
+          <div class="ov-day-sub">${day.dateLabel} · ${stopNames}</div>
+        </div>
+        <div class="ov-time">${timeLabel}</div>
+      </div>`;
+  });
+  html += `<div class="overview-total">סה"כ נסיעה בכל הטיול: ${tripTotalSeconds ? formatHebrewDuration(tripTotalSeconds) : 'מחשב...'}</div>`;
+  card.innerHTML = html;
+  card.querySelectorAll('.overview-row').forEach(el => {
+    el.addEventListener('click', () => showView(parseInt(el.getAttribute('data-day'), 10)));
+  });
+  showExtraPlacesOverview();
+}
+
+function renderDay(day) {
+  // Show only this day's markers/route, hide every other day's.
+  Object.keys(dayMarkers).forEach(dayNum => {
+    dayMarkers[dayNum].forEach(m => m.setMap(parseInt(dayNum, 10) === day.day ? map : null));
+  });
+  Object.keys(dayRenderers).forEach(dayNum => {
+    dayRenderers[dayNum].setMap(parseInt(dayNum, 10) === day.day ? map : null);
+  });
+  Object.keys(dayDistanceLabels).forEach(dayNum => {
+    dayDistanceLabels[dayNum].forEach(l => l.setMap(parseInt(dayNum, 10) === day.day ? map : null));
+  });
+  if (dayRenderers[day.day]) {
+    const dir = dayRenderers[day.day].getDirections();
+    if (dir) map.fitBounds(dir.routes[0].bounds);
+  } else if (day.points.length) {
+    // Route not loaded yet (or none) -- fit to this day's own markers instead.
+    const b = new google.maps.LatLngBounds();
+    (dayMarkers[day.day] || []).forEach(m => b.extend(m.getPosition()));
+    if (!b.isEmpty()) map.fitBounds(b);
+  }
+
+  const card = document.getElementById('dayCard');
+  let html = `
+    <h3>יום ${day.day} — ${day.label}</h3>
+    <div class="base-tag">${day.dateLabel} · בסיס: ${day.base}</div>
+  `;
+  if (day.blurb) {
+    html += `<div class="day-blurb">${day.blurb}</div>`;
+  }
+  if (day.points.length) {
+    html += renderPieBlock(categoryCounts(day.points), 'התפלגות סוגי אטרקציה — היום');
+  }
+  html += `
+    <div class="info-row"><span class="ic">⏰</span><span class="lbl">קימה</span><span class="val">${day.wake}</span></div>
+    <div class="info-row"><span class="ic">☕</span><span class="lbl">ארוחת בוקר</span><span class="val">${day.breakfast}</span></div>
+    <div class="info-row"><span class="ic">🚗</span><span class="lbl">נסיעה</span><span class="val">${day.travelNote}</span></div>
+  `;
+  html += renderSchedule(day);
+  if (day.points.length) {
+    html += `<div class="info-row"><span class="ic">📍</span><span class="lbl">נקודות</span><span class="val"><ul class="poi-list">`;
+    day.points.forEach(id => {
+      const p = POINTS[id];
+      html += `<li><span class="poi-name" data-id="${id}">${p.name}</span><div class="poi-desc">${p.desc}</div></li>`;
+    });
+    html += `</ul></span></div>`;
+  }
+  const legInfo = dayLegData[day.day];
+  if (legInfo && legInfo.legs.length) {
+    html += `<div class="travel-legs">`;
+    legInfo.legs.forEach(leg => {
+      html += `<div class="leg">${leg.from} ← ${leg.to}: <b>${formatHebrewDuration(leg.seconds)}</b> (${formatHebrewDistance(leg.meters)})</div>`;
+    });
+    html += `</div>`;
+  } else if (legInfo && legInfo.failed) {
+    html += `<div class="travel-legs">זמני נסיעה לא זמינים כרגע.</div>`;
+  }
+  if (day.restaurants.length) {
+    html += `<div class="info-row"><span class="ic">🍽️</span><span class="lbl">מסעדות</span><span class="val">`;
+    day.restaurants.forEach(r => {
+      html += `<div class="restaurant"><b>${r.name}</b>${r.note}</div>`;
+    });
+    html += `</span></div>`;
+  }
+  if (day.base.includes('נמל תעופה')) {
+    html += `<div class="lodging-note">🛫 יום עזיבה — אין לינה הלילה, טיסה חזרה</div>`;
+  } else {
+    html += `<div class="lodging-note">🛏️ לינה הלילה: ${day.base}</div>`;
+  }
+  card.innerHTML = html;
+  card.querySelectorAll('.poi-name').forEach(el => {
+    el.addEventListener('click', () => focusPointById(el.getAttribute('data-id')));
+  });
+  showExtraPlacesForDay(day);
+}
+
+// Hebrew duration/distance strings are always computed from the raw numeric value, never
+// trusted from Google's localized duration.text/distance.text, which can come back mixed-
+// language (e.g. "3 שעות 5 mins") even with &language=he loaded.
+function formatHebrewDuration(totalSeconds) {
+  const totalMinutes = Math.round(totalSeconds / 60);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours === 0) return `${minutes} דקות`;
+  if (minutes === 0) return `${hours} שעות`;
+  return `${hours} שעות ו-${minutes} דקות`;
+}
+function formatHebrewDistance(meters) {
+  return `${Math.round(meters / 1000)} ק"מ`;
+}
+
+// ---- Category pie charts (whole-trip overview + per-day) ----
+function categoryCounts(pointIds) {
+  const counts = {};
+  pointIds.forEach(id => {
+    const p = POINTS[id];
+    if (!p) return;
+    counts[p.category] = (counts[p.category] || 0) + 1;
+  });
+  return counts;
+}
+
+function renderPieChartSVG(counts, size) {
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  if (!total) return '';
+  const r = size / 2, cx = r, cy = r;
+  let angle = -90;
+  let paths = '';
+  // A single-category pie can't be drawn as an SVG arc (0-length gap), so draw a full circle.
+  const entries = Object.entries(counts);
+  if (entries.length === 1) {
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${cx}" cy="${cy}" r="${r - 1}" fill="${CATEGORY_COLORS[entries[0][0]]}" /></svg>`;
+  }
+  entries.forEach(([cat, count]) => {
+    const frac = count / total;
+    const sweep = frac * 360;
+    const large = sweep > 180 ? 1 : 0;
+    const x1 = cx + r * Math.cos(angle * Math.PI / 180);
+    const y1 = cy + r * Math.sin(angle * Math.PI / 180);
+    const endAngle = angle + sweep;
+    const x2 = cx + r * Math.cos(endAngle * Math.PI / 180);
+    const y2 = cy + r * Math.sin(endAngle * Math.PI / 180);
+    paths += `<path d="M${cx},${cy} L${x1.toFixed(2)},${y1.toFixed(2)} A${r},${r} 0 ${large} 1 ${x2.toFixed(2)},${y2.toFixed(2)} Z" fill="${CATEGORY_COLORS[cat]}" />`;
+    angle = endAngle;
+  });
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${paths}</svg>`;
+}
+
+function renderPieBlock(counts, title) {
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  if (!total) return '';
+  const svg = renderPieChartSVG(counts, 84);
+  let legendHtml = '';
+  Object.entries(counts).forEach(([cat, count]) => {
+    const pct = Math.round((count / total) * 100);
+    legendHtml += `<div class="pie-legend-row"><span class="dot" style="background:${CATEGORY_COLORS[cat]}"></span>${CATEGORY_LABELS_HE[cat]} — ${count} (${pct}%)</div>`;
+  });
+  return `<div class="pie-block"><div class="pie-title">${title}</div><div class="pie-flex">${svg}<div class="pie-legend">${legendHtml}</div></div></div>`;
+}
+
+// ---- Spaced-out principal day schedule (wake -> breakfast -> travel/visit blocks) ----
+// Deliberately rounded to the nearest half-hour throughout (both the visit-duration estimates
+// below and every computed clock time) -- this is a rough, principal-shape schedule, not a
+// minute-precise itinerary, so there's no value in showing e.g. "14:37".
+const VISIT_MINUTES = { Nature: 90, City: 60, Attraction: 120, Food: 60 };
+const CATEGORY_ICONS = { Nature: '🌲', City: '🏙️', Attraction: '🎯', Food: '🍽️' };
+
+function round30(mins) {
+  return Math.round(mins / 30) * 30;
+}
+
+function minutesToHHMM(mins) {
+  const m = ((mins % 1440) + 1440) % 1440;
+  const h = Math.floor(m / 60);
+  const mm = m % 60;
+  return `${String(h).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+}
+
+function buildDaySchedule(day) {
+  const legInfo = dayLegData[day.day];
+  if (!day.route || day.route.length < 2 || !legInfo || !legInfo.legs.length) return null;
+  const wakeMatch = /^(\d{1,2}):(\d{2})$/.exec(day.wake);
+  if (!wakeMatch) return null; // e.g. "לפי זמן הנחיתה" -- no fixed anchor to schedule against
+
+  let cursor = round30(parseInt(wakeMatch[1], 10) * 60 + parseInt(wakeMatch[2], 10));
+  const blocks = [{ time: cursor, icon: '⏰', label: 'קימה', cls: '' }];
+
+  if (day.breakfast && !day.breakfast.includes('בטיסה')) {
+    cursor = round30(cursor + 30);
+    blocks.push({ time: cursor, icon: '☕', label: 'ארוחת בוקר', sub: '~חצי שעה', cls: '' });
+    cursor = round30(cursor + 30);
+  }
+
+  day.route.forEach((stop, idx) => {
+    if (idx === 0) return;
+    const leg = legInfo.legs[idx - 1];
+    if (leg) {
+      cursor = round30(cursor + leg.seconds / 60);
+      blocks.push({ time: cursor, icon: '🚗', label: `נסיעה ל${stop.label}`, sub: formatHebrewDuration(leg.seconds), cls: 'travel' });
+    }
+    const poiEntry = Object.entries(POINTS).find(([id, p]) => p.query === stop.query);
+    if (poiEntry) {
+      const p = poiEntry[1];
+      const dur = VISIT_MINUTES[p.category] || 60;
+      blocks.push({ time: cursor, icon: CATEGORY_ICONS[p.category] || '📍', label: p.name, sub: dur >= 60 ? `~${dur / 60} שעות מוצע` : `~${dur} דק׳ מוצע`, cls: 'visit' });
+      cursor = round30(cursor + dur);
+    }
+  });
+
+  return blocks;
+}
+
+function renderSchedule(day) {
+  const blocks = buildDaySchedule(day);
+  if (!blocks) return '';
+  let html = `<div class="schedule"><div class="schedule-title">לוח זמנים עקרוני ומרווח (משוער, אפשר לכוונן בשטח)</div>`;
+  blocks.forEach(b => {
+    html += `<div class="sched-block ${b.cls}"><div class="sched-time">${minutesToHHMM(b.time)}</div><div class="sched-body"><div class="sched-label">${b.icon} ${b.label}</div>${b.sub ? `<div class="sched-sub">${b.sub}</div>` : ''}</div></div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+// ---- "Worth knowing about" -- everything from Slovenia_Route_Map.html's full point list that
+// did NOT make the final 13-point selection. Not part of the trip; just a reference list at the
+// bottom of the sidebar so a good option isn't forgotten for a future trip. Name/category are
+// carried over as-is; distance is computed once, live, against the trip's 3 actual sleep bases.
+const EXTRA_REGIONS = [
+  { region: 'האלפים היוליאניים ופארק לאומי טריגלב (לא נכנס למסלול הפעם)', points: [
+    { name:'אגם בלד (Lake Bled)', category:'Nature', query:'Lake Bled, Slovenia' },
+    { name:'מצוק ווינטגר (Vintgar Gorge)', category:'Nature', query:'Vintgar Gorge, Slovenia' },
+    { name:'אגם בוהין (Lake Bohinj)', category:'Nature', query:'Lake Bohinj, Slovenia' },
+    { name:'מפל סביצ׳ה (Slap Savica)', category:'Nature', query:'Slap Savica, Bohinj, Slovenia' },
+    { name:'רכבל הר ווגל (Vogel)', category:'Attraction', query:'Vogel Cable Car, Bohinj, Slovenia' },
+    { name:'עמק הסוצ׳ה (Soča Valley)', category:'Nature', query:'Soča River, Slovenia' },
+    { name:'מפל קוז׳אק (Kozjak Waterfall)', category:'Nature', query:'Kozjak Waterfall, Kobarid, Slovenia' },
+    { name:'בוברץ (Bovec)', category:'City', query:'Bovec, Slovenia' },
+    { name:"מעבר ורשיץ' (Vršič Pass)", category:'Attraction', query:'Vršič Pass, Slovenia' },
+    { name:'קרניסקה גורה (Kranjska Gora)', category:'City', query:'Kranjska Gora, Slovenia' },
+    { name:'שביל יוליאנה (Juliana Trail)', category:'Nature', query:'Juliana Trail, Kranjska Gora, Slovenia' },
+    { name:'רדובליצה ומוזיאון הדבוראות', category:'Attraction', query:'Čebelarski muzej Radovljica, Slovenia' }
+  ]},
+  { region: 'חוף האדריאטי (לא נכנס למסלול הפעם)', points: [
+    { name:'פיראן (Piran)', category:'City', query:'Piran, Slovenia' },
+    { name:"פורטורוז' (Portorož)", category:'City', query:'Portorož, Slovenia' },
+    { name:'מלוחות המלח סצ׳ובלה (Sečovlje Salina)', category:'Nature', query:'Sečovlje Salina Nature Park, Slovenia' }
+  ]},
+  { region: 'מזרח סלובניה ושטיירסקה', points: [
+    { name:'בקתת המכשפה ויער האגדות (אולימיה)', category:'Attraction', query:'Olimje, Podčetrtek, Slovenia' }
+  ]}
+];
+const EXTRA_BASES = [
+  { name: 'ליובליאנה', query: 'Ljubljana, Slovenia' },
+  { name: 'פוסטויna', query: 'Postojna, Slovenia' },
+  { name: 'מאריבור', query: 'Maribor, Slovenia' }
+];
+const ALL_EXTRA = EXTRA_REGIONS.flatMap(r => r.points);
+
+// Distances are computed per the CURRENTLY VIEWED DAY's own lodging base, not a fixed "nearest
+// of all 3 bases" figure -- "how far is Lake Bled from where I'm actually sleeping tonight" is
+// the useful question, not an abstract closest-base number. Uses the same DirectionsService
+// already used for the day routes (one call per extra point, staggered) rather than
+// DistanceMatrixService, since that's a separate Google API that may not be enabled for this
+// key -- Directions is proven working elsewhere on this page. Cached per base name so switching
+// between days that share a base (e.g. days 1-2 both in Ljubljana) doesn't recompute.
+const extraDistanceCache = {}; // baseName -> array parallel to ALL_EXTRA: 'pending' | 'failed' | {meters}
+
+function ensureExtraDistancesForBase(baseName) {
+  if (extraDistanceCache[baseName]) return; // already computed or already in flight
+  const baseEntry = EXTRA_BASES.find(b => b.name === baseName);
+  if (!baseEntry) return;
+  const results = new Array(ALL_EXTRA.length).fill('pending');
+  extraDistanceCache[baseName] = results;
+  ALL_EXTRA.forEach((p, idx) => {
+    setTimeout(() => {
+      directionsService.route({
+        origin: baseEntry.query,
+        destination: p.query,
+        travelMode: google.maps.TravelMode.DRIVING
+      }, (result, status) => {
+        if (status === 'OK') {
+          results[idx] = { meters: result.routes[0].legs[0].distance.value };
+        } else {
+          results[idx] = 'failed';
+        }
+        // Only worth re-rendering if the day currently on screen still uses this base.
+        if (activeView !== 'all') {
+          const activeDay = DAYS.find(d => d.day === activeView);
+          if (activeDay && activeDay.base === baseName) renderExtraPlacesSection(baseName);
+        }
+      });
+    }, idx * 150);
+  });
+}
+
+function renderExtraPlacesSection(baseName) {
+  const container = document.getElementById('extraPlaces');
+  if (!container) return;
+  const results = extraDistanceCache[baseName];
+  let html = `<div class="extra-section"><div class="extra-section-title">עוד מקומות ששווה לדעת עליהם</div><div class="extra-section-sub">מרחק נסיעה מ${baseName} (בסיס הלינה של היום הזה) — לא נכנסו למסלול הסופי הזה.</div>`;
+  EXTRA_REGIONS.forEach(r => {
+    html += `<div class="extra-region-title">${r.region}</div>`;
+    r.points.forEach(p => {
+      const idx = ALL_EXTRA.indexOf(p);
+      const d = results ? results[idx] : 'pending';
+      let distText;
+      if (!d || d === 'pending') distText = 'מחשב...';
+      else if (d === 'failed') distText = 'מרחק לא זמין';
+      else distText = `כ-${formatHebrewDistance(d.meters)}`;
+      html += `<div class="extra-row" data-idx="${idx}"><span class="dot" style="background:${CATEGORY_COLORS[p.category]}"></span><span class="extra-name">${p.name}</span><span class="extra-dist">${distText}</span></div>`;
+    });
+  });
+  html += `</div>`;
+  container.innerHTML = html;
+  // Click a row -> geocode (first time only) + grow the marker + pop its info bubble, exactly
+  // like clicking a point in the day's own POI list above.
+  container.querySelectorAll('.extra-row').forEach(el => {
+    el.addEventListener('click', () => focusExtraPoint(parseInt(el.getAttribute('data-idx'), 10)));
+  });
+}
+
+// Called from renderDay(): kicks off (or reuses cached) distance lookups for that day's own
+// base, and renders whatever's available immediately (results fill in and re-render as they land).
+function showExtraPlacesForDay(day) {
+  const container = document.getElementById('extraPlaces');
+  if (!container) return;
+  const baseEntry = EXTRA_BASES.find(b => b.name === day.base);
+  if (!baseEntry) {
+    // Departure day (e.g. "מאריבור → נמל תעופה") -- no single lodging point to measure from.
+    container.innerHTML = `<div class="extra-section"><div class="extra-section-title">עוד מקומות ששווה לדעת עליהם</div><div class="extra-section-sub">אין לינה קבועה ביום הזה (יום עזיבה), אז אין נקודת ייחוס למרחק.</div></div>`;
+    return;
+  }
+  ensureExtraDistancesForBase(day.base);
+  renderExtraPlacesSection(day.base);
+}
+
+// Called from renderOverview(): the "all days" view spans 3 different bases at once, so there's
+// no single lodging point to measure extra places against -- point the user at a specific day.
+function showExtraPlacesOverview() {
+  const container = document.getElementById('extraPlaces');
+  if (!container) return;
+  container.innerHTML = `<div class="extra-section"><div class="extra-section-title">עוד מקומות ששווה לדעת עליהם</div><div class="extra-section-sub">עברו ליום ספציפי כדי לראות מרחקי נסיעה מנקודת הלינה של אותו יום.</div></div>`;
+}
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjZ4x9SilKEMNW1NByB5YPprLfcDloEFQ&libraries=geometry&language=he&region=SI&callback=initMap">
+</script>
+</body>
+</html>

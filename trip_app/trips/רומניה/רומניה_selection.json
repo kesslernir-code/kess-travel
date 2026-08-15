@@ -1,0 +1,770 @@
+{
+  "destination": "רומניה",
+  "confirmedAt": "2026-08-15T16:47:19.614Z",
+  "selectedCount": 109,
+  "selected": [
+    {
+      "name": "בוקרשט (Bucharest)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bucharest_University_Square_%28cropped%29.jpg/960px-Bucharest_University_Square_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "העיר העתיקה של בוקרשט (Bucharest Old Town)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Strada_Covaci.jpg/960px-Strada_Covaci.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "ארמון הפרלמנט (Palace of Parliament)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/en/thumb/1/18/Bucharest_-_Palace_of_the_Parliament_%282024%29_%282%29.jpg/960px-Bucharest_-_Palace_of_the_Parliament_%282024%29_%282%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "האתנאום הרומני (Romanian Athenaeum)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Ateneo_Rumano%2C_Bucarest%2C_Ruman%C3%ADa%2C_2016-05-29%2C_DD_73.jpg/960px-Ateneo_Rumano%2C_Bucarest%2C_Ruman%C3%ADa%2C_2016-05-29%2C_DD_73.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "שדרת הניצחון (Calea Victoriei)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Urban",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bucharest_University_Square_%28cropped%29.jpg/960px-Bucharest_University_Square_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "כיכר המהפכה (Revolution Square)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Revolution_square_in_Maribor.jpg/960px-Revolution_square_in_Maribor.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "תרמה בוקרשט (Therme Bucharest)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/02_TWE_Thermenparadies_Au%C3%9Fenansicht_Kuppel_offen.jpg/960px-02_TWE_Thermenparadies_Au%C3%9Fenansicht_Kuppel_offen.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "קורטאה ווקה וכנסיית סנט אנטון (Curtea Veche & Church)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Biserica_Curtea_Veche_Bucure%C8%99ti_%282023%29_-_img_02.jpg/960px-Biserica_Curtea_Veche_Bucure%C8%99ti_%282023%29_-_img_02.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "שער הניצחון של בוקרשט (Arcul de Triumf)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/Arcul_de_Triumf_%2824396923048%29.jpg/960px-Arcul_de_Triumf_%2824396923048%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "ארמון האביב / אחוזת צ'אושסקו (Spring Palace / Palatul Primăverii)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Bathroom_of_Palatul_Prim%C7%8Everii_-_Spring_Palace_-_in_Bucharest_Romania.jpg/960px-Bathroom_of_Palatul_Prim%C7%8Everii_-_Spring_Palace_-_in_Bucharest_Romania.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "מוזיאון הכפר הלאומי (Dimitrie Gusti National Village Museum)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/%282023%29_Biserica_de_lemn_din_Dragomire%C8%99ti%2C_Maramure%C8%99%2C_1722_-_img_18.jpg/960px-%282023%29_Biserica_de_lemn_din_Dragomire%C8%99ti%2C_Maramure%C8%99%2C_1722_-_img_18.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "חנות הספרים קרטורשטי קרוסל (Cărturești Carusel)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Libraria_Carturesti_Carusel_-_Interior_ziua.jpg/960px-Libraria_Carturesti_Carusel_-_Interior_ziua.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "קארו קו ברה (Caru’ cu Bere)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Food",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Caru_cu_Bere_%28MAR_2023%29_-_img_05.jpg/960px-Caru_cu_Bere_%28MAR_2023%29_-_img_05.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "גני צ'ישמיג'יו (Cișmigiu Garden)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Nature",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bucharest_University_Square_%28cropped%29.jpg/960px-Bucharest_University_Square_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "אגם הראסטראו (Lake Herăstrău / King Mihai I Park)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Nature",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Creation_of_Her%C4%83str%C4%83u_area_1.jpg/960px-Creation_of_Her%C4%83str%C4%83u_area_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "פארק הטבע וקרשט (Văcărești Nature Park)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Nature",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Lacul_Vacaresti_-_Delta_Vacaresti_-_Vara.jpg/960px-Lacul_Vacaresti_-_Delta_Vacaresti_-_Vara.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מוזיאון האיכר הרומני (Museum of the Romanian Peasant)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Bucharest_-_Museum_of_the_Romanian_Peasant_%28MAR2023%29_04.jpg/960px-Bucharest_-_Museum_of_the_Romanian_Peasant_%28MAR2023%29_04.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "המוזיאון הלאומי לאמנות עכשווית (MNAC)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Bucarest_musee_national_art_contemporain.jpg/960px-Bucarest_musee_national_art_contemporain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "ארמון בנק CEC (CEC Bank Palace)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Palacio_CEC%2C_Bucarest%2C_Ruman%C3%ADa%2C_2016-05-29%2C_DD_91-93_HDR.jpg/960px-Palacio_CEC%2C_Bucarest%2C_Ruman%C3%ADa%2C_2016-05-29%2C_DD_91-93_HDR.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "המוזיאון הלאומי להיסטוריה של רומניה (National History Museum)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Museo_Nacional_de_Historia_de_Ruman%C3%ADa%2C_Bucarest%2C_Ruman%C3%ADa%2C_2016-05-29%2C_DD_63.jpg/960px-Museo_Nacional_de_Historia_de_Ruman%C3%ADa%2C_Bucarest%2C_Ruman%C3%ADa%2C_2016-05-29%2C_DD_63.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "ארמון מוגושואיה (Mogoșoaia Palace)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/RO_IF_Mogosoaia_Palace_Kitchen_Watch_Tower.jpg/960px-RO_IF_Mogosoaia_Palace_Kitchen_Watch_Tower.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מנזר סנאגוב (Snagov Monastery)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/M%C3%A2n%C4%83stirea_Snagov.jpg/960px-M%C3%A2n%C4%83stirea_Snagov.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מסעדת קאיאמו (Kaiamo)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Food",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bucharest_University_Square_%28cropped%29.jpg/960px-Bucharest_University_Square_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מסעדת נואה (Noua)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Food",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Noua_Dreapt%C4%83_2023_logo.svg/960px-Noua_Dreapt%C4%83_2023_logo.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "מסעדת קאנה (Kané)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Food",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Col_John_R_Kane.jpg/960px-Col_John_R_Kane.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "פסאז' מאקה-וילקרוס (Pasajul Macca-Villacrosse)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Macca-Villacrosse.jpg/960px-Macca-Villacrosse.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "כנסיית סטברופולאוס (Stavropoleos Church)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/4%2C_Strada_Stavropoleos%2C_Bucharest_%28Romania%29.jpg/960px-4%2C_Strada_Stavropoleos%2C_Bucharest_%28Romania%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הקתדרלה הפטריארכלית של רומניה (Romanian Patriarchal Cathedral)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/National_Cathedral_of_Romania_%282025_November%29.jpg/960px-National_Cathedral_of_Romania_%282025_November%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "בית הקברות בלו (Bellu Cemetery)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/RO_B_Bellu_cemetery_entrance.jpg/960px-RO_B_Bellu_cemetery_entrance.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "אגם מוריי (Lacul Morii)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9c/Lacul_Morii_aeroboat.jpg/960px-Lacul_Morii_aeroboat.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "פארק קומאנה (Comana Park)",
+      "region": "בוקרשט וסביבתה",
+      "category": "Nature",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/RO_GR_Neajlov_Delta.JPG/960px-RO_GR_Neajlov_Delta.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "בראשוב (Brașov)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Bra%C8%99ov%2C_Pia%C8%9Ba_Sfatului_-_Flickr_-_Jorge_Franganillo.jpg/960px-Bra%C8%99ov%2C_Pia%C8%9Ba_Sfatului_-_Flickr_-_Jorge_Franganillo.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "טירת בראן (Bran Castle)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Castelul_Bran2.jpg/960px-Castelul_Bran2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "טירת פלש (Peleș Castle)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bucharest_University_Square_%28cropped%29.jpg/960px-Bucharest_University_Square_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הכנסייה השחורה (Black Church / Biserica Neagră)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Biserica_Neagr%C4%83_%2848729880193%29.jpg/960px-Biserica_Neagr%C4%83_%2848729880193%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "מבצר רשנוב (Râșnov Fortress)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Cetatea_R%C3%A2%C8%99nov%2C_v%C4%83zut%C4%83_din_%C8%99oseaua_Cristian-R%C3%A2%C8%99nov..jpg/960px-Cetatea_R%C3%A2%C8%99nov%2C_v%C4%83zut%C4%83_din_%C8%99oseaua_Cristian-R%C3%A2%C8%99nov..jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הפארק הלאומי פיאטרה קראיולוי (Piatra Craiului National Park)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Abrupt_-_panoramio.jpg/960px-Abrupt_-_panoramio.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "קניון זרנשט (Zărnești Gorges / Prăpăstiile Zărneștiului)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "שמורת מקלט הדובים ליברטי (Libearty Bear Sanctuary)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "קניון שבעת הסולמות (Seven Ladders Canyon)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הרי בוצ'ג'י, הספינקס והבאבלה (Bucegi Mountains, Sphinx & Babele)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הר טמפה (Mount Tâmpa)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/RO_BV_Bra%C5%9Fov%2C_T%C3%A2mpa_2.jpg/960px-RO_BV_Bra%C5%9Fov%2C_T%C3%A2mpa_2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "כיכר המועצה בראשוב (Piața Sfatului)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Brasov%2C_Piata_Sfatului.jpg/960px-Brasov%2C_Piata_Sfatului.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "רחוב החבל (Strada Sforii)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Brasov_-_Strada_Sforii_%282023%29_-_img_02.jpg/960px-Brasov_-_Strada_Sforii_%282023%29_-_img_02.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "סינאיה (Sinaia)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Camil_Iamandescu-Castelul_Peles.jpg/960px-Camil_Iamandescu-Castelul_Peles.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "פויאנה בראשוב (Poiana Brașov)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Poiana_Brasov.jpg/960px-Poiana_Brasov.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הכפר מגורה (Măgura)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Magura_jud_Bacau.png/960px-Magura_jud_Bacau.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "בקתת קורמטורה (Cabana Curmătura)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Sleep",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "טירת קנטקוזינו (Cantacuzino Castle)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הרי צ'יוקאש (Ciucaș Mountains)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Ciucas_stanca2.jpg/960px-Ciucas_stanca2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הכנסייה המבוצרת בפרז'מר (Prejmer Fortified Church)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Biserica_fortificat%C4%83_din_Prejmer_-_vedere_de_ansamblu.jpg/960px-Biserica_fortificat%C4%83_din_Prejmer_-_vedere_de_ansamblu.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מסעדת סרג'יאנה (Sergiana)",
+      "region": "בראשוב, עמק פראחובה ורכס הקרפטים",
+      "category": "Food",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/EUD_2009-374.pdf/page1-960px-EUD_2009-374.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "סיביו (Sibiu)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Hermannstadt_Romania%2C_the_Small_Plaza.jpg/960px-Hermannstadt_Romania%2C_the_Small_Plaza.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "סיגישוארה (Sighișoara)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Casa_cu_cerbi.JPG/960px-Casa_cu_cerbi.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "כביש טרנספגרשאן ואגם בלאה (Transfăgărășan & Lake Bâlea)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Bileato.jpg/960px-Bileato.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "טירת קורבין (Corvin Castle / Castelul Corvinilor)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Hunedoara_castle.jpg/960px-Hunedoara_castle.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הרי פגראש ופסגת מולדובאנו (Făgăraș Mountains & Moldoveanu Peak)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Moldoveanu_Peak_%28Romania%29.jpg/960px-Moldoveanu_Peak_%28Romania%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מוזיאון אסטרה הפתוח (ASTRA National Museum Complex)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הכנסייה המבוצרת בבירטאן (Biertan Fortified Church)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הכפר ויסקרי (Viscri)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Viscri_-_Cimitir_evanghelic.jpg/960px-Viscri_-_Cimitir_evanghelic.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "המוזיאון הלאומי ברוקנטל (Brukenthal National Museum)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Brukenthal-sibiu.jpg/960px-Brukenthal-sibiu.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "גשר השקרים בסיביו (Bridge of Lies)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/RO_SB_Bridge_of_Lies_02.jpg/960px-RO_SB_Bridge_of_Lies_02.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מגדל השעון בסיגישוארה (Clock Tower)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Sighi%C8%99oara_Clock_Tower_2026.jpg/960px-Sighi%C8%99oara_Clock_Tower_2026.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מצודת אלבה יוליה (Alba Iulia Citadel)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Cetatea_Alba_Carolina_Ansamblul_fortifica%C8%9Biei_%E2%80%9ECetatea_Alba_Iulia_14.jpg/960px-Cetatea_Alba_Carolina_Ansamblul_fortifica%C8%9Biei_%E2%80%9ECetatea_Alba_Iulia_14.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מצודת פוינארי (Poenari Fortress)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/PoienariCastle1.jpg/960px-PoienariCastle1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מנזר קורטאה דה ארג'ש (Curtea de Argeș Monastery)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Man_Curtea_de_Arges.SV.jpg/960px-Man_Curtea_de_Arges.SV.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מרג'ינימאה סיביולוי (Mărginimea Sibiului)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Food",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Vedere_Rasinari.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
+    },
+    {
+      "name": "יקב וטירת ז'ידוויי (Castel Jidvei)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מצודת דווה (Deva Citadel)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "סרמיזגטוסה רג'יה (Sarmizegetusa Regia)",
+      "region": "סיביו, סיגישוארה ומרכז טרנסילבניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Sarmizegetusa_temples.jpg/960px-Sarmizegetusa_temples.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "קלוז'-נאפוקה (Cluj-Napoca)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Romania-2382_-_View_from_Hotel_%287794313314%29.jpg/960px-Romania-2382_-_View_from_Hotel_%287794313314%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מכרה המלח בטורדה (Salina Turda)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/6/69/Salina_Turda_045.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
+    },
+    {
+      "name": "אוראדיה (Oradea)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/2025-05-03_Oradea_detail_07.jpg/960px-2025-05-03_Oradea_detail_07.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הפארק הלאומי אפוסני (Apuseni Natural Park)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Apuseni_in_Romania.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
+    },
+    {
+      "name": "מערת הקרח סקרישוארה (Scărișoara Ice Cave)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Pestera_Scarisoara_-_Sala_Biserica.jpg/960px-Pestera_Scarisoara_-_Sala_Biserica.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מערת הדובים (Peștera Urșilor)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Medvebarlang09.jpg/960px-Medvebarlang09.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "קניון טורדה (Cheile Turzii)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "יער הויה-באצ'ו (Hoia-Baciu Forest)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "ארמון הנשר השחור (Black Eagle Palace)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Palatul_Vulturul_Negru%2C_Oradea_%282023%29_-_img_03.jpg/960px-Palatul_Vulturul_Negru%2C_Oradea_%282023%29_-_img_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "הגן הבוטני של קלוז' (Alexandru Borza Botanical Garden)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Cluj-Napoca-Gr%C4%83dina_Botanic%C4%83_-Alexandru_Borza-IMG_1562.jpg/960px-Cluj-Napoca-Gr%C4%83dina_Botanic%C4%83_-Alexandru_Borza-IMG_1562.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "פסטיבל אנטולד (Untold Festival)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Other",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Untold2019_fans.jpg/960px-Untold2019_fans.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "אתר המרחצאות ביילה פליקס (Băile Felix)",
+      "region": "קלוז'-נאפוקה, אפוסני וצפון-מערב רומניה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Apollo_-_Baile_Felix_BH.JPG/960px-Apollo_-_Baile_Felix_BH.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "המנזרים המצוירים בבוקובינה (Painted Monasteries of Bucovina)",
+      "region": "מרמורש ובוקובינה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Moldovi%C8%9Ba_Monastery_1532.jpg/960px-Moldovi%C8%9Ba_Monastery_1532.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "מרמורש (Maramureș)",
+      "region": "מרמורש ובוקובינה",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/2023-APR_-_Memorialul_Sighet_%28Exterior%29_IMG_09.jpg/960px-2023-APR_-_Memorialul_Sighet_%28Exterior%29_IMG_09.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "בית הקברות השמח בספנצה (Merry Cemetery)",
+      "region": "מרמורש ובוקובינה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cimitirul_Vesel%2C_S%C4%83p%C3%A2n%C8%9Ba%2C_Maramure%C8%99_-_%282023%29_-_IMG_18.jpg/960px-Cimitirul_Vesel%2C_S%C4%83p%C3%A2n%C8%9Ba%2C_Maramure%C8%99_-_%282023%29_-_IMG_18.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "כנסיות העץ של מרמורש (Wooden Churches of Maramureș)",
+      "region": "מרמורש ובוקובינה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/B%C3%A2rsana_Monastery%2C_Maramure%C8%99%2C_Romania_%282023%29_-_IMG_00_%28cropped%29.jpg/960px-B%C3%A2rsana_Monastery%2C_Maramure%C8%99%2C_Romania_%282023%29_-_IMG_00_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "רכבת הקיטור מוקניצה (Mocănița Steam Train)",
+      "region": "מרמורש ובוקובינה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "אנדרטת קורבנות הקומוניזם בסיגט (Sighet Memorial Museum)",
+      "region": "מרמורש ובוקובינה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הרי רודנה (Rodna Mountains)",
+      "region": "מרמורש ובוקובינה",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Romania%2C_Rodna_Mountains_National_Park.jpg/960px-Romania%2C_Rodna_Mountains_National_Park.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הרי צ'חלאו והאגם האדום (Ceahlău Mountains & Red Lake)",
+      "region": "מרמורש ובוקובינה",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/A_handbook_of_Roumania_%28IA_handbookofrouman00grearich%29.pdf/page1-500px-A_handbook_of_Roumania_%28IA_handbookofrouman00grearich%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "יאשי (Iași)",
+      "region": "מרמורש ובוקובינה",
+      "category": "Urban",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Palatul_Culturii_Ia%C8%99i_-_seara_din_lateral_%28cropped%29.jpg/960px-Palatul_Culturii_Ia%C8%99i_-_seara_din_lateral_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "אזור היין של קוטנרי (Cotnari Wine Region)",
+      "region": "מרמורש ובוקובינה",
+      "category": "Food",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Feteasca_negra_from_Romania.jpg/960px-Feteasca_negra_from_Romania.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הכפר ברב (Breb)",
+      "region": "מרמורש ובוקובינה",
+      "category": "Urban",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Haystack_in_the_evening%2C_Breb%2C_Ocna_%C8%98ugatag%2C_2017.jpg/960px-Haystack_in_the_evening%2C_Breb%2C_Ocna_%C8%98ugatag%2C_2017.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "שמורת הביוספרה של דלתת הדנובה (Danube Delta)",
+      "region": "דלתת הדנובה וחוף הים השחור",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Danube_Delta_ESA23450088.jpeg/960px-Danube_Delta_ESA23450088.jpeg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "קונסטנצה (Constanța)",
+      "region": "דלתת הדנובה וחוף הים השחור",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "קזינו קונסטנצה (Constanța Casino)",
+      "region": "דלתת הדנובה וחוף הים השחור",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Constan%C8%9Ba_Casino_2025_%2854606449888%29.jpg/960px-Constan%C8%9Ba_Casino_2025_%2854606449888%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "טולצ'אה (Tulcea)",
+      "region": "דלתת הדנובה וחוף הים השחור",
+      "category": "Urban",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Tulcea_Skyline.jpg/960px-Tulcea_Skyline.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "יער לטאה (Letea Forest)",
+      "region": "דלתת הדנובה וחוף הים השחור",
+      "category": "Nature",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Letea0_cropped.jpg/960px-Letea0_cropped.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מבצר אניסלה והעיר העתיקה היסטריה (Enisala Fortress & Histria)",
+      "region": "דלתת הדנובה וחוף הים השחור",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "גורה פורטיציי וואמה וקה (Gura Portiței & Vama Veche)",
+      "region": "דלתת הדנובה וחוף הים השחור",
+      "category": "Nature",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/960px-Flag_of_Romania.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "סולינה וספנטו גאורגה (Sulina & Sfântu Gheorghe)",
+      "region": "דלתת הדנובה וחוף הים השחור",
+      "category": "Urban",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/20230425.Donau_Delta_Sf%C3%A2ntu_Gheorghe.-072.2.jpg/960px-20230425.Donau_Delta_Sf%C3%A2ntu_Gheorghe.-072.2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הפארק הלאומי שערי הברזל ופסל דצ'באל (Iron Gates & Decebal Sculpture)",
+      "region": "באנאט, שערי הברזל ודרום-מערב רומניה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Statuia_Chipul_lui_Decebal_-_Cazanele_Dun%C4%83rii%2C_Rom%C3%A2nia.jpg/960px-Statuia_Chipul_lui_Decebal_-_Cazanele_Dun%C4%83rii%2C_Rom%C3%A2nia.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "הפארק הלאומי רטזאט (Retezat National Park)",
+      "region": "באנאט, שערי הברזל ודרום-מערב רומניה",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Retezat_near_camp_Bucura.JPG/960px-Retezat_near_camp_Bucura.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "טימישוארה (Timișoara)",
+      "region": "באנאט, שערי הברזל ודרום-מערב רומניה",
+      "category": "Urban",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Pia%C8%9Ba_Victoriei_Timi%C8%99oara.jpg/960px-Pia%C8%9Ba_Victoriei_Timi%C8%99oara.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "עמוד האינסוף בטרגו ז'יו (Endless Column)",
+      "region": "באנאט, שערי הברזל ודרום-מערב רומניה",
+      "category": "Attraction",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/%D0%A1%D1%80%D0%B0%D0%B2%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D0%B2%D1%8B%D1%81%D0%BE%D1%82%D0%B0_%D0%BA%D0%BE%D0%BB%D0%BE%D0%BD%D0%BD_%D0%90%D0%BB%D0%B5%D0%BA%D1%81%D0%B0%D0%BD%D0%B4%D1%80%D0%B0_I%2C_%D0%9D%D0%B0%D0%BF%D0%BE%D0%BB%D0%B5%D0%BE%D0%BD%D0%B0%2C_%D0%A2%D1%80%D0%B0%D1%8F%D0%BD%D0%B0%2C_%D0%9F%D0%BE%D0%BC%D0%BF%D0%B5%D1%8F_%D0%B8_%D0%90%D0%BD%D1%82%D0%BE%D0%BD%D0%B8%D0%BD%D0%B0%2C1836%D0%B3_%D0%93%D0%98%D0%9C.jpg/960px-thumbnail.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "כביש טרנסאלפינה (Transalpina / DN 67C)",
+      "region": "באנאט, שערי הברזל ודרום-מערב רומניה",
+      "category": "Attraction",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Romania-roads-DN67C.png/960px-Romania-roads-DN67C.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "אזור היין דיאלו מארה (Dealu Mare Wine Region)",
+      "region": "באנאט, שערי הברזל ודרום-מערב רומניה",
+      "category": "Food",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Muntenia.svg/960px-Muntenia.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "שביל ויה טרנסילבניקה (Via Transilvanica)",
+      "region": "באנאט, שערי הברזל ודרום-מערב רומניה",
+      "category": "Nature",
+      "recommended": true,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Via_Transilvanica_marking.jpg/960px-Via_Transilvanica_marking.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מפל ביגאר (Bigăr Waterfall)",
+      "region": "באנאט, שערי הברזל ודרום-מערב רומניה",
+      "category": "Nature",
+      "recommended": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Cascada_bigar.jpg/960px-Cascada_bigar.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    }
+  ]
+}

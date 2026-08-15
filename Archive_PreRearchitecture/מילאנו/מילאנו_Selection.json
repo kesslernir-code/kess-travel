@@ -1,0 +1,126 @@
+{
+  "destination": "מילאנו",
+  "confirmedAt": "2026-07-08T21:39:19.113Z",
+  "points": [
+    {
+      "id": "corsocomo10",
+      "name": "10 Corso Como",
+      "category": "City",
+      "region": "מרכז היסטורי ורובע האופנה",
+      "rec": true,
+      "isSleep": false
+    },
+    {
+      "id": "duomo",
+      "name": "הדואומו (Duomo di Milano)",
+      "category": "Attraction",
+      "region": "מרכז היסטורי ורובע האופנה",
+      "rec": true,
+      "isSleep": false
+    },
+    {
+      "id": "galleria",
+      "name": "Galleria Vittorio Emanuele II",
+      "category": "Attraction",
+      "region": "מרכז היסטורי ורובע האופנה",
+      "rec": true,
+      "isSleep": false
+    },
+    {
+      "id": "castellosforzesco",
+      "name": "Castello Sforzesco (טירת ספורצה)",
+      "category": "Attraction",
+      "region": "מרכז היסטורי ורובע האופנה",
+      "rec": true,
+      "isSleep": false
+    },
+    {
+      "id": "cenacolo",
+      "name": "הסעודה האחרונה של דה וינצ'י (Cenacolo Vinciano)",
+      "category": "Attraction",
+      "region": "מרכז היסטורי ורובע האופנה",
+      "rec": true,
+      "isSleep": false
+    },
+    {
+      "id": "ambrosiana",
+      "name": "Pinacoteca Ambrosiana",
+      "category": "Attraction",
+      "region": "מרכז היסטורי ורובע האופנה",
+      "rec": false,
+      "isSleep": false
+    },
+    {
+      "id": "love",
+      "name": "L.O.V.E.",
+      "category": "Attraction",
+      "region": "מרכז היסטורי ורובע האופנה",
+      "rec": false,
+      "isSleep": false
+    },
+    {
+      "id": "qcterme",
+      "name": "QC Termemilano",
+      "category": "Attraction",
+      "region": "מרכז היסטורי ורובע האופנה",
+      "rec": false,
+      "isSleep": false
+    },
+    {
+      "id": "yamamoto",
+      "name": "Gastronomia Yamamoto",
+      "category": "Food",
+      "region": "מרכז היסטורי ורובע האופנה",
+      "rec": false,
+      "isSleep": false
+    },
+    {
+      "id": "navigli",
+      "name": "רובע נביגלי",
+      "category": "City",
+      "region": "נביגלי",
+      "rec": true,
+      "isSleep": false
+    },
+    {
+      "id": "colonnesanlorenzo",
+      "name": "Colonne di San Lorenzo",
+      "category": "Attraction",
+      "region": "נביגלי",
+      "rec": true,
+      "isSleep": false
+    },
+    {
+      "id": "gelateriamusica",
+      "name": "La Gelateria della Musica",
+      "category": "Food",
+      "region": "נביגלי",
+      "rec": true,
+      "isSleep": false
+    },
+    {
+      "id": "antiquariato",
+      "name": "Mercato dell'Antiquariato",
+      "category": "City",
+      "region": "נביגלי",
+      "rec": false,
+      "isSleep": false
+    },
+    {
+      "id": "illibraccio",
+      "name": "Il Libraccio",
+      "category": "City",
+      "region": "נביגלי",
+      "rec": false,
+      "isSleep": false
+    },
+    {
+      "id": "backdoor43",
+      "name": "Backdoor 43",
+      "category": "Food",
+      "region": "נביגלי",
+      "rec": false,
+      "isSleep": false
+    }
+  ]
+}

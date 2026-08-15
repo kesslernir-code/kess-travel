@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סלובניה — עמוד רקע לטיול</title>
+<style>
+  :root {
+    --ink: #1f2a24;
+    --paper: #faf8f3;
+    --muted: #5c6b62;
+    --accent: #2f6b4f;
+    --gold: #b98b3e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    direction: rtl;
+    text-align: right;
+    line-height: 1.75;
+  }
+  .hero {
+    position: relative;
+    height: 78vh;
+    min-height: 480px;
+    display: flex;
+    align-items: flex-end;
+    background: #000;
+  }
+  .hero img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.82;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,15,12,0.88) 0%, rgba(10,15,12,0.25) 55%, rgba(10,15,12,0.05) 100%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 7vw 56px;
+    color: #fff;
+  }
+  .hero-kicker {
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #e8d9b8;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    margin: 0 0 14px;
+    font-size: 64px;
+    font-weight: 800;
+  }
+  .hero-tagline {
+    font-size: 20px;
+    max-width: 640px;
+    color: #f1ede3;
+    font-weight: 400;
+  }
+  section {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 60px 7vw;
+  }
+  .background p {
+    font-size: 17.5px;
+    margin: 0 0 22px;
+    color: #333c36;
+  }
+  .background p:first-of-type::first-letter {
+    font-size: 46px;
+    font-weight: 800;
+    color: var(--accent);
+    margin-left: 4px;
+  }
+  h2.section-title {
+    font-size: 13px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+  h2.section-title-main {
+    font-size: 32px;
+    letter-spacing: normal;
+    text-transform: none;
+    color: var(--ink);
+    font-weight: 800;
+    margin: 0 0 40px;
+  }
+  .grid-section {
+    max-width: 1180px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 28px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(40,50,40,0.08);
+    display: flex;
+    flex-direction: column;
+  }
+  .card img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    display: block;
+  }
+  .card-body {
+    padding: 18px 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .cat-tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    color: #fff;
+    background: var(--accent);
+    letter-spacing: 0.5px;
+  }
+  .rec-badge {
+    font-size: 13px;
+    color: var(--gold);
+  }
+  .card h3 {
+    margin: 2px 0 0;
+    font-size: 19px;
+    font-weight: 700;
+  }
+  .card p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+  .card .region-tag {
+    font-size: 12px;
+    color: #9aa79e;
+    margin-top: auto;
+    padding-top: 8px;
+  }
+  footer {
+    text-align: center;
+    padding: 40px 7vw 60px;
+    color: #9aa79e;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Bled_Lake,_Slovenia.jpg" alt="אגם בלד">
+    <div class="hero-content">
+      <div class="hero-kicker">KESSLER TRIP · יעד</div>
+      <h1>סלובניה</h1>
+      <div class="hero-tagline">אלפים ירוקים, אגמים טורקיז ומערות ענק — מדינה קטנה שנראית כמו כל אירופה בזעיר אנפין</div>
+    </div>
+  </div>
+
+  <section class="background">
+    <h2 class="section-title">רקע</h2>
+    <h2 class="section-title-main">מה עושה את סלובניה מיוחדת</h2>
+    <p>סלובניה היא אחת המדינות הקטנות והצפופות-בנוף באירופה: אפשר לנסוע מהאלפים היוליאניים המושלגים לחוף הים האדריאטי הים-תיכוני בפחות משעתיים נסיעה. הפארק הלאומי טריגלב, הפרוש על פני האלפים היוליאניים בצפון-מערב המדינה, הוא הלב הטבעי של הטיול: אגם בלד המפורסם עם האי והכנסייה במרכזו, אגם בוהין השקט יותר, ומצוק ווינטגר עם שביליו הצרים לאורך נהר במים טורקיז צלולים. נהר הסוצ׳ה, שמקורו עמוק בהרים, זורם בגוון כחול-ירקרק כמעט בלתי טבעי לכל אורכו — אחד המראות שחוזרים בכל תיאור של האזור.</p>
+    <p>מתחת לפני השטח, אזור הקארסט הדרום-מערבי מסתיר את אחת ממערכות המערות המרשימות באירופה: מערת פוסטויna התיירותית עם רכבתה התת-קרקעית, ומערות שקוצ׳יאן — אתר מורשת עולמית של אונסק"ו עם קניון תת-קרקעי עצום שנהר שלם נעלם לתוכו. לא רחוק משם, טירת פרדיאמה בנויה ממש בתוך פתח מערה בצוק אנכי — אחת מטירות המערה הגדולות בעולם.</p>
+    <p>ליובליאנה, הבירה, היא עיר קטנה וירוקה להפליא: מרכז היסטורי הליכתי סביב נהר ליובליאניצה, טירה מוגבהת עם תצפית פנורמית, ושכונות אמנות ותרבות כמו מטלקובה לצד המרכז הקלאסי. ובקצה הדרום-מערבי, לאורך כ-46 הקילומטרים הבלבד של קו החוף הסלובני, יושבת פיראן — עיירת נמל ונציאנית מוקפת חומות שמרגישה כאילו נלקחה ישירות מאיטליה. שילוב של טבע דרמטי, ערים קטנות ואותנטיות ומרחקי נסיעה קצרים הופך את סלובניה ליעד שמתאים במיוחד לטיול המשלב הליכות בטבע עם קצת זמן עיר ועיירות.</p>
+  </section>
+
+  <section class="grid-section">
+    <h2 class="section-title">נקודות ציון</h2>
+    <h2 class="section-title-main">המקומות שלא מפספסים</h2>
+    <div class="grid">
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ljubljana_Castle_-_Ljubljana,_Slovenia_(7451147982).jpg" alt="טירת ליובליאנה">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">אטרקציה</span><span class="rec-badge">⭐ מומלץ</span></div>
+          <h3>טירת ליובליאנה</h3>
+          <p>מוגבהת מעל העיר העתיקה ונגישה ברכבל, עם תצפית פנורמית על ליובליאנה, נהר ליובליאניצה וההרים ברקע. נקודת המוצא הטבעית להכרת הבירה.</p>
+          <div class="region-tag">ליובליאנה</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ljubljana,_Tromostovje_(7).jpg" alt="גשר השלושה, ליובליאנה">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">עיר</span><span class="rec-badge">⭐ מומלץ</span></div>
+          <h3>גשר השלושה ושוק המרכזי</h3>
+          <p>עיצוב האדריכל פלצ׳ניק האייקוני: שלושה גשרים צמודים חוצים את הנהר, ולצדם שוק בוקר תוסס עם דוכני מזון מקומי — הלב הפועם של העיר העתיקה.</p>
+          <div class="region-tag">ליובליאנה</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Blejski_vintgar.jpg" alt="מצוק ווינטגר">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">טבע</span><span class="rec-badge">⭐ מומלץ</span></div>
+          <h3>מצוק ווינטגר (Vintgar Gorge)</h3>
+          <p>שביל שבילי עץ קצר לאורך נהר רדובנה, במים טורקיז בין קירות סלע צרים. מוזכר כ"חובה" בכל מקור שנסרק — קל, מרהיב ומתאים לכל הרמות.</p>
+          <div class="region-tag">האלפים היוליאניים</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lake_Bohinj_from_the_Janez_bridge,_Rib%C4%8Dev_Laz,_Slovenia,_2013.jpg" alt="אגם בוהין">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">טבע</span><span class="rec-badge">⭐ מומלץ</span></div>
+          <h3>אגם בוהין (Lake Bohinj)</h3>
+          <p>האגם הגדול בסלובניה, רגוע ופחות מתויר מבלד. נקודת מוצא נוחה למפל סביצ׳ה ולרכבל להר ווגל שמעליו.</p>
+          <div class="region-tag">האלפים היוליאניים</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Soca_River_Slovenia.JPG" alt="נהר הסוצ'ה">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">טבע</span><span class="rec-badge">⭐ מומלץ</span></div>
+          <h3>עמק הסוצ׳ה (Soča Valley)</h3>
+          <p>נהר בגוון טורקיז-כחול כמעט בלתי טבעי הזורם דרך פארק טריגלב. נקודות עצירה רבות לפיקניק ושחייה, ובסיס לראפטינג מקצועי בבוברץ.</p>
+          <div class="region-tag">האלפים היוליאניים</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Russian_Road_-_Vr%C5%A1i%C4%8D-pas,_Slovenia_(8325886094).jpg" alt="מעבר ורשיץ'">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">אטרקציה</span><span class="rec-badge">⭐ מומלץ</span></div>
+          <h3>מעבר ורשיץ' (Vršič Pass)</h3>
+          <p>הכביש ההררי הגבוה ביותר בסלובניה, עם 50 עיקולים ממוספרים ונופים דרמטיים בין קרניסקה גורה לעמק הסוצ׳ה. הנסיעה עצמה היא חוויה.</p>
+          <div class="region-tag">האלפים היוליאניים</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kranjska_Gora_(9782624931).jpg" alt="קרניסקה גורה והאלפים היוליאניים">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">עיר</span></div>
+          <h3>קרניסקה גורה והאלפים היוליאניים</h3>
+          <p>כפר סקי אותנטי בלב האלפים היוליאניים, נקודת מוצא נוחה לוורשיץ' ולמסלולי הליכה — כולל טעימה ממקטע משביל יוליאנה המעגלי (270 ק"מ) סביב פסגת טריגלב.</p>
+          <div class="region-tag">האלפים היוליאניים</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Postojna_Cave_-_Slovenia.jpg" alt="מערת פוסטויna">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">אטרקציה</span><span class="rec-badge">⭐ מומלץ</span></div>
+          <h3>מערת פוסטויna (Postojna Cave)</h3>
+          <p>מערכת המערות המתויירת ביותר באירופה. רכבת פנימית תת-קרקעית לוקחת פנימה לאולמות ענק של נטיפים מרהיבים.</p>
+          <div class="region-tag">הקארסט</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/SkocjanCaves.JPG" alt="מערות שקוצ'יאן">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">אטרקציה</span><span class="rec-badge">⭐ מומלץ</span></div>
+          <h3>מערות שקוצ'יאן (Škocjan Caves)</h3>
+          <p>אתר מורשת עולמית של אונסק"ו: קניון תת-קרקעי עצום שנהר רקה שלם נעלם לתוכו. לרוב נחשב מרשים אף יותר מפוסטויna, ופחות מתויר.</p>
+          <div class="region-tag">הקארסט</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/10th_anniversary_of_Slovene_Wikipedia_-_Predjama_castle.JPG" alt="טירת פרדיאמה">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">אטרקציה</span><span class="rec-badge">⭐ מומלץ</span></div>
+          <h3>טירת פרדיאמה (Predjama Castle)</h3>
+          <p>טירה בנויה ממש בתוך פתח מערה בצוק אנכי — אחת מטירות המערה הגדולות בעולם. קרובה גיאוגרפית לפוסטויna, משתלבת מצוין באותו יום סיור.</p>
+          <div class="region-tag">הקארסט</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tartini_Square,_Piran,_Slovenia,_20240504_1436_8505.jpg" alt="פיראן, כיכר טרטיני">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">עיר</span><span class="rec-badge">⭐ מומלץ</span></div>
+          <h3>פיראן (Piran)</h3>
+          <p>עיירת נמל ונציאנית מוקפת חומות, עם כיכר טרטיני במרכזה ומגדלור עם תצפית לים. מוזכרת כ"חובה" בכל מקור שכיסה את החוף.</p>
+          <div class="region-tag">חוף האדריאטי</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ptica_(panjska_kon%C4%8Dnica).jpg" alt="פאנל כוורת מצויר, רדובליצה">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">אטרקציה</span><span class="rec-badge">⭐ מומלץ</span></div>
+          <h3>רדובליצה ומוזיאון הדבוראות</h3>
+          <p>עיירה ימי-ביניימית ציורית בדרך בין בלד לקרניסקה גורה. מוזיאון הדבוראות מציג את מסורת הכוורות המצוירות הייחודית לסלובניה — פאנלים עממיים צבעוניים מהמאה ה-19.</p>
+          <div class="region-tag">האלפים היוליאניים</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ptuj_from_the_castle.JPG" alt="פטוי, נוף מהטירה">
+        <div class="card-body">
+          <div class="card-tags"><span class="cat-tag">עיר</span></div>
+          <h3>פטוי (Ptuj)</h3>
+          <p>העיר העתיקה ביותר בסלובניה, עם טירה מוגבהת מעל העיירה ורחוב ראשי ימי-ביניימי משומר. נציגה הטובה ביותר של מזרח סלובניה השקט והפחות מתויר.</p>
+          <div class="region-tag">מזרח סלובניה</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>KESSLER TRIP · סלובניה · עמוד רקע שנבנה מתוך Slovenia_Master_Plan.md</footer>
+
+</body>
+</html>

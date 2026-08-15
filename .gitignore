@@ -1,0 +1,5 @@
+node_modules/
+.env.local
+logs/*.log
+logs/*.out
+*.pid

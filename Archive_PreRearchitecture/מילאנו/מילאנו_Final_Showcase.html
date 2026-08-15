@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מילאנו — Showcase ממוקד</title>
+<style>
+  :root {
+    --ink: #241f1a;
+    --paper: #faf6ef;
+    --muted: #6b6157;
+    --gold: #c8a24a;
+    --accent: #a13d3d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    direction: rtl;
+    text-align: right;
+    line-height: 1.7;
+  }
+  .hero {
+    position: relative;
+    height: 40vh;
+    min-height: 260px;
+    display: flex;
+    align-items: flex-end;
+    background-size: cover;
+    background-position: center;
+    background-image: url('https://commons.wikimedia.org/wiki/Special:FilePath/Duomo_di_Milano.JPG');
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(20,15,10,0.85) 0%, rgba(20,15,10,0.25) 55%, rgba(20,15,10,0.05) 100%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 30px 6vw 34px;
+    color: #fff;
+  }
+  .hero .kicker {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .hero h1 { margin: 0 0 8px; font-size: 44px; font-weight: 800; }
+  .hero .tagline { font-size: 16px; max-width: 640px; opacity: 0.95; }
+  .day-header {
+    max-width: 1200px;
+    margin: 40px auto 6px;
+    padding: 0 6vw;
+  }
+  .day-header .day-kicker {
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .day-header h2 { margin: 4px 0 0; font-size: 26px; }
+  .day-header .day-sub { font-size: 14.5px; color: var(--muted); margin-top: 4px; }
+  .grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 6vw 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 3px 16px rgba(60,45,25,0.09);
+    display: flex;
+    flex-direction: column;
+  }
+  .card img { width: 100%; height: 190px; object-fit: cover; display: block; }
+  .card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1 1 auto; }
+  .cat-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 9px;
+    margin-bottom: 10px;
+    align-self: flex-start;
+  }
+  .card h3 { margin: 0 0 8px; font-size: 18px; }
+  .card p { font-size: 14px; color: var(--muted); margin: 0 0 12px; flex: 1 1 auto; }
+  .card a.more-link {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    align-self: flex-start;
+  }
+  .card a.more-link:hover { text-decoration: underline; }
+  footer { text-align: center; padding: 30px 6vw 50px; color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="hero-content">
+      <div class="kicker">KESSLER TRIP</div>
+      <h1>מילאנו — Showcase ממוקד</h1>
+      <div class="tagline">כל נקודה שנבחרה בפועל למסלול — 22–23.7, מרוכזות לפי ימים.</div>
+    </div>
+  </div>
+
+  <div class="day-header">
+    <div class="day-kicker">יום 1 — 22.7 (רביעי)</div>
+    <h2>מרכז היסטורי ורובע האופנה</h2>
+    <div class="day-sub">הדואומו, הגלריה, קונספט-סטור, טירת ספורצה, הסעודה האחרונה וספא מפנק בסיום</div>
+  </div>
+  <div class="grid">
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Duomo_di_Milano.JPG" alt="הדואומו">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>⭐ הדואומו (Duomo di Milano)</h3>
+        <p>הקתדרלה הגותית האייקונית של מילאנו, הכנסייה הגדולה באיטליה, עם גג שניתן לטייל עליו ותצפית על העיר. מומלץ להזמין כרטיסים מראש בעונת השיא.</p>
+        <a class="more-link" href="https://he.wikipedia.org/wiki/קתדרלת_מילאנו" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Galleria_Vittorio_Emanuele_II.jpg" alt="גלריה ויטוריו עמנואלה השני">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>⭐ Galleria Vittorio Emanuele II</h3>
+        <p>קניון הקניות הפעיל העתיק ביותר באיטליה (נפתח ב-1877), כיפת זכוכית איקונית, פתוח 24/7, כניסה חופשית.</p>
+        <a class="more-link" href="https://en.wikipedia.org/wiki/Galleria_Vittorio_Emanuele_II" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/10_Corso_Como.jpg" alt="10 Corso Como">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#8e44ad">עיר</span>
+        <h3>⭐ 10 Corso Como</h3>
+        <p>קונספט סטור אגדי: בוטיק אופנה, חנות ספרים, גלריה וקפה תחת גג אחד.</p>
+        <a class="more-link" href="https://www.timeout.com/milan/shopping/10-corso-como" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Bento_at_Hanabishi,_Koyasan.jpg" alt="Gastronomia Yamamoto">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#c0392b">אוכל</span>
+        <h3>Gastronomia Yamamoto</h3>
+        <p>מסעדה יפנית אותנטית ממש מאחורי הדואומו, מתמחה בבנטו.</p>
+        <a class="more-link" href="https://www.gastronomiayamamoto.it/" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cortile_degli_Spiriti_Magni_Pinacoteca_Ambrosiana_Milano.jpg" alt="Pinacoteca Ambrosiana">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>Pinacoteca Ambrosiana</h3>
+        <p>המוזיאון העתיק ביותר במילאנו, יצירות של רפאל, דה וינצ'י, בוטיצ'לי, טיציאן וקאראווג'ו.</p>
+        <a class="more-link" href="https://en.wikipedia.org/wiki/Pinacoteca_Ambrosiana" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The_finger_@_Statua_del_Dito_Medio_by_Maurizio_Cattelan_@_Piazza_degli_Affari_@_Milan_(50005960791).jpg" alt="L.O.V.E.">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>L.O.V.E.</h3>
+        <p>פסל אצבע משולשת ענק מול הבורסה האיטלקית, פסל מחאה נגד הפשיזם מאת מאוריציו קאטלן.</p>
+        <a class="more-link" href="https://en.wikipedia.org/wiki/L.O.V.E._(sculpture)" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Castello_sforzesco,_milano.JPG" alt="טירת ספורצה">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>⭐ Castello Sforzesco (טירת ספורצה)</h3>
+        <p>טירה מהמאה ה-15, חצרות בכניסה חופשית, 7 מוזיאונים ב-5 יורו, כולל פייטה לא גמורה של מיכלאנג'לו.</p>
+        <a class="more-link" href="https://en.wikipedia.org/wiki/Sforza_Castle" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Leonardo_da_Vinci_-_The_Last_Supper_high_res.jpg" alt="הסעודה האחרונה">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>⭐ הסעודה האחרונה של דה וינצ'י (Cenacolo Vinciano)</h3>
+        <p>יצירת המופת המפורסמת של לאונרדו דה וינצ'י; חובה להזמין 2-3 חודשים מראש — כניסה בזמן קבוע מראש בלבד.</p>
+        <a class="more-link" href="https://en.wikipedia.org/wiki/The_Last_Supper_(Leonardo)" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Photo_QC_Terme_1.jpg" alt="QC Termemilano">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>QC Termemilano</h3>
+        <p>מתחם ספא יוקרתי בתוך מבנה היסטורי מוקף חומות עתיקות, בריכות תרמיות וסאונות.</p>
+        <a class="more-link" href="https://www.qcterme.com/en/milano/qc-termemilano" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="day-header">
+    <div class="day-kicker">יום 2 — 23.7 (חמישי)</div>
+    <h2>רובע נביגלי</h2>
+    <div class="day-sub">עמודים רומיים עתיקים, שיטוט לאורך התעלות, קניות בוטיקים, גלידה אגדית ואפריטיבו לפני היציאה</div>
+  </div>
+  <div class="grid">
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Milano_Colonne_di_San_Lorenzo_1.jpg" alt="Colonne di San Lorenzo">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#e67e22">אטרקציה</span>
+        <h3>⭐ Colonne di San Lorenzo</h3>
+        <p>16 עמודים קורינתיים רומיים, מול הבזיליקה — הטראמים חולפים ממש לצד ההריסות העתיקות.</p>
+        <a class="more-link" href="https://en.wikipedia.org/wiki/Colonne_di_San_Lorenzo" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Milano,_casa_sui_navigli.JPG" alt="רובע נביגלי">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#8e44ad">עיר</span>
+        <h3>⭐ רובע נביגלי</h3>
+        <p>שכונת התעלות (Naviglio Grande, Naviglio Pavese), תרבות אפריטיבו תוססת מ-17:00, "מיני-ונציה" עם בתים בגווני חלודה-צהוב-ורוד.</p>
+        <a class="more-link" href="https://en.wikipedia.org/wiki/Navigli" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Milano,_Naviglio_Grande,_02-2011_(5481693534).jpg" alt="Mercato dell'Antiquariato">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#8e44ad">עיר</span>
+        <h3>Mercato dell'Antiquariato</h3>
+        <p>שוק עתיקות חודשי לאורך גדות נביליו גרנדה, ביום ראשון האחרון של כל חודש — בתאריכי הטיול השוק עצמו לא פעיל, אבל התעלה יפה לטיול רגל בכל מקרה.</p>
+        <a class="more-link" href="https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Libreria_Bocca_dal_1775_-_MILANO.jpg" alt="Il Libraccio">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#8e44ad">עיר</span>
+        <h3>Il Libraccio</h3>
+        <p>חנות ספרים מאובקת ואינטימית בסמטאות נביגלי.</p>
+        <a class="more-link" href="https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gelato_in_Florence,_Italy.jpg" alt="La Gelateria della Musica">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#c0392b">אוכל</span>
+        <h3>⭐ La Gelateria della Musica</h3>
+        <p>הגלידריה הטובה ביותר בעיר לפי Culture Trip, כל טעם נקרא ע"ש מוזיקאי — הפיסטוק-שוקולד מיוחד.</p>
+        <a class="more-link" href="https://theculturetrip.com/europe/italy/articles/the-top-10-things-to-do-and-see-in-navigli-milan" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Italian_Aperitivo_culture_-_pre-dinner_evening_drink_as_an_appetizer_(32876800955).jpg" alt="Backdoor 43">
+      <div class="card-body">
+        <span class="cat-tag" style="background:#c0392b">אוכל</span>
+        <h3>Backdoor 43</h3>
+        <p>אחד הברים הקטנים בעולם, כ-4 מ"ר, חובה להזמין מקום מראש.</p>
+        <a class="more-link" href="https://www.atlasobscura.com/places/backdoor-43" target="_blank" rel="noopener">קרא עוד במקום ←</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>15 נקודות, 2 ימים — מילאנו, 22–23.7</footer>
+
+</body>
+</html>
