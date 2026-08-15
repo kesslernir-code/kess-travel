@@ -8,6 +8,14 @@
   #app { display: flex; height: 100%; }
   #map { flex: 1 1 auto; height: 100%; }
   #sidebar { width: 460px; flex: 0 0 460px; height: 100%; overflow-y: auto; border-right: 3px solid #ddd; box-sizing: border-box; padding: 16px; background: #fafafa; direction: rtl; text-align: right; }
+  /* Phone: the fixed 460px sidebar next to the map was the real cause of
+     horizontal overflow on narrow screens -- stack map above list instead
+     of side-by-side, each full width. */
+  @media (max-width: 768px) {
+    #app { flex-direction: column; }
+    #map { flex: 0 0 42vh; height: 42vh; }
+    #sidebar { width: 100%; flex: 1 1 auto; height: auto; border-right: none; border-top: 3px solid #ddd; }
+  }
   h2 { margin-top: 0; font-size: 18px; }
   .dayTabs { display: flex; gap: 6px; margin-bottom: 14px; }
   .dayTabs button { flex: 1 1 auto; padding: 10px 6px; font-size: 13px; font-weight: 700; border: 1px solid #ccc; background: #fff; border-radius: 6px; cursor: pointer; color: #333; }

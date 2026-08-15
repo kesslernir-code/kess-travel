@@ -8,6 +8,14 @@
   #app { display: flex; height: 100%; }
   #map { flex: 1 1 auto; height: 100%; }
   #sidebar { width: 460px; flex: 0 0 460px; height: 100%; overflow-y: auto; border-right: 3px solid #ddd; box-sizing: border-box; padding: 16px; background: #fafafa; direction: rtl; text-align: right; }
+  /* Phone: the fixed 460px sidebar next to the map was the real cause of
+     horizontal overflow on narrow screens -- stack map above list instead
+     of side-by-side, each full width. */
+  @media (max-width: 768px) {
+    #app { flex-direction: column; }
+    #map { flex: 0 0 42vh; height: 42vh; }
+    #sidebar { width: 100%; flex: 1 1 auto; height: auto; border-right: none; border-top: 3px solid #ddd; }
+  }
   h2 { margin-top: 0; font-size: 18px; }
   .dayTabs { display: flex; gap: 6px; margin-bottom: 14px; }
   .dayTabs button { flex: 1 1 auto; padding: 10px 6px; font-size: 13px; font-weight: 700; border: 1px solid #ccc; background: #fff; border-radius: 6px; cursor: pointer; color: #333; }
@@ -113,9 +121,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "בירת רומניה, המרכז הכלכלי והתרבותי הגדול במדינה. העיר משלבת בין סגנונות בל אפוק וניאו-קלאסי ('פריז של המזרח') לבין שדרות ומונומנטים מתקופת הרודנות הקומוניסטית, וכוללת עיר עתיקה שוקקת חיים, בתי קפה מעולים ומוזיאונים מרכזיים.",
-    "source": "lonelyplanet.com / nomadicmatt.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "bucharestoldtown1": {
     "id": "bucharestoldtown1",
@@ -124,9 +132,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "הרובע ההיסטורי המרוצף באבן ששימש כרובע הסוחרים הימי-ביניימי של הבירה. האזור שופץ ומהווה את הלב הפועם של חיי הלילה, מלא בסמטאות להולכי רגל, מסעדות שף, בתי קפה ומבנים היסטוריים.",
-    "source": "lonelyplanet.com / ricksteves.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "palaceofparliament2": {
     "id": "palaceofparliament2",
@@ -135,9 +143,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "מבנה ענק שהוקם בעלות של מיליארדי דולרים כמונומנט לפולחן האישיות של הרודן ניקולאה צ'אושסקו. נחשב לאחד המבנים המנהליים הגדולים בעולם וכולל מעל אלף חדרים מפוארים, אולמות נשפים ואת הפרלמנט הרומני.",
-    "source": "lonelyplanet.com / ricksteves.com / atlasobscura.com / nomadicmatt.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "romanianathenaeum3": {
     "id": "romanianathenaeum3",
@@ -146,9 +154,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "אולם קונצרטים ומבנה נאו-קלאסי מפואר שנחנך בשנת 1888 בתכנון האדריכל אלברט גלרון. המבנה כולל עמודי שיש דוריים, פרסקו היסטורי באורך 70 מטרים ומשמש משכנה של התזמורת הפילהרמונית ג'ורג'ה אנסקו.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "caleavictoriei4": {
     "id": "caleavictoriei4",
@@ -157,9 +165,9 @@ const POINTS = {
     "category": "City",
     "rec": false,
     "visitMin": 60,
-    "desc": "שדרה מרכזית ואלגנטית המדגימה את תקופת הבל אפוק של בוקרשט, שלאורכה ארמונות, מוזיאונים, מלונות יוקרה ומבנים בסגנון אדריכלות צרפתית.",
-    "source": "ricksteves.com",
-    "url": "https://ricksteves.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "revolutionsquare5": {
     "id": "revolutionsquare5",
@@ -168,9 +176,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "הכיכר המרכזית שבה התחוללה המהפכה העממית בסוף 1989 שהביאה להפלת שלטונו של צ'אושסקו. במקום ניצבת אנדרטת הלידה מחדש להנצחת הנספים במאבק.",
-    "source": "ricksteves.com / atlasobscura.com / nomadicmatt.com",
-    "url": "https://ricksteves.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "thermebucharest6": {
     "id": "thermebucharest6",
@@ -179,9 +187,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "מתחם בריכות וספא מקורה ענק ומתקדם, הכולל בריכות מים תרמיים, מגלשות, סאונות ייחודיות ומיטות מים לעיסוי והרפיה.",
-    "source": "purewander.com",
-    "url": "https://purewander.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "curteavechechurch7": {
     "id": "curteavechechurch7",
@@ -190,9 +198,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "שרידי חצר הנסיכות הישנה מימי הביניים שהוקמה על ידי ולאד המשפד (דרקולה), לצד כנסיית סנט אנטון העתיקה.",
-    "source": "atlasobscura.com / wikiloc.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "arculdetriumf8": {
     "id": "arculdetriumf8",
@@ -201,9 +209,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "שער ניצחון מונומנטלי המוקדש לניצחון חיילי רומניה במלחמת העולם הראשונה, המציע תצפית רחבה על שדרות העיר.",
-    "source": "atlasobscura.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "springpalacepalatulprimv9": {
     "id": "springpalacepalatulprimv9",
@@ -212,9 +220,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "אחוזת המגורים המפוארת של הרודן ניקולאה צ'אושסקו ברובע פרימוורי, המציגה את אורח החיים הראוותני של המשפחה השלטת.",
-    "source": "lonelyplanet.com / nomadicmatt.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "dimitriegustinationalvil10": {
     "id": "dimitriegustinationalvil10",
@@ -223,9 +231,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "מוזיאון פתוח אתנוגרפי על שפת אגם הראסטראו, המציג מאות בתי עץ אותנטיים, כנסיות ומשקי חווה מכל רחבי רומניה.",
-    "source": "nomadicmatt.com",
-    "url": "https://nomadicmatt.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "crtureticarusel11": {
     "id": "crtureticarusel11",
@@ -234,9 +242,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "חנות ספרים מרהיבה בת שש קומות השוכנת במבנה מהמאה ה-19 בעיר העתיקה, בעלת מרפסות עקלקלות לבנות ועיצוב פנים מרשים.",
-    "source": "atlasobscura.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "carucubere12": {
     "id": "carucubere12",
@@ -245,9 +253,9 @@ const POINTS = {
     "category": "Food",
     "rec": true,
     "visitMin": 45,
-    "desc": "מבשלת בירה ומסעדה היסטורית מהמפורסמות ברומניה, השוכנת במבנה נאו-גותי מרשים ומגישה אוכל רומני מסורתי.",
-    "source": "lonelyplanet.com / atlasobscura.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "cimigiugarden13": {
     "id": "cimigiugarden13",
@@ -256,9 +264,9 @@ const POINTS = {
     "category": "Nature",
     "rec": false,
     "visitMin": 90,
-    "desc": "הפארק הציבורי העתיק ביותר בבוקרשט, הכולל אגם מלאכותי, פינות ישיבה מוצלות וגשרים רומנטיים בלב העיר.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "lakeherstrukingmihaiipar14": {
     "id": "lakeherstrukingmihaiipar14",
@@ -267,9 +275,9 @@ const POINTS = {
     "category": "Nature",
     "rec": false,
     "visitMin": 90,
-    "desc": "פארק רחב ידיים ואגם בצפון העיר המוקף וילות יוקרתיות, מסעדות ומוזיאונים מרכזיים.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "vcretinaturepark15": {
     "id": "vcretinaturepark15",
@@ -278,9 +286,9 @@ const POINTS = {
     "category": "Nature",
     "rec": false,
     "visitMin": 90,
-    "desc": "שמורת טבע ודלתה עירונית ייחודית שנוצרה באופן טבעי בתוך שטח מאגר מים נטוש בלב בוקרשט.",
-    "source": "atlasobscura.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "museumoftheromanianpeasa16": {
     "id": "museumoftheromanianpeasa16",
@@ -289,9 +297,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "מוזיאון אתנוגרפי עטור פרסים המציג את ההיסטוריה, הפולקלור, התלבושות והאמנות הכפרית של רומניה.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "mnac17": {
     "id": "mnac17",
@@ -300,9 +308,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "מוזיאון לאמנות עכשווית הממוקם בחלק ממבנה ארמון הפרלמנט העצום ומציג תערוכות מתחלפות.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "ceccecbankpalace18": {
     "id": "ceccecbankpalace18",
@@ -311,9 +319,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "מבנה מונומנטלי מרשים בסגנון בוז-אר עם כיפת זכוכית ומתכת על שדרת קאליה ויקטוריי.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "nationalhistorymuseum19": {
     "id": "nationalhistorymuseum19",
@@ -322,9 +330,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "מוזיאון היסטורי מרכזי המציג ממצאים מתקופת דאקיה והאימפריה הרומית, כולל שחזור מדויק של עמוד טראיאנוס.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "mogooaiapalace20": {
     "id": "mogooaiapalace20",
@@ -333,9 +341,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "ארמון היסטורי מהמאה ה-17 בסגנון ברנקובניאני ייחודי, הממוקם על שפת אגם צפונית לבוקרשט ומוקף גנים מטופחים.",
-    "source": "atlasobscura.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "snagovmonastery21": {
     "id": "snagovmonastery21",
@@ -344,9 +352,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "מנזר מבודד השוכן על אי בלב אגם סנאגוב מצפון לבוקרשט, המזוהה לפי המסורת כמקום קבורתו של ולאד המשפד.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "kaiamo22": {
     "id": "kaiamo22",
@@ -355,9 +363,9 @@ const POINTS = {
     "category": "Food",
     "rec": false,
     "visitMin": 45,
-    "desc": "מסעדת קונספט קולינרית מודרנית בבוקרשט המציעה פרשנות חדשנית למטבח הרומני בגישת Farm-to-table.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "noua23": {
     "id": "noua23",
@@ -366,9 +374,9 @@ const POINTS = {
     "category": "Food",
     "rec": false,
     "visitMin": 45,
-    "desc": "מסעדת שף מובילה בבירה המציעה מטבח רומני עכשווי המבוסס על חומרי גלם מקומיים מובחרים.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "kan24": {
     "id": "kan24",
@@ -377,9 +385,9 @@ const POINTS = {
     "category": "Food",
     "rec": false,
     "visitMin": 45,
-    "desc": "מסעדת פיין דיינינג המציגה תפריטי טעימות מודרניים של מטבח רומני יצירתי.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "pasajulmaccavillacrosse25": {
     "id": "pasajulmaccavillacrosse25",
@@ -388,9 +396,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "ארקדה מקורה ומרשימה בבוקרשט המעוטרת בחלונות ויטראז' צהובים וכוללת בתי קפה וברים נעימים.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "stavropoleoschurch26": {
     "id": "stavropoleoschurch26",
@@ -399,9 +407,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "כנסייה אורתודוקסית מהמאה ה-18 בסגנון ברנקובניאני, הידועה בחצר פנימית שלווה עם קשתות מגולפות באבן.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "romanianpatriarchalcathe27": {
     "id": "romanianpatriarchalcathe27",
@@ -410,9 +418,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "קתדרלה שנבנתה במאה ה-17 על גבעת המיטרופוליה ומשמשת כמרכז הכנסייה האורתודוקסית הרומנית.",
-    "source": "nomadicmatt.com",
-    "url": "https://nomadicmatt.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "bellucemetery28": {
     "id": "bellucemetery28",
@@ -421,9 +429,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "בית קברות היסטורי ומונומנטלי המשמש כפנתיאון הלאומי של רומניה, שבו קבורים סופרים, אמנים ומנהיגים.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "laculmorii29": {
     "id": "laculmorii29",
@@ -432,9 +440,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "האגם הגדול ביותר בבוקרשט המציע שבילי הליכה וריצה פתוחים וטיילת שקיעה נעימה.",
-    "source": "wikiloc.com",
-    "url": "https://wikiloc.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "comanapark30": {
     "id": "comanapark30",
@@ -443,9 +451,9 @@ const POINTS = {
     "category": "Nature",
     "rec": false,
     "visitMin": 90,
-    "desc": "שמורת טבע ויער מדרום לבוקרשט המציעה שבילי רכיבה על אופניים, שיט בביצות ופעילויות בטבע.",
-    "source": "wikiloc.com",
-    "url": "https://wikiloc.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "braov31": {
     "id": "braov31",
@@ -454,9 +462,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "אחת הערים השמורות והמתוירות ביותר ברומניה, השוכנת למרגלות הרי הקרפטים. העיר כוללת מרכז סקסוני ימי-ביניימי מוקף חומות, כיכר שוק ציורית, מסעדות מעולות ושער יציאה מעולה לטירות ומסלולי טבע.",
-    "source": "lonelyplanet.com / ricksteves.com / nomadicmatt.com / balkantrails.com / purewander.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "brancastle32": {
     "id": "brancastle32",
@@ -465,9 +473,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "המבצר הימי-ביניימי הניצב על צוק סלעי בבראן, הידוע בעולם כמקור ההשראה לטירת דרקולה של בראם סטוקר. הטירה כוללת חדרים תקופתיים, מעברים סודיים ותערוכות על בית המלוכה הרומני.",
-    "source": "lonelyplanet.com / ricksteves.com / atlasobscura.com / timeout.com / nomadicmatt.com / wikiloc.com / romanianfriend.com / balkantrails.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "pelecastle33": {
     "id": "pelecastle33",
@@ -476,9 +484,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "מעון הקיץ המלכותי המפואר של המלך קרול הראשון בסינאיה. נחשבת לאחת הטירות היפות והמרשימות באירופה, עם אדריכלות נאו-רנסאנסית, חדר נשק עשיר, גנים מטופחים ועיטורי עץ יוקרתיים.",
-    "source": "lonelyplanet.com / ricksteves.com / atlasobscura.com / nomadicmatt.com / balkantrails.com / purewander.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "blackchurchbisericaneagr34": {
     "id": "blackchurchbisericaneagr34",
@@ -487,9 +495,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "הכנסייה הגותית הגדולה ביותר ברומניה, שנבנתה במאה ה-14 בבראשוב. שמה ניתן לה לאחר שקירותיה הושחרו בשריפה הגדולה של 1689. היא מכילה עוגב ענק מהמאה ה-19 ואוסף נדיר של שטיחים אנטוליים.",
-    "source": "lonelyplanet.com / atlasobscura.com / nomadicmatt.com / romanianfriend.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "rnovfortress35": {
     "id": "rnovfortress35",
@@ -498,9 +506,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "מבצר צלבני-טבטוני מהמאה ה-13 השוכן על ראש גבעה סלעית מעל העיירה רשנוב. המתחם תיפקד כעיר מקלט קהילתית מבוצרת ומציע תצפית פנורמית על הרי בוצ'ג'י.",
-    "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "piatracraiuluinationalpa36": {
     "id": "piatracraiuluinationalpa36",
@@ -509,9 +517,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "פארק לאומי דרמטי המתאפיין ברכס אבן גיר צר ומשונן באורך 25 ק\"מ. האזור מציע טרקים אלפיניים מאתגרים, קניונים עמוקים, יערות עשירים בדובי בר ובקתות הרים ציוריות.",
-    "source": "lonelyplanet.com / romanianfriend.com / balkantrails.com / purewander.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "zrnetigorgesprpstiilezrn37": {
     "id": "zrnetigorgesprpstiilezrn37",
@@ -520,9 +528,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "קניון סלעי צר ומרהיב המוקף מצוקי גיר אנכיים גבוהים, המהווה את אחד ממסלולי ההליכה הפופולריים ביותר בפיאטרה קראיולוי.",
-    "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "libeartybearsanctuary38": {
     "id": "libeartybearsanctuary38",
@@ -531,9 +539,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "מקלט הדובים החומים הגדול בעולם הממוקם ביערות זרנשט, המשמש בית מוגן למעל 100 דובים שניצלו מתנאי שבי קשים.",
-    "source": "balkantrails.com",
-    "url": "https://balkantrails.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "sevenladderscanyon39": {
     "id": "sevenladderscanyon39",
@@ -542,9 +550,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "קניון צר ברכס פיאטרה מארה ליד בראשוב, המאפשר טיפוס חווייתי לצד מפלים שוצפים באמצעות סדרת סולמות וגשרוני מתכת.",
-    "source": "wikiloc.com / romanianfriend.com",
-    "url": "https://wikiloc.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "bucegimountainssphinxbab40": {
     "id": "bucegimountainssphinxbab40",
@@ -553,9 +561,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "רכס הרים פראי בעמק פראחובה הנגיש ברכבל מסינאיה או בושטני. על הרמה הגבוהה ניצבות תצורות סלע מפורסמות שפוסלו על ידי הרוח והטבע, וכן שבילים לפסגת אומו.",
-    "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com / balkantrails.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "mounttmpa41": {
     "id": "mounttmpa41",
@@ -564,9 +572,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "הר המתנשא ישירות מעל העיר בראשוב ומציע תצפית פנורמית מרהיבה על העיר העתיקה לצד השלט המפורסם 'Brașov'. העלייה אפשרית ברגל או ברכבל.",
-    "source": "nomadicmatt.com / wikiloc.com / balkantrails.com",
-    "url": "https://nomadicmatt.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "piaasfatului42": {
     "id": "piaasfatului42",
@@ -575,9 +583,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "הכיכר המרכזית בלב העיר העתיקה של בראשוב, המוקפת מבנים סקסוניים צבעוניים ובמרכזה בית המועצה ההיסטורי.",
-    "source": "lonelyplanet.com / nomadicmatt.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "stradasforii43": {
     "id": "stradasforii43",
@@ -586,9 +594,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "אחת הסמטאות הצרות ביותר באירופה, שרוחבה נע בין 111 ל-135 ס\"מ, ששימשה במקור כמעבר חירום לכבאים בבראשוב.",
-    "source": "atlasobscura.com / nomadicmatt.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "sinaia44": {
     "id": "sinaia44",
@@ -597,9 +605,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "עיירת נופש הררית יוקרתית בעמק פראחובה, ששימשה כעיירת הקיץ של משפחת המלוכה הרומנית ומשמשת מרכז לסקי ולטיולים.",
-    "source": "lonelyplanet.com / balkantrails.com / purewander.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "poianabraov45": {
     "id": "poianabraov45",
@@ -608,9 +616,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "אתר הסקי והנופש ההררי הפופולרי ביותר ברומניה, השוכן 12 ק\"מ מעל העיר בראשוב ומציע מסלולי סקי, רכיבת אופניים ומלונות נופש.",
-    "source": "wikiloc.com / balkantrails.com",
-    "url": "https://wikiloc.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "mgura46": {
     "id": "mgura46",
@@ -619,9 +627,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "כפר הררי פסטורלי ושליו בתוך הפארק הלאומי פיאטרה קראיולוי, המציע נופי מרעה ירוקים, בקתות מסורתיות ושקט כפרי מוחלט.",
-    "source": "wikiloc.com / purewander.com",
-    "url": "https://wikiloc.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "cabanacurmtura47": {
     "id": "cabanacurmtura47",
@@ -630,9 +638,9 @@ const POINTS = {
     "category": "Sleep",
     "rec": true,
     "visitMin": 60,
-    "desc": "בקתת הרים מסורתית ואהובה ברכס פיאטרה קראיולוי, המהווה צומת שבילים מרכזי למטיילים ומציעה ארוחות חמות ולינה.",
-    "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "cantacuzinocastle48": {
     "id": "cantacuzinocastle48",
@@ -641,9 +649,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "טירה מרשימה בסגנון נאו-רומני בעיירה בושטני, המוקפת גנים ומזרקות עם נוף ישיר למצוקי הרי בוצ'ג'י.",
-    "source": "romanianfriend.com",
-    "url": "https://romanianfriend.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "ciucamountains49": {
     "id": "ciucamountains49",
@@ -652,9 +660,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "רכס הרים פוטוגני ליד בראשוב הידוע בתצורות סלע קרסטיות מרהיבות, עמקים ירוקים ומסלולי הליכה נוחים.",
-    "source": "romanianfriend.com",
-    "url": "https://romanianfriend.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "prejmerfortifiedchurch50": {
     "id": "prejmerfortifiedchurch50",
@@ -663,9 +671,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "כנסייה סקסונית מבוצרת במיוחד שהוכרזה כאתר מורשת עולמית של אונסק\"ו, בעלת חומות מגן עבות ומאות תאי מגורים לתושבי הכפר בעת מצור.",
-    "source": "romanianfriend.com",
-    "url": "https://romanianfriend.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "sergiana51": {
     "id": "sergiana51",
@@ -674,9 +682,9 @@ const POINTS = {
     "category": "Food",
     "rec": true,
     "visitMin": 45,
-    "desc": "מסעדה מסורתית מובילה בבראשוב השוכנת במרתף לבנים עתיק ומגישה מאכלים טרנסילבניים, רומניים והונגריים עשירים.",
-    "source": "purewander.com",
-    "url": "https://purewander.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "sibiu52": {
     "id": "sibiu52",
@@ -685,9 +693,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "אחת הערים היפות ברומניה ובירת התרבות האירופית לשעבר. מרכזה ההיסטורי מאופיין בסמטאות אבן, כיכרות מרשימות, חומות ימי-ביניימיות וגגות בעלי חלונות ייחודיים הידועים כ'עיניים של סיביו'.",
-    "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com / balkantrails.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "sighioara53": {
     "id": "sighioara53",
@@ -696,9 +704,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "עיר מצודה ימי-ביניימית שמורה במלואה שהוכרזה כאתר מורשת עולמית של אונסק\"ו. העיר מתאפיינת ברחובות מרוצפי אבן, בתים צבועים בגוני פסטל, מגדלי שמירה ומגדל שעון מפורסם, ומוכרת כמקום הולדתו של ולאד המשפד.",
-    "source": "lonelyplanet.com / ricksteves.com / nomadicmatt.com / winetravelguides.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "transfgranlakeblea54": {
     "id": "transfgranlakeblea54",
@@ -707,9 +715,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "כביש נופי מפותל והרפתקני החוצה את הרי פגראש בגובה מעל 2,000 מטר, ומגיע אל אגם בלאה הקרחוני. נחשב לאחד מנתיבי הנסיעה היפים בעולם (פתוח בקיץ ובסתיו).",
-    "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com / balkantrails.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "corvincastlecastelulcorv55": {
     "id": "corvincastlecastelulcorv55",
@@ -718,9 +726,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "טירה גותית-רנסנסית מונומנטלית בחונדוארה, הנחשבת למבצר הימי-ביניימי המרשים ביותר ברומניה, עם גשר מתרומם, צריחים נישאים ואולמות אבירים.",
-    "source": "lonelyplanet.com / atlasobscura.com / romanianfriend.com / balkantrails.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "fgramountainsmoldoveanup56": {
     "id": "fgramountainsmoldoveanup56",
@@ -729,9 +737,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "הרכס הגבוה ביותר ברומניה הכולל את הפסגה הגבוהה במדינה (מולדובאנו, 2,544 מ') ואגמים קרחוניים מרהיבים, המהווים גן עדן לטרקים ומטפסי הרים.",
-    "source": "nomadicmatt.com / wikiloc.com / romanianfriend.com",
-    "url": "https://nomadicmatt.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "astranationalmuseumcompl57": {
     "id": "astranationalmuseumcompl57",
@@ -740,9 +748,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "המוזיאון הפתוח הגדול באירופה, המשתרע על פני עשרות דונמים ביער מדרום לסיביו ומציג מאות טחנות רוח ומים, בתי חווה ובתי מלאכה מסורתיים.",
-    "source": "lonelyplanet.com / nomadicmatt.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "biertanfortifiedchurch58": {
     "id": "biertanfortifiedchurch58",
@@ -751,9 +759,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "כנסייה גותית מבוצרת ומוקפת שלוש חומות הגנה בכפר בירטאן, אתר מורשת עולמית של אונסק\"ו המייצג את המורשת הסקסונית של טרנסילבניה.",
-    "source": "lonelyplanet.com / romanianfriend.com / balkantrails.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "viscri59": {
     "id": "viscri59",
@@ -762,9 +770,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "כפר סקסוני אותנטי ומשומר בעל כנסייה מבוצרת של אונסק\"ו, בתי חווה מסורתיים ופרויקטים לשימור מורשת הנתמכים על ידי המלך צ'ארלס השלישי.",
-    "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com / balkantrails.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "brukenthalnationalmuseum60": {
     "id": "brukenthalnationalmuseum60",
@@ -773,9 +781,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "המוזיאון הוותיק ביותר ברומניה, השוכן בארמון בארוקי בכיכר פיאצה מארה בסיביו ומציג אוספי אמנות אירופית ורומנית יקרי ערך.",
-    "source": "nomadicmatt.com / balkantrails.com",
-    "url": "https://nomadicmatt.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "bridgeoflies61": {
     "id": "bridgeoflies61",
@@ -784,9 +792,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "גשר הברזל היצוק הראשון ברומניה, הממוקם בעיר העתיקה של סיביו וקשור באגדות מקומיות לפיהן הגשר יקרוס אם ייאמר עליו שקר.",
-    "source": "atlasobscura.com / nomadicmatt.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "clocktower62": {
     "id": "clocktower62",
@@ -795,9 +803,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "סמלה של מצודת סיגישוארה מהמאה ה-14, הכולל גג רעפים צבעוני, מנגנון בובות עץ מכני ותצפית פנורמית על העיר.",
-    "source": "lonelyplanet.com / atlasobscura.com / romanianfriend.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "albaiuliacitadel63": {
     "id": "albaiuliacitadel63",
@@ -806,9 +814,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "מצודת כוכב ענקית ושמורה היטב בסגנון וובאן, שבה הוכרז איחוד רומניה ב-1918, הכוללת שערים מונומנטליים, קתדרלות וטקסי חילופי משמר.",
-    "source": "romanianfriend.com / winetravelguides.com",
-    "url": "https://romanianfriend.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "poenarifortress64": {
     "id": "poenarifortress64",
@@ -817,9 +825,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "מבצר הררי תלול על ראש צוק מעל עמק ארג'ש, ששימש כמעוזו ההיסטורי האותנטי של ולאד המשפד ודורש טיפוס של 1,480 מדרגות.",
-    "source": "atlasobscura.com / romanianfriend.com / balkantrails.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "curteadeargemonastery65": {
     "id": "curteadeargemonastery65",
@@ -828,9 +836,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "קתדרלה מהמאה ה-16 בעלת אדריכלות ייחודית וצריחים מפותלים, המשמשת כמקום קבורתם של מלכי רומניה.",
-    "source": "atlasobscura.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "mrginimeasibiului66": {
     "id": "mrginimeasibiului66",
@@ -839,9 +847,9 @@ const POINTS = {
     "category": "Food",
     "rec": false,
     "visitMin": 45,
-    "desc": "אזור כפרים ציוריים למרגלות הרי קינדרל ליד סיביו, הידוע בשימור מסורות רועים, גבינות מקומיות משובחות ואירוח כפרי.",
-    "source": "romanianfriend.com",
-    "url": "https://romanianfriend.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "casteljidvei67": {
     "id": "casteljidvei67",
@@ -850,9 +858,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "טירה מהמאה ה-16 ואחוזת יין בולטת באזור נהר טארנאבה, המפורסמת ביינות לבנים איכותיים ובסיורי טעימות במרתפיה ההיסטוריים.",
-    "source": "winetravelguides.com",
-    "url": "https://winetravelguides.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "devacitadel68": {
     "id": "devacitadel68",
@@ -861,9 +869,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "שרידי מבצר היסטורי הניצב בראש הר געש כבוי מעל העיר דווה, אליו ניתן להעפיל ברכבל תלול.",
-    "source": "lonelyplanet.com / atlasobscura.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "sarmizegetusaregia69": {
     "id": "sarmizegetusaregia69",
@@ -872,9 +880,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "הבירה הצבאית, הדתית והפוליטית של ממלכת דאקיה הקדומה לפני הכיבוש הרומי, השוכנת בהרי אורשטיה ומוכרזת כאתר אונסק\"ו.",
-    "source": "atlasobscura.com / romanianfriend.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "clujnapoca70": {
     "id": "clujnapoca70",
@@ -883,9 +891,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "העיר הגדולה והחשובה ביותר בטרנסילבניה, מרכז תרבותי, אקדמי וטכנולוגי תוסס המציע אדריכלות היסטורית, בתי קפה מעולים וחיי לילה עשירים.",
-    "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com / balkantrails.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "salinaturda71": {
     "id": "salinaturda71",
@@ -894,9 +902,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "מכרה מלח עתיק ועצום שהוסב לפארק שעשועים ומרכז בריאות תת-קרקעי עתידני, הכולל אגם עם סירות משוטים, גלגל ענק ומתקני ספורט בתוך אולמות מלח מוארים.",
-    "source": "atlasobscura.com / nomadicmatt.com / romanianfriend.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "oradea72": {
     "id": "oradea72",
@@ -905,9 +913,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "פנינה אדריכלית סמוך לגבול הונגריה, המפורסמת באוסף המבנים המרהיב שלה בסגנון ארט נובו וזצסיון וינאי שעברו שחזור קפדני.",
-    "source": "lonelyplanet.com / wikiloc.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "apuseninaturalpark73": {
     "id": "apuseninaturalpark73",
@@ -916,9 +924,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "פארק טבע מרהיב במערב הקרפטים המתאפיין בכפרי עץ מסורתיים, עמקי קרסט ומאות מערות נטיפים וקרח תת-קרקעיות.",
-    "source": "romanianfriend.com",
-    "url": "https://romanianfriend.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "scrioaraicecave74": {
     "id": "scrioaraicecave74",
@@ -927,9 +935,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "מערה טבעית בהרי אפוסני המכילה את אחד מקרחוני הקרסט התת-קרקעיים הגדולים בעולם, אליה יורדים במדרגות עץ אל עולם קפוא.",
-    "source": "romanianfriend.com",
-    "url": "https://romanianfriend.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "peteraurilor75": {
     "id": "peteraurilor75",
@@ -938,9 +946,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "מערת נטיפים שמורה להפליא שבה התגלו שלדים ומאובנים של מאות דובי מערות שחיו באזור בתקופת הקרח.",
-    "source": "romanianfriend.com",
-    "url": "https://romanianfriend.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "cheileturzii76": {
     "id": "cheileturzii76",
@@ -949,9 +957,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "שמורת טבע מרשימה של קניון צר בעל מצוקי גיר תלולים המתנשאים לגובה מאות מטרים מעל נחל האשדאט, עם שבילי הליכה וגשרים תלויים.",
-    "source": "wikiloc.com / romanianfriend.com",
-    "url": "https://wikiloc.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "hoiabaciuforest77": {
     "id": "hoiabaciuforest77",
@@ -960,9 +968,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "יער מסתורי סמוך לקלוז'-נאפוקה הידוע בעציו המפותלים בצורה מוזרה ובסיפורי פולקלור על תופעות על-טבעיות.",
-    "source": "atlasobscura.com / nomadicmatt.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "blackeaglepalace78": {
     "id": "blackeaglepalace78",
@@ -971,9 +979,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "מתחם ארכיטקטוני מרהיב בסגנון ארט נובו בכיכר אונירי שבאוראדיה, הכולל גלריית זכוכית מעוטרת בוויטראז'ים.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "alexandruborzabotanicalg79": {
     "id": "alexandruborzabotanicalg79",
@@ -982,9 +990,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "גן בוטני רחב ידיים שנוסד במאה ה-19, הכולל אלפי מיני צמחים, גן יפני אותנטי וחממות טרופיות.",
-    "source": "nomadicmatt.com",
-    "url": "https://nomadicmatt.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "untoldfestival80": {
     "id": "untoldfestival80",
@@ -993,9 +1001,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "אחד מפסטיבלי המוזיקה האלקטרונית הגדולים והמובילים באירופה, הנערך מדי קיץ במרכז קלוז'-נאפוקה.",
-    "source": "lonelyplanet.com / romanianfriend.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "bilefelix81": {
     "id": "bilefelix81",
@@ -1004,9 +1012,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "אתר נופש וספא תרמי מפורסם סמוך לאוראדיה המציע בריכות מים גיאותרמיים הפתוחות לאורך כל השנה.",
-    "source": "romanianfriend.com",
-    "url": "https://romanianfriend.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "paintedmonasteriesofbuco82": {
     "id": "paintedmonasteriesofbuco82",
@@ -1015,9 +1023,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "קבוצת מנזרים מבוצרים שהוכרזו כאתר מורשת עולמית של אונסק\"ו (כולל סוצ'ביצה, וורונץ, מולדובוצה והומור), המפורסמים בציורי קיר חיצוניים מרהיבים מהמאות ה-15 וה-16.",
-    "source": "lonelyplanet.com / nomadicmatt.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "maramure83": {
     "id": "maramure83",
@@ -1026,9 +1034,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "חבל ארץ צפוני וכפרי המשמר אורח חיים מסורתי וייחודי ברומניה, הידוע בשערי עץ מגולפים, לבוש מסורתי עממי, עמקים פסטורליים וכנסיות עץ מרשימות.",
-    "source": "lonelyplanet.com / nomadicmatt.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "merrycemetery84": {
     "id": "merrycemetery84",
@@ -1037,9 +1045,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "בית קברות ייחודי בכפר ספנצה שבמרמורש, שבו מאות צלבי עץ צבועים בכחול עז מעוטרים בציורים נאיביים ובשירים הומוריסטיים המתארים את חיי הנפטרים.",
-    "source": "ricksteves.com / romanianfriend.com",
-    "url": "https://ricksteves.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "woodenchurchesofmaramure85": {
     "id": "woodenchurchesofmaramure85",
@@ -1048,9 +1056,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "עשרות כנסיות עץ גותיות-אורתודוקסיות בעלות צריחים גבוהים ומחודדים וגגות רעפי עץ, שחלקן הוכרזו כאתרי מורשת עולמית של אונסק\"ו.",
-    "source": "lonelyplanet.com / ricksteves.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "mocniasteamtrain86": {
     "id": "mocniasteamtrain86",
@@ -1059,9 +1067,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "נסיעה חווייתית ברכבת קיטור עתיקה הנוסעת על מסילה צרה לאורך עמק נהר הוואסר בהרי מרמורש הפראיים.",
-    "source": "romanianfriend.com",
-    "url": "https://romanianfriend.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "sighetmemorialmuseum87": {
     "id": "sighetmemorialmuseum87",
@@ -1070,9 +1078,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "מוזיאון הנצחה עוצמתי השוכן במבנה כלא פוליטי לשעבר בעיר סיגטו מרמאציאי, המוקדש לקורבנות המשטר הקומוניסטי וההתנגדות ברומניה.",
-    "source": "atlasobscura.com / nomadicmatt.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "rodnamountains88": {
     "id": "rodnamountains88",
@@ -1081,9 +1089,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "הפארק הלאומי והרכס האלפיני הגבוה והפראי ביותר בצפון הקרפטים הרומניים, המציע אגמים קרחוניים ופסגות נישאות מעל 2,300 מטר.",
-    "source": "wikiloc.com / romanianfriend.com",
-    "url": "https://wikiloc.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "ceahlumountainsredlake89": {
     "id": "ceahlumountainsredlake89",
@@ -1092,9 +1100,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "מסיב הררי דרמטי במזרח הקרפטים המאופיין בצוקים בולטים, מפלים שוצפים וקרבה לאגם האדום (Lacul Roșu) וקניון ביקאז.",
-    "source": "wikiloc.com / romanianfriend.com",
-    "url": "https://wikiloc.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "iai90": {
     "id": "iai90",
@@ -1103,9 +1111,9 @@ const POINTS = {
     "category": "City",
     "rec": false,
     "visitMin": 60,
-    "desc": "הבירה ההיסטורית של חבל מולדובה, עיר אלגנטית ותרבותית המציעה ארמונות מרשימים, כנסיות עתיקות ואוניברסיטאות מובילות.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "cotnariwineregion91": {
     "id": "cotnariwineregion91",
@@ -1114,9 +1122,9 @@ const POINTS = {
     "category": "Food",
     "rec": true,
     "visitMin": 45,
-    "desc": "אזור כרמים עתיק בגבעות מולדובה המפורסם מאז המאה ה-15 ביינות הקינוח הלבנים המסורתיים שלו ובסיורי יקבים היסטוריים.",
-    "source": "winetravelguides.com",
-    "url": "https://winetravelguides.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "breb92": {
     "id": "breb92",
@@ -1125,9 +1133,9 @@ const POINTS = {
     "category": "City",
     "rec": false,
     "visitMin": 60,
-    "desc": "כפר מסורתי וציורי בעמק מארה שבמרמורש, המהווה מוקד למלאכות יד מסורתיות, נגרות עץ ואירוח כפרי אותנטי.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "danubedelta93": {
     "id": "danubedelta93",
@@ -1136,9 +1144,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "שמורת הביוספרה ודלתת הנהר הגדולה והשמורה ביותר באירופה. גן עדן לצפרות ולטבע פראי הכולל מבוך תעלות, אגמים, איים צפים ומושבות שקנאים הגדולות באירופה.",
-    "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "constana94": {
     "id": "constana94",
@@ -1147,9 +1155,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "עיר הנמל והחוף הראשית של רומניה לחוף הים השחור, שנוסדה בעת העתיקה ומציעה מוזיאונים היסטוריים, טיילת חוף ומבנים ארכיטקטוניים מרשימים.",
-    "source": "lonelyplanet.com / nomadicmatt.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "constanacasino95": {
     "id": "constanacasino95",
@@ -1158,9 +1166,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "מבנה אר נובו איקוני ומפואר הניצב על שפת הים השחור בטיילת של קונסטנצה, שנחשב לאחד המונומנטים המפורסמים ברומניה.",
-    "source": "atlasobscura.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "tulcea96": {
     "id": "tulcea96",
@@ -1169,9 +1177,9 @@ const POINTS = {
     "category": "City",
     "rec": false,
     "visitMin": 60,
-    "desc": "עיר נמל על גדות הדנובה המשמשת כשער הכניסה הראשי לסיורי שיט ולחקר שמורת דלתת הדנובה.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "leteaforest97": {
     "id": "leteaforest97",
@@ -1180,9 +1188,9 @@ const POINTS = {
     "category": "Nature",
     "rec": false,
     "visitMin": 90,
-    "desc": "יער קדום ייחודי בדלתת הדנובה הגדל על דיונות חול, המפורסם בסוסי הבר החופשיים המשוטטים בו ובצמחייה הסובטרופית שבו.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "enisalafortresshistria98": {
     "id": "enisalafortresshistria98",
@@ -1191,9 +1199,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "אתרים ארכיאולוגיים מרשימים בדוברוג'ה, הכוללים מצודה ימי-ביניימית של בני גנואה המשקיפה על הלגונות ושרידי עיר נמל יוונית-רומית עתיקה.",
-    "source": "lonelyplanet.com / atlasobscura.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "guraportieivamaveche99": {
     "id": "guraportieivamaveche99",
@@ -1202,9 +1210,9 @@ const POINTS = {
     "category": "Nature",
     "rec": false,
     "visitMin": 90,
-    "desc": "חופי רחצה בולטים על הים השחור – החל מרצועת חול שקטה ובתולית בין הלגונה לים בגורה פורטיציי ועד לחוף הבוהמי והתוסס בואמה וקה.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "sulinasfntugheorghe100": {
     "id": "sulinasfntugheorghe100",
@@ -1213,9 +1221,9 @@ const POINTS = {
     "category": "City",
     "rec": false,
     "visitMin": 60,
-    "desc": "כפרי דייגים ועיירות חוף מבודדות בקצות ערוצי הדנובה, אליהם ניתן להגיע בשיט בלבד, המציעים חופי ים בתוליים ואווירה שלווה.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "irongatesdecebalsculptur101": {
     "id": "irongatesdecebalsculptur101",
@@ -1224,9 +1232,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "קניון נהר הדנובה הדרמטי בגבול רומניה וסרביה, שבו נחצב בסלע צוק ענק בדמותו של המלך הדאקי דצ'באל, לצד מערות ומסלולי שיט במעוק הנהר.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "retezatnationalpark102": {
     "id": "retezatnationalpark102",
@@ -1235,9 +1243,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "פארק לאומי אלפיני פראי בקרפטים הדרומיים, הכולל עשרות אגמים קרחוניים צלולים, יערות עתיקים ופסגות תלולות מעל 2,500 מטר.",
-    "source": "wikiloc.com / romanianfriend.com",
-    "url": "https://wikiloc.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "timioara103": {
     "id": "timioara103",
@@ -1246,9 +1254,9 @@ const POINTS = {
     "category": "City",
     "rec": true,
     "visitMin": 60,
-    "desc": "העיר המרכזית בחבל באנאט, עיר בעלת היסטוריה עשירה וכיכרות רחבות ידיים, שהייתה מוקד פרוץ המהפכה הרומנית בשנת 1989.",
-    "source": "lonelyplanet.com / winetravelguides.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "endlesscolumn104": {
     "id": "endlesscolumn104",
@@ -1257,9 +1265,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": false,
     "visitMin": 60,
-    "desc": "פסל מונומנטלי מפורסם מעשה ידי הפסל קונסטנטין ברנקושי בעיר טרגו ז'יו, המהווה יצירת מופת של האמנות המודרנית להנצחת גיבורי רומניה.",
-    "source": "lonelyplanet.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "transalpinadn67c105": {
     "id": "transalpinadn67c105",
@@ -1268,9 +1276,9 @@ const POINTS = {
     "category": "Attraction",
     "rec": true,
     "visitMin": 60,
-    "desc": "כביש הנסיעה ההררי הסלול הגבוה ביותר ברומניה, החוצה את הרי פארנג בגובה שיא של 2,145 מטר ומציע נופים הרריים עוצרי נשימה.",
-    "source": "lonelyplanet.com / romanianfriend.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "dealumarewineregion106": {
     "id": "dealumarewineregion106",
@@ -1279,9 +1287,9 @@ const POINTS = {
     "category": "Food",
     "rec": true,
     "visitMin": 45,
-    "desc": "אזור כרמים וייצור יין מוביל במורדות הדרומיים של הקרפטים, המפורסם ביינות האדומים האיכותיים שלו (בעיקר פטסקה נגרה) ודרך היין של פראחובה.",
-    "source": "lonelyplanet.com / winetravelguides.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "viatransilvanica107": {
     "id": "viatransilvanica107",
@@ -1290,9 +1298,9 @@ const POINTS = {
     "category": "Nature",
     "rec": true,
     "visitMin": 90,
-    "desc": "שביל מסעות והליכה לאומי באורך 1,400 ק\"מ החוצה את רומניה מצפון לדרום (מפוטנה עד דרובטה-טורנו סברין) ועובר דרך קהילות כפריות ואתרי אונסק\"ו.",
-    "source": "lonelyplanet.com / timeout.com / wikiloc.com",
-    "url": "https://lonelyplanet.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   },
   "bigrwaterfall108": {
     "id": "bigrwaterfall108",
@@ -1301,9 +1309,9 @@ const POINTS = {
     "category": "Nature",
     "rec": false,
     "visitMin": 90,
-    "desc": "מפל מים ייחודי בעמק מיניש הזורם על גבי סלע חרוטי המכוסה באזוב ירוק עשיר.",
-    "source": "atlasobscura.com",
-    "url": "https://atlasobscura.com"
+    "desc": "",
+    "source": "",
+    "url": ""
   }
 };
 

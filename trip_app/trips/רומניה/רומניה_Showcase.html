@@ -6,7 +6,7 @@
 <title>רומניה — עמוד רקע</title>
 <style>
   :root { --ink:#241f1a;--paper:#faf6ef;--muted:#6b6157;--gold:#c8a24a;--accent:#a13d3d; }
-  * { box-sizing: border-box; }
+  * { box-sizing:border-box; }
   body { margin:0; background:var(--paper); color:var(--ink); font-family:'Segoe UI',Arial,sans-serif; direction:rtl; text-align:right; line-height:1.7; }
   .hero { position:relative; height:62vh; min-height:380px; display:flex; align-items:flex-end; background-size:cover; background-position:center; }
   .hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(20,15,10,0.85) 0%, rgba(20,15,10,0.25) 55%, rgba(20,15,10,0.05) 100%); }
@@ -24,10 +24,10 @@
   .cat-tag { display:inline-block; font-size:11px; font-weight:700; color:#fff; border-radius:4px; padding:2px 9px; margin-bottom:10px; }
   .card h3 { margin:0 0 8px; font-size:19px; }
   .card p { font-size:14.5px; color:var(--muted); margin:0; }
+  @media (max-width:480px) { .hero h1 { font-size:34px; } .hero .tagline { font-size:16px; } }
 </style>
 </head>
 <body>
-
   <div class="hero" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Castelul_Bran2.jpg/960px-Castelul_Bran2.jpg?utm_source=en.wikipedia.org&amp;utm_campaign=api&amp;utm_content=thumbnail');">
     <div class="hero-content">
       <div class="kicker">KESSLER TRIP</div>
@@ -154,6 +154,5 @@
     </div>
 
   </div>
-
 </body>
 </html>

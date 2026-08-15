@@ -243,7 +243,8 @@ function renderShowcase(destination, enrich) {
   .card-body { padding:18px 20px 22px; }
   .cat-tag { display:inline-block; font-size:11px; font-weight:700; color:#fff; border-radius:4px; padding:2px 9px; margin-bottom:10px; }
   .card h3 { margin:0 0 8px; font-size:19px; }
-  .card p { font-size:14.5px; color:var(--muted); margin:0; }`;
+  .card p { font-size:14.5px; color:var(--muted); margin:0; }
+  @media (max-width:480px) { .hero h1 { font-size:34px; } .hero .tagline { font-size:16px; } }`;
 
   const bodyHtml = `  <div class="hero" style="${heroStyle}">
     <div class="hero-content">
@@ -464,7 +465,8 @@ ${cards}
   .fs-card-body { padding:14px 16px 18px; }
   .cat-tag { display:inline-block; font-size:11px; font-weight:700; color:#fff; border-radius:4px; padding:2px 9px; margin-bottom:8px; }
   .fs-card h3 { margin:0 0 6px; font-size:17px; }
-  .fs-card p { font-size:13.5px; color:var(--muted); margin:0; }`;
+  .fs-card p { font-size:13.5px; color:var(--muted); margin:0; }
+  @media (max-width:480px) { .hero h1 { font-size:30px; } }`;
 
   const bodyHtml = `  <div class="hero" style="${heroStyle}">
     <div class="hero-content">
