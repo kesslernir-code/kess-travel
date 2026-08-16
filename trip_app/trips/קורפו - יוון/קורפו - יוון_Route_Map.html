@@ -1355,12 +1355,31 @@ function clearAllRegionOverlays() {
 // around the farthest point, capped at MAX_REGION_RADIUS_M so a region with
 // far-flung points can't draw a circle spanning a huge chunk of the
 // country), one place to tune it instead of two independently-typed copies.
+// A "nearby islands / day trips" region can genuinely include a place that's
+// actually hundreds of km away (a real case: an extracted region for a Corfu
+// trip included a Greek island in a completely different sea as a "day
+// trip") -- averaging every point's location into one bounding box lets that
+// ONE outlier drag the whole region's circle into empty space between the
+// real cluster and the outlier, while the real nearby points end up sitting
+// outside the circle entirely. Reject points far from the rough (median,
+// not mean -- robust to a single wild value) center before computing the
+// real circle; fall back to all points if that would reject everything.
 function computeRegionCircle(locs) {
+  let finalLocs = locs;
+  if (locs.length > 2) {
+    const lats = locs.map(l => l.lat()).sort((a, b) => a - b);
+    const lngs = locs.map(l => l.lng()).sort((a, b) => a - b);
+    const mid = Math.floor(locs.length / 2);
+    const roughCenter = new google.maps.LatLng(lats[mid], lngs[mid]);
+    const OUTLIER_LIMIT_M = 150000; // ~a reasonable day-trip radius
+    const kept = locs.filter(l => google.maps.geometry.spherical.computeDistanceBetween(roughCenter, l) <= OUTLIER_LIMIT_M);
+    if (kept.length) finalLocs = kept;
+  }
   const bounds = new google.maps.LatLngBounds();
-  locs.forEach(l => bounds.extend(l));
+  finalLocs.forEach(l => bounds.extend(l));
   const center = bounds.getCenter();
   let radius = 4000;
-  locs.forEach(l => { radius = Math.max(radius, google.maps.geometry.spherical.computeDistanceBetween(center, l) * 1.15); });
+  finalLocs.forEach(l => { radius = Math.max(radius, google.maps.geometry.spherical.computeDistanceBetween(center, l) * 1.15); });
   radius = Math.min(radius, MAX_REGION_RADIUS_M);
   return { center, radius };
 }
