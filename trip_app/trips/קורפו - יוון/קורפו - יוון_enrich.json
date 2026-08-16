@@ -1,0 +1,107 @@
+{
+  "destinationEn": "Corfu",
+  "countryCode": "GR",
+  "mainCityName": "העיר קורפו",
+  "mainCityEn": "Corfu Town",
+  "mainCityCenter": {
+    "lat": 39.6243,
+    "lng": 19.9217
+  },
+  "mapCenter": {
+    "lat": 39.62,
+    "lng": 19.85
+  },
+  "tagline": "אי ירוק וציורי בים היוני, המשלב אדריכלות ונציאנית מלכותית, מפרצי טורקיז דרמטיים ומסורת ים-תיכונית שופעת.",
+  "background": [
+    "קורפו (קרקירה), המכונה 'אי האזמרגד' של הים היוני, מתאפיין בנוף יוצא דופן של מטעי זיתים עתיקים, גבעות מיוערות ומפרצי טורקיז צלולים. בניגוד למרבית איי יוון, קורפו לא נכבש על ידי האימפריה העות'מאנית, והשפעות השלטון הוונציאני, הצרפתי והבריטי ניכרות בו היטב באדריכלות, באורח החיים ובמוזיקה המקומית.",
+    "האי מציע שילוב עשיר בין עיר בירה היסטורית המוכרת כאתר מורשת עולמית לבין טבע פראי וקו חוף מגוון. מצוקי הגיר הלבנים של צפון האי, החופים הנסתרים של פליאוקסטריצה במערב, והדיונות הפראיות בדרום יוצרים תפאורה מושלמת לטיולי כוכב, מסעות רגליים ושיט בין מפרצים.",
+    "הטיול בקורפו מתאים הן למי שמחפש נופש רגוע בטברנות מסורתיות ובחופים בתוליים, והן לחובבי תרבות, היסטוריה וארכיטקטורה. עם שפע נקודות תצפית מרהיבות, ארמונות קיציים ומסלולי הליכה מגוונים, האי מעניק חוויה ים-תיכונית ייחודית, ירוקה ואלגנטית."
+  ],
+  "highlights": [
+    {
+      "name": "העיר קורפו (קרקירה) והעיר העתיקה",
+      "showcaseDesc": "עיר הבירה המרתקת של האי, שהוכרזה כאתר מורשת עולמית של אונסק\"ו. העיר מלאה בסמטאות צרות וציוריות, ארמונות, מבצרים ונציאניים וכיכרות אלגנטיות עם בתי קפה מעוצבים.",
+      "category": "Urban",
+      "imageQuery": "Corfu Old Town Greece narrow street",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Corfu_Montage_L.png/960px-Corfu_Montage_L.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "המבצר הישן (Old Fortress / Palaio Frourio)",
+      "showcaseDesc": "מבצר ונציאני מרשים מהמאה ה-15 הניצב על חצי אי סלעי ומבוצר מול העיר העתיקה. המקום כולל שרידים היסטוריים ומציע תצפית פנורמית מרהיבה על העיר ועל הים.",
+      "category": "Attraction",
+      "imageQuery": "Old Fortress Corfu Palaio Frourio",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Kerkyrapalaiofrourio.JPG/960px-Kerkyrapalaiofrourio.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "קאנוני, מנזר ולאכרנה ואי העכבר (Kanoni & Pontikonisi)",
+      "showcaseDesc": "אחת הגלויות המפורסמות ביותר של קורפו, המשקיפה על מנזר ולאכרנה הלבן בלב הים ועל אי העכבר הירוק. הנקודה פופולרית במיוחד לצפייה במטוסים הנוחתים מעל הלגונה.",
+      "category": "Attraction",
+      "imageQuery": "Vlacherna Monastery Kanoni Corfu",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "פליאוקסטריצה (Paleokastritsa)",
+      "showcaseDesc": "מפרץ חלומי המוקף בצוקים ירוקים, מערות ימיות ומים צלולים בגווני טורקיז ואזמרגד. מוקד אידיאלי להשכרת סירות, צלילה ורחצה באחד מחופי הדגל של האי.",
+      "category": "Nature",
+      "imageQuery": "Paleokastritsa bay Corfu",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מבצר אנגלוקסטרו (Angelokastro Castle)",
+      "showcaseDesc": "מבצר ביזנטי עתיק ומרשים מהמאה ה-13 הניצב על פסגת צוק תלול מעל הים היוני. הטיפוס אל המבצר מתגמל באחת מנקודות התצפית הפנורמיות והדרמטיות ביותר בקורפו.",
+      "category": "Attraction",
+      "imageQuery": "Angelokastro Corfu Castle",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Angelokastro_%28Corfu%29.jpg/960px-Angelokastro_%28Corfu%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "תעלת האהבה (Canal d'Amour)",
+      "showcaseDesc": "תצורת סלע טבעית ייחודית מאבן חול עם מפרצונים ותעלות ים צלולות בסידארי. לפי האגדה המקומית, זוגות השוחים יחד בתעלה יזכו לאהבת נצח.",
+      "category": "Nature",
+      "imageQuery": "Canal d'Amour Sidari Corfu",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "מצוק דראסטיס (Cape Drastis)",
+      "showcaseDesc": "קצהו הצפוני והמרהיב של קורפו, המתאפיין בצוקי אבן חול לבנים המזדקרים מתוך מי תכלת. האתר מציע מראות עוצרי נשימה, תצפיות שקיעה פופולריות ומפרצי רחצה נסתרים.",
+      "category": "Nature",
+      "imageQuery": "Cape Drastis Corfu cliffs",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "פורטו טימוני (Porto Timoni)",
+      "showcaseDesc": "תופעת טבע נדירה של שני מפרצי טורקיז מושלמים הממוקמים גב-אל-גב לחצי אי צר. ההגעה דורשת מסלול הליכה נופי מהכפר אפיאונס או שיט בסירה.",
+      "category": "Nature",
+      "imageQuery": "Porto Timoni double beach Corfu",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "ארמון האכיליון (Achilleion Palace)",
+      "showcaseDesc": "ארמון קיץ מפואר שנבנה במאה ה-19 עבור הקיסרית האוסטרית סיסי, בהשראת הגיבור המיתולוגי אכילס. הארמון מוקף בגנים מעוטרי פסלים ומשקיף אל מפרץ קורפו.",
+      "category": "Attraction",
+      "imageQuery": "Achilleion Palace Corfu gardens",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Korfu_%28GR%29%2C_Gastouri%2C_Achilleion_--_2018_--_1323.jpg/960px-Korfu_%28GR%29%2C_Gastouri%2C_Achilleion_--_2018_--_1323.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "name": "הר ומנזר הפנדוקראטור (Mount Pantokrator)",
+      "showcaseDesc": "הפסגה הגבוהה ביותר באי, המתנשאת לגובה 906 מטרים ומארחת מנזר היסטורי שליו. מראש ההר נפרש נוף פנורמי של 360 מעלות על כל קורפו, חופי אלבניה והים הפתוח.",
+      "category": "Nature",
+      "imageQuery": "Mount Pantokrator monastery Corfu",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/MountPantokrator.jpg/960px-MountPantokrator.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "אגם קוריסיה, חוף חליקורנאס וחוף איסוס (Lake Korissia & Issos Beach)",
+      "showcaseDesc": "שמורת טבע פראית בדרום האי המשלבת לגונת מים עשירה בציפורי מים, דיונות חול זהובות ורצועת חוף ארוכה ושקטה.",
+      "category": "Nature",
+      "imageQuery": "Issos Beach Lake Korissia Corfu",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+    },
+    {
+      "name": "שביל קורפו (The Corfu Trail)",
+      "showcaseDesc": "מסלול הליכה מפורסם באורך של מעל 150 ק\"מ החוצה את האי מקצהו הדרומי ועד לצפון. השביל חולף דרך מטעי זיתים, כפרים נסתרים, רכסים הרריים וחופים בתוליים.",
+      "category": "Nature",
+      "imageQuery": "Corfu Trail hiking trail Greece",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/7/74/Seal_of_the_International_Court_of_Justice.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
+    }
+  ],
+  "_fallbackImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Kerkyrapalaiofrourio.JPG/960px-Kerkyrapalaiofrourio.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+}

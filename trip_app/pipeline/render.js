@@ -174,6 +174,28 @@ ${main}
         document.getElementById('tab-'+n).classList.add('active');
       });
     });
+
+    // Auto-refresh while a background stage is still running -- a real
+    // pipeline run finished (Corfu: tabs 3+4 went ready) but the open tab
+    // kept showing the stale "pending" state until manually reloaded, since
+    // this is a static file with no push mechanism. Self-disabling: does
+    // nothing once there's nothing pending (so it's a harmless no-op on an
+    // already-finished or already-published trip), and stops polling the
+    // moment anything changes rather than polling forever.
+    (function(){
+      var pendingCount = document.querySelectorAll('.pending:not(.error)').length;
+      if (!pendingCount) return;
+      var poll = setInterval(function(){
+        fetch(location.pathname + '?_poll=' + Date.now(), { cache: 'no-store' })
+          .then(function(r){ return r.text(); })
+          .then(function(html){
+            var doc = new DOMParser().parseFromString(html, 'text/html');
+            var stillPending = doc.querySelectorAll('.pending:not(.error)').length;
+            if (stillPending !== pendingCount) { clearInterval(poll); location.reload(); }
+          })
+          .catch(function(){ /* transient fetch error -- just try again next tick */ });
+      }, 6000);
+    })();
   </script>`;
 
   return htmlShell(`KESSLER TRIP — ${destination}`, extraCss, bodyHtml);

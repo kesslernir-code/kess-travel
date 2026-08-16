@@ -1,0 +1,926 @@
+{
+  "destination": "קורפו - יוון",
+  "regions": [
+    {
+      "name": "העיר קורפו וסביבתה (קרקירה)",
+      "places": [
+        {
+          "name": "העיר קורפו (קרקירה) והעיר העתיקה",
+          "description": "עיר הבירה של קורפו, שהוכרזה כאתר מורשת עולמית של אונסק\"ו, מתאפיינת באווירה מיוחדת עם השפעות ונציאניות, בריטיות וצרפתיות הניכרות במבנים, בבתי האחוזה, בכיכרות ובסמטאות הצרות (קנטוניה). בעיר פועלים מוזיאונים מרתקים, כנסיות היסטוריות, פאבים ומסעדות.",
+          "category": "Urban",
+          "sources": [
+            "masa.co.il",
+            "lonelyplanet.com",
+            "ricksteves.com",
+            "wikiloc.com",
+            "nomadicmatt.com",
+            "tzatchickie.gr",
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "טיילת וכיכר הספיאנאדה (Spianada)",
+          "description": "הכיכר הציבורית הגדולה ביותר ביוון וטיילת יפהפייה שלאורכה נטועים גנים ירוקים ומטופחים. הכיכר שוכנת לרגלי המצודה העתיקה וכוללת אכסדרת עמודים מרשימה ומגרש קריקט, ומהווה מוקד מרכזי לטיול רגלי בעיר.",
+          "category": "Urban",
+          "sources": [
+            "masa.co.il",
+            "gotravel.co.il",
+            "lonelyplanet.com",
+            "nomadicmatt.com",
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מתחם הליסטון (Liston)",
+          "description": "ארקדת מבנים מקושתים מפוארת שנבנתה בתקופת הכיבוש הצרפתי בהשראת רחוב ריבולי בפריז. המקום שוכן בכיכר הספיאנאדה ומאכלס את בתי הקפה האלגנטיים ביותר באי לצד חנויות ומסעדות.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il",
+            "lonelyplanet.com",
+            "wikiloc.com",
+            "nomadicmatt.com",
+            "tzatchickie.gr",
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "המבצר הישן (Old Fortress / Palaio Frourio)",
+          "description": "מבצר ונציאני מרשים שנבנה במאה ה-15 על חצי אי סלעי במקום שבו שכנה הבירה הביזנטית. המבצר כולל תערוכות היסטוריות ומציע תצפית פנורמית מרהיבה על העיר קורפו והים.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il",
+            "gotravel.co.il",
+            "lonelyplanet.com",
+            "ricksteves.com",
+            "nomadicmatt.com",
+            "tzatchickie.gr",
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "המבצר החדש (New Fortress / Neo Frourio)",
+          "description": "מבצר ונציאני מהמאה ה-16 המוקף חומות אבן ומגדלים, המתנשא מעל העיר העתיקה והנמל ומציע נקודת תצפית יפהפייה על קורפו וקו החוף.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il",
+            "gotravel.co.il",
+            "ricksteves.com",
+            "wikiloc.com",
+            "nomadicmatt.com",
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "כנסיית איוס ספירידון (Agios Spyridon)",
+          "description": "כנסייה יוונית-אורתודוקסית מהמאה ה-16 עם מגדל פעמונים בולט. בכנסייה שמור ארון כסף ובו גופתו החנוטה של הקדוש ספירידון, פטרון האי שנודע כמחולל ניסים, לצד אוסף פריטי כסף וציורי קיר מרהיבים.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il",
+            "atlasobscura.com",
+            "nomadicmatt.com",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "ארמון ופארק מון רפו (Mon Repos)",
+          "description": "ארמון היסטורי שבו נולד הנסיך פיליפ, השוכן בתוך פארק ירוק ומטופח מול שרידי פליאופוליס. במקום פועל מוזיאון המציג ממצאים ארכיאולוגיים עתיקים ושבילי הליכה נעימים.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il",
+            "wikiloc.com",
+            "nomadicmatt.com",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "המוזיאון לאמנות המזרח הרחוק וארמון מייקל וג'ורג'",
+          "description": "מוזיאון ייחודי השוכן בארמון ניאו-קלאסי מפואר בעיר קורפו, המוקדש לאמנות ותרבות ממדינות אסיה וכולל שריונים, פרגודים ויצירות אמנות אותנטיות.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il",
+            "atlasobscura.com",
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "המוזיאון הארכיאולוגי של קורפו",
+          "description": "מוזיאון המציג אוסף עשיר של עתיקות שנמצאו ברחבי האי, ביניהן גמלון האבן העתיק של מקדש ארטמיס עם דמות הגורגונה מדוזה ופסל אריה האבן של מנקראטס.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "קאנוני, מנזר ולאכרנה ואי העכבר (Kanoni & Pontikonisi)",
+          "description": "אזור תצפית מפורסם הצופה אל מסלול הנחיתה של שדה התעופה בלגונה, מנזר ולאכרנה הלבן הניצב על המים, ואי העכבר (פונטיקוניסי) הירוק אליו ניתן לשוט בסירה קצרה.",
+          "category": "Attraction",
+          "sources": [
+            "gotravel.co.il",
+            "wikiloc.com",
+            "nomadicmatt.com",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "קפה קאנוני (Cafe Kanoni)",
+          "description": "בית קפה ברובע קאנוני המציע טרסה עם תצפית מרהיבה על מסלול ההמראה והנחיתה של שדה התעופה ועל אי העכבר.",
+          "category": "Food",
+          "sources": [
+            "gotravel.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מוזיאון השטרות של הבנק היוני (Banknote Museum)",
+          "description": "מוזיאון השוכן במבנה היסטורי משנת 1839 בכיכר הגיבורים, המציג שטרות, מטבעות ומסמכים בנקאיים מ-1822 ועד עידן האירו, כולל שטר נדיר של 100 מיליארד דרכמות.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": {
+            "lat": 39.62466,
+            "lng": 19.922525
+          },
+          "recommended": true
+        },
+        {
+          "name": "קאסה פרלנטה (Casa Parlante)",
+          "description": "מוזיאון חי והיסטורי בעיר קורפו המציג המחשה מוחשית לאורח חייה של משפחת אצולה מקומית במהלך המאה ה-19.",
+          "category": "Attraction",
+          "sources": [
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "שכונת קמפיילו (Campiello)",
+          "description": "הרובע העתיק והציורי ביותר בעיר קורפו, המתאפיין באווירה ונציאנית ייחודית, סמטאות מרוצפות אבן צרות ומבנים היסטוריים.",
+          "category": "Urban",
+          "sources": [
+            "ricksteves.com",
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "השוק המרכזי של קורפו (Central Market)",
+          "description": "שוק עירוני תוסס ליד המבצר החדש, המציע דגה טרייה, פירות, ירקות, דבש מקומי, ליקרים וממתקי קומקוואט.",
+          "category": "Food",
+          "sources": [
+            "ricksteves.com",
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מפעל הסבון פאטוניס (Patounis Soap Factory)",
+          "description": "יצרן הסבון המסורתי היחיד מהמאה ה-19 שעדיין פועל בקורפו ומייצר סבונים טבעיים משמן זית מקומי בשיטות מסורתיות.",
+          "category": "Attraction",
+          "sources": [
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מחלבת אלקסיס פריקליס (Alexis Periklis Dairy Shop)",
+          "description": "חנות חלב ומעדנייה הפועלת מאז 1935, המפורסמת בחמאה מיוחדת, יוגורט וקינוח גלקטובורקו מסורתי.",
+          "category": "Food",
+          "sources": [
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "בית הקברות הבריטי (Corfu British Cemetery)",
+          "description": "בית קברות היסטורי ושליו בעיר קורפו המשמש עדות למורשת ולתקופת השלטון הבריטי באי.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "המוזיאון הביזנטי ומנזר פלאטיטרה",
+          "description": "אתרי מורשת ותרבות בעיר קורפו הכוללים תצוגות של היסטוריה ביזנטית ואתרי פולחן היסטוריים.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "כנסיית אייה קרקירה (פיאופוליס)",
+          "description": "כנסייה היסטורית בעיר קורפו המהווה את אחד ממוקדי העניין הדתיים בבירת האי.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מוזיאון קפודיסטריאס",
+          "description": "מוזיאון בעיר קורפו המוקדש לקורות חייו ופועלו של יואניס קפודיסטריאס.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "האי וידוס (Vidos Island)",
+          "description": "אי ירוק ושקט השוכן במרחק הפלגה קצר מול העיר קורפו, ומציע שבילי הליכה קלים וטבע שליו.",
+          "category": "Nature",
+          "sources": [
+            "wikiloc.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מנטוקי (Mantouki)",
+          "description": "אזור פרברי סמוך לעיר קורפו הנכלל במסלולי טיול והליכה רגליים.",
+          "category": "Urban",
+          "sources": [
+            "wikiloc.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מלון Bella Venezia",
+          "description": "מלון בוטיק יוקרתי השוכן בתוך וילה ניאו-קלאסית ברחוב שליו במרכז העיר קורפו, עם טרסת גן מטופחת.",
+          "category": "Sleep",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מועדוני לילה באזור הנמל החדש (Hippodrome, Apokalypsis, DNA)",
+          "description": "מתחם מועדוני הלילה המרכזי של קורפו סמוך לנמל החדש, המציע מסיבות וחיי לילה תוססים.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "סיור אוטובוס תיירים קורפו (Hop-On Hop-Off)",
+          "description": "אוטובוס תיירים דו-קומתי המאפשר סיור פנורמי וגישה נוחה בין אתריה המרכזיים של העיר.",
+          "category": "Attraction",
+          "sources": [
+            "ricksteves.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "טברנה Faliraki",
+          "description": "טברנה מסורתית השוכנת למרגלות המבצר העתיק ומשקיפה ישירות על הים.",
+          "category": "Food",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        }
+      ]
+    },
+    {
+      "name": "צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)",
+      "places": [
+        {
+          "name": "תעלת האהבה (Canal d'Amour)",
+          "description": "תצורת סלע טבעית מרהיבה מאבן חול עם תעלות ומפרצי רחצה בסידארי. על פי האגדה המקומית, זוגות ששוחים יחד בתעלה יישארו מאוהבים לנצח.",
+          "category": "Nature",
+          "sources": [
+            "masa.co.il",
+            "lonelyplanet.com",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "סידארי (Sidari)",
+          "description": "עיירת נופש בצפון האי המציעה חופים חוליים רחבים, טברנות, בתי קפה, פעילויות ספורט מים והפלגות לאורך המפרצים.",
+          "category": "Urban",
+          "sources": [
+            "masa.co.il",
+            "lonelyplanet.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מצוק דראסטיס (Cape Drastis)",
+          "description": "תצורות סלע לבנות ומרשימות המזדקרות אל תוך מי תכלת צלולים בקצה הצפוני של קורפו, המהוות מוקד מרהיב לתצפית שקיעה ולשחייה.",
+          "category": "Nature",
+          "sources": [
+            "masa.co.il",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "חוף לוגאס וקפה 7th Heaven (Logas Beach)",
+          "description": "חוף עוצר נשימה מתחת לצוקי אבן חול תלולים בכפר פרולאדס, עם בר-קפה הצופה לנופי שקיעה מרהיבים מעל הים.",
+          "category": "Nature",
+          "sources": [
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "פורטו טימוני (Porto Timoni)",
+          "description": "תופעת טבע ייחודית של שני חופים מרהיבים גב-אל-גב עם מי טורקיז, אליהם מגיעים במסלול הליכה מהכפר אפיאונס או בסירה.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הר ומנזר הפנדוקראטור (Mount Pantokrator)",
+          "description": "ההר הגבוה ביותר בקורפו (906 מטרים). בפסגתו שוכנים מנזר היסטורי ובית קפה, והוא מציע תצפית פנורמית של 360 מעלות על האי כולו, חופי אלבניה ואיטליה.",
+          "category": "Nature",
+          "sources": [
+            "masa.co.il",
+            "atlasobscura.com",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הכפר פריתיה העתיקה (Palea Perithia)",
+          "description": "כפר ביזנטי עתיק מהמאה ה-14 על מדרונות הר פנטוקראטור. הכפר כולל שרידי בתי אבן היסטוריים (כמו אחוזת סקורדיליס), שבילי טיול וטברנות מסורתיות.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com",
+            "wikiloc.com",
+            "discovergreece.com"
+          ],
+          "coordinates": {
+            "lat": 39.763604,
+            "lng": 19.875119
+          },
+          "recommended": true
+        },
+        {
+          "name": "ניו פריתיה (New Perithia)",
+          "description": "כפר יווני מסורתי בקרבת כביש החוף הצפוני, הכולל טברנות, בית בד וחנויות מקומיות.",
+          "category": "Urban",
+          "sources": [
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "קסיופי (Kassiopi)",
+          "description": "כפר דייגים ציורי בצפון-מזרח קורפו עם נמל מסורתי, שרידי טירה ביזנטית, חופי חלוקים יפהפיים, מסעדות דגים וטברנות מול המים.",
+          "category": "Urban",
+          "sources": [
+            "masa.co.il",
+            "lonelyplanet.com",
+            "nomadicmatt.com",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הכפר נימפס ומפלי נימפס (Nymfes Village & Askitario)",
+          "description": "כפר פסטורלי המוקף מטעי זיתים ומפלי מים שבהם לפי המיתולוגיה רחצו נימפות, לצד שרידי מנזר ההתבודדות אסקיטריו מהמאה ה-5.",
+          "category": "Nature",
+          "sources": [
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "אגיוס גאורגיוס פאגון (Agios Georgios Pagon)",
+          "description": "מפרץ חוף רחב ומוכר בצפון-מערב האי המתאים לרחצה ולפעילויות ספורט מים.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "אחארבי ורודה (Acharavi & Roda)",
+          "description": "יישובי נופש פופולריים בחוף הצפוני של קורפו המציעים רצועות חוף ארוכות, טברנות ומגוון שירותי תיירות.",
+          "category": "Urban",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "ארילס ואגיוס סטפאנוס (Arillas & Agios Stefanos)",
+          "description": "אתרי נופש חופיים ורגועים בצפון-מערב קורפו עם מפרצים יפים ושקיעות מרשימות.",
+          "category": "Urban",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "קאלאמי, קאמינאקי וניסאקי (Kalami, Kaminaki & Nissaki)",
+          "description": "כפרי חוף ומפרצונים ציוריים בחוף הצפון-מזרחי של האי, המאופיינים במי ים צלולים וטברנות מסורתיות.",
+          "category": "Urban",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "בארמבטי, איפסוס ופירגי (Barbati, Ipsos & Pyrgi)",
+          "description": "רצועת חופי נופש לאורך החוף המזרחי למרגלות הר פנטוקראטור, המציעה ספורט מים, ברים ומסעדות.",
+          "category": "Urban",
+          "sources": [
+            "masa.co.il",
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "ספרטילאס ו-ולאניו (Spartilas & Valanio)",
+          "description": "כפרים הרריים מסורתיים בצפון האי המשמשים כנקודות מעבר ותצפית לאורך מסלולי הטיול.",
+          "category": "Urban",
+          "sources": [
+            "wikiloc.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        }
+      ]
+    },
+    {
+      "name": "מערב ומרכז קורפו (פליאוקסטריצה, גליפדה ועמק רופה)",
+      "places": [
+        {
+          "name": "פליאוקסטריצה (Paleokastritsa)",
+          "description": "מפרץ ציורי מהיפים באי, המוקף גבעות מיוערות, צוקים ומי טורקיז. המקום מציע חופים מרהיבים, מערות ימיות, טברנות דגים והשכרת סירות.",
+          "category": "Nature",
+          "sources": [
+            "masa.co.il",
+            "lonelyplanet.com",
+            "nomadicmatt.com",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מנזר תאוטוקו (Theotokos Monastery)",
+          "description": "מנזר היסטורי מהמאה ה-13 השוכן על צוק מעל מפרץ פליאוקסטריצה, ובו גנים מטופחים, מוזיאון קטן ותצפית מרהיבה על הים.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "מבצר אנגלוקסטרו (Angelokastro Castle)",
+          "description": "מבצר ביזנטי מרשים מהמאה ה-13 הניצב על צוק תלול מעל הים בסמוך לפליאוקסטריצה ומציע נופים פנורמיים עוצרי נשימה.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "חופי ומערות ליאפאדס (Liapades, Rovinia & Paradise Beach)",
+          "description": "אזור חופי בתולי ומפרצים נסתרים הסמוכים לליאפאדס, בהם חוף רוביניה, חוף פרדייז, חוף סטלארי ומערת ליניודורוס, הנגישים בעיקר בסירות.",
+          "category": "Nature",
+          "sources": [
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "לה גרוטה (La Grotta)",
+          "description": "מפרץ סלעי ייחודי ובר חוף מפורסם בתוך נקרת סלע בפליאוקסטריצה, המציע מים צלולים וקפיצה למים.",
+          "category": "Attraction",
+          "sources": [
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "אקווריום קורפו (Corfu Aquarium)",
+          "description": "אקווריום בפליאוקסטריצה המציג מיני דגים, זוחלים ובעלי חיים ימיים האופייניים לים היוני.",
+          "category": "Attraction",
+          "sources": [
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "חוף גליפדה (Glifada)",
+          "description": "אחד החופים החוליים היפים והפופולריים ביותר באי, המוקף צוקים דרמטיים ומציע מגוון פעילויות ספורט מים וטברנות.",
+          "category": "Nature",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "איוס גורדיוס (Agios Gordios)",
+          "description": "עיירת חוף נעימה עם רצועת חוף חולית רחבה המוקפת הרים ירוקים, מסעדות ומלונות למול הים.",
+          "category": "Nature",
+          "sources": [
+            "masa.co.il",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "הכפר פלאקאס ותצפית כיסא הקיסר (Pelekas & Kaiser's Throne)",
+          "description": "כפר הררי ציורי שבראשו תצפית שבנה קיסר גרמניה וילהלם השני, המציעה פנורמה מרהיבה על כל מרחבי האי והשקיעה.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "פארק המים אקוולנד (Aqualand Corfu)",
+          "description": "פארק מים גדול במרכז האי הכולל עשרות מגלשות, בריכות גלים ומתקני מים לכל הגילאים.",
+          "category": "Attraction",
+          "sources": [
+            "gotravel.co.il",
+            "nomadicmatt.com",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "אחוזת תיאוטוקי (Theotoky Estate)",
+          "description": "יקב היסטורי ואחוזה חקלאית בעמק רופה המציעה סיורים בכרמים, טעימות יין ומוזיאון יין קטן.",
+          "category": "Food",
+          "sources": [
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "יקב אמבלונס קורפו (Ambelonas Corfu)",
+          "description": "יקב ומסעדה כפרית המציגים זני ענבים מקומיים, מורשת חקלאית וטעימות יין מקומיות.",
+          "category": "Food",
+          "sources": [
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "גוביה, קונדוקאלי ודסיה (Gouvia, Kontokali & Dassia)",
+          "description": "אתרי נופש ומרינה מרכזית ליאכטות מצפון לעיר קורפו, הכוללים חופים, שפע מסעדות, מלונות וחיי לילה.",
+          "category": "Urban",
+          "sources": [
+            "masa.co.il",
+            "wikiloc.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "חוף ומלון אקרוטירי ביץ' (Akrotiri Beach & Agia Triada)",
+          "description": "מלון נופש השוכן על חצי אי במערב קורפו לצד חוף ומפרץ אגיה טריאדה השליו.",
+          "category": "Sleep",
+          "sources": [
+            "gotravel.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "The Pink Palace",
+          "description": "הוסטל מסיבות מפורסם בחוף המערבי של קורפו, הפופולרי בקרב צעירים ותרמילאים.",
+          "category": "Sleep",
+          "sources": [
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "Kalisto Resorts",
+          "description": "מתחם וילות ודירות אירוח השוכן מעל הכפר פלאקאס ומציע נופים פנורמיים ירוקים.",
+          "category": "Sleep",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "חוף יאליסקארי (Yaliskari Beach Studios)",
+          "description": "חוף קטן ואינטימי בחוף המערבי שלצידו פועל מתחם אירוח וטברנה כפרית.",
+          "category": "Sleep",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        }
+      ]
+    },
+    {
+      "name": "דרום קורפו (כולל בניטצ'ס, קאבוס ואגם קוריסיה)",
+      "places": [
+        {
+          "name": "ארמון האכיליון (Achilleion Palace)",
+          "description": "ארמון קיץ מפואר שהוקם בשנת 1890 עבור אליזבת קיסרית אוסטריה (סיסי) ושימש בהמשך את הקייזר וילהלם השני. הארמון מציע גנים מרהיבים, פסלי מיתולוגיה יוונית ותצפית פנורמית.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il",
+            "lonelyplanet.com",
+            "nomadicmatt.com",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "בניטצ'ס (Benitses)",
+          "description": "כפר דייגים שהפך לעיירת נופש שוקקת עם טברנות, חופים נעימים, ומסלולי הליכה בטבע של 'עמק האזמרגד'.",
+          "category": "Urban",
+          "sources": [
+            "masa.co.il",
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "אגם קוריסיה, חוף חליקורנאס וחוף איסוס (Lake Korissia & Issos Beach)",
+          "description": "שמורת טבע בדרום קורפו הכוללת אגם עשיר בעופות מים (כולל פלמינגו), דיונות חול פראיות ורצועות חוף חוליות ורחבות.",
+          "category": "Nature",
+          "sources": [
+            "masa.co.il",
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "חוף גרדנו (Gardeno Beach)",
+          "description": "חוף חולי ושקט בדרום קורפו המגובה בצוקים מרשימים ומציע מפלט שקט ופחות מתויר.",
+          "category": "Nature",
+          "sources": [
+            "tzatchickie.gr"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "אגיוס גאורגיוס דרום (Agios Georgios South)",
+          "description": "רצועת חוף ארוכה בדרום קורפו הנחשבת לאזור מומלץ לצלילה ולנופש רגוע.",
+          "category": "Nature",
+          "sources": [
+            "masa.co.il",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "קאבוס (Kavos)",
+          "description": "עיירת נופש בקצה הדרומי של קורפו, הידועה בחיי לילה תוססים ובסמיכות לנקודת ההתחלה של שביל קורפו.",
+          "category": "Urban",
+          "sources": [
+            "masa.co.il",
+            "wikiloc.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "חוות שמן הזית The Governor (אגיוס מתאוס)",
+          "description": "בית בד ומפיק שמן זית עטור פרסים באזור הר אגיוס מתאוס, המציע סיורים וטעימות שמן זית מסורתי.",
+          "category": "Food",
+          "sources": [
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מוזיאון הזית דונאטוס פאיפטיס (Donatos Paipetis Olive Museum)",
+          "description": "מוזיאון בכפר קינופיאסטס המשמר את מסורת גידול עצי הזית והפקת שמן הזית ההיסטורית של קורפו.",
+          "category": "Attraction",
+          "sources": [
+            "discovergreece.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מלחת אליקס (Alykes Salt Wetland)",
+          "description": "אתר טבע ומלחה היסטורית בדרום האי המהווה מוקד משיכה לחובבי טבע וצפרות.",
+          "category": "Nature",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "מלון אנגסאנה קורפו (Angsana Corfu Resort & Spa)",
+          "description": "אתר נופש יוקרתי על צלע הר מדרום לבירת קורפו הכולל וילות, בריכת אינפיניטי וספא מפואר.",
+          "category": "Sleep",
+          "sources": [
+            "gotravel.co.il"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "לומוס (Lomous)",
+          "description": "נקודת עניין נופית בדרום האי קורפו.",
+          "category": "Attraction",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        }
+      ]
+    },
+    {
+      "name": "טרק שביל קורפו (The Corfu Trail)",
+      "places": [
+        {
+          "name": "שביל קורפו (The Corfu Trail)",
+          "description": "מסלול הליכה מרהיב לאורך יותר מ-150-200 ק\"מ החוצה את קורפו מקאבוס בדרום ועד צפון האי. השביל עובר בכפרים נידחים, חופים, חורשות זיתים ורכסי הרים.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com",
+            "wikiloc.com",
+            "nomadicmatt.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "אירוח לאורך שביל קורפו (Mejanis, Haus Basilika, Pension Skala, Bella Vista)",
+          "description": "פנסיונים ובתי הארחה כפריים המשמשים כנקודות לינה לצועדים במקטעים השונים של טרק שביל קורפו.",
+          "category": "Sleep",
+          "sources": [
+            "wikiloc.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        }
+      ]
+    },
+    {
+      "name": "איים סמוכים וסיורי יום (פאקסוס, דיאפונטיה, לפקדה ואלבניה)",
+      "places": [
+        {
+          "name": "האי פאקסוס והעיירה גאיוס (Paxos & Gaios)",
+          "description": "אי שליו מדרום לקורפו המפורסם במצוקי גיר מרשימים, נקרות ים כחולות, מטעי זיתים ועיירת נמל ציורית.",
+          "category": "Nature",
+          "sources": [
+            "masa.co.il",
+            "gotravel.co.il"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "האי אנטי-פאקסוס (Antipaxos)",
+          "description": "אי זעיר ופסטורלי דרומית לפאקסוס הידוע בחופים עם חול בהיר ומי טורקיז צלולים במיוחד.",
+          "category": "Nature",
+          "sources": [
+            "gotravel.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "איי דיאפונטיה (Diapontia Islands: Othoni, Erikousa, Mathraki)",
+          "description": "שלושה איים נידחים ושלווים מצפון-מערב לקורפו, המציעים חופים שקטים, כפרים אותנטיים ומפלט מההמונים.",
+          "category": "Nature",
+          "sources": [
+            "lonelyplanet.com"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "אתר העתיקות בוטרינט (Butrint, Albania)",
+          "description": "אתר עתיקות היסטורי ופארק לאומי באלבניה, השוכן מול חופי קורפו ונגיש בשיט קצר מהאי.",
+          "category": "Attraction",
+          "sources": [
+            "atlasobscura.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "האי לפקדה (Lefkada)",
+          "description": "אי יוני סמוך הכולל את העיר לפקדה, מפרץ מיקרוס גיאלוס, עיירת הנמל נידרי, חוף פורטו קציקי המפורסם ועיירת הגלישה ואסיליקי.",
+          "category": "Nature",
+          "sources": [
+            "gotravel.co.il"
+          ],
+          "coordinates": null,
+          "recommended": true
+        },
+        {
+          "name": "האי סקורפיוס (Skorpios)",
+          "description": "אי פרטי מול נידרי בלפקדה שהיה בבעלות משפחת אונאסיס ובו קבורים בני המשפחה.",
+          "category": "Attraction",
+          "sources": [
+            "gotravel.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "האי זקינתוס - קמפינג Tartaruga",
+          "description": "אתר קמפינג על מצוקי האי זקינתוס בים היוני המשקיף על חוף ומים צלולים.",
+          "category": "Sleep",
+          "sources": [
+            "masa.co.il"
+          ],
+          "coordinates": null,
+          "recommended": false
+        },
+        {
+          "name": "האי נקוס (Naxos Town)",
+          "description": "עיירת הנמל המרכזית באי נקוס בארכיפלג הקיקלאדיים שביוון.",
+          "category": "Urban",
+          "sources": [
+            "ricksteves.com"
+          ],
+          "coordinates": null,
+          "recommended": false
+        }
+      ]
+    }
+  ]
+}

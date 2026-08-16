@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<title>Route Planner — Corfu</title>
+<style>
+  html, body { height: 100%; margin: 0; font-family: -apple-system, Segoe UI, Arial, sans-serif; }
+  #app { display: flex; height: 100%; }
+  #map { flex: 1 1 auto; height: 100%; }
+  #sidebar { width: 400px; flex: 0 0 400px; height: 100%; overflow-y: auto; border-right: 3px solid #ddd; box-sizing: border-box; padding: 16px; background: #fafafa; direction: rtl; text-align: right; }
+  /* Phone: the 400px fixed sidebar next to the map was the real cause of
+     horizontal overflow on narrow screens -- stack map above list instead
+     of side-by-side, each full width. */
+  @media (max-width: 768px) {
+    #app { flex-direction: column; }
+    #map { flex: 0 0 42vh; height: 42vh; }
+    #sidebar { width: 100%; flex: 1 1 auto; height: auto; border-right: none; border-top: 3px solid #ddd; }
+  }
+  h2 { margin-top: 0; font-size: 18px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; font-size: 12px; }
+  .legend span { display: inline-flex; align-items: center; gap: 4px; }
+  .legend-rec { font-size: 12px; color: #7a5b00; margin-bottom: 14px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.3); flex-shrink: 0; }
+  .region-title { font-weight: bold; margin: 16px 0 6px; font-size: 14px; color: #222; background: #eee; padding: 4px 8px; border-radius: 4px; }
+  .sleep-subheader { font-size: 11px; font-weight: bold; color: #1a1a4e; margin: 6px 0 3px; padding-inline-start: 4px; }
+  .region-days-row { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: normal; color: #444; margin-top: 4px; }
+  .region-days-row select { font-size: 11.5px; padding: 1px 4px; border-radius: 4px; border: 1px solid #ccc; }
+  .region-title:hover { background: #e0e0e0; }
+  .region-title-row { display: flex; align-items: center; gap: 6px; }
+  .region-label { cursor: pointer; flex: 1 1 auto; }
+  .region-dist { display: block; font-weight: normal; font-size: 11px; color: #555; margin-top: 2px; margin-inline-start: 24px; }
+  .poi-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 13px; }
+  .poi-row:hover { background: #f0f0f0; }
+  .poi-row .dot { flex: 0 0 auto; cursor: pointer; }
+  .poi-row .poi-name { flex: 1 1 auto; cursor: pointer; }
+  .sleep-tag { font-size: 10px; background: #1a1a4e; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
+  .rec-tag { font-size: 10px; background: #b8860b; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
+  .rec-star { font-size: 12px; margin-inline-start: 4px; flex-shrink: 0; }
+  #confirmBtn { width: 100%; margin-top: 16px; padding: 12px; font-size: 15px; font-weight: bold; background: #1a7a3c; color: white; border: none; border-radius: 6px; cursor: pointer; position: sticky; bottom: 0; }
+  #confirmBtn:hover { background: #145c2d; }
+  #backBtn { width: 100%; margin-top: 8px; padding: 8px; font-size: 13px; background: #eee; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; }
+  #routeSummary { margin-top: 16px; font-size: 13px; }
+  #routeSummary .leg { padding: 8px; margin-bottom: 6px; background: white; border-inline-start: 4px solid #1a7a3c; border-radius: 4px; }
+  #status { font-size: 12px; color: #888; margin-top: 10px; }
+  .hidden { display: none !important; }
+  .info-desc { font-size: 12px; max-width: 260px; line-height: 1.5; }
+  .info-source { font-size: 11px; margin-top: 6px; }
+  .info-rec { font-size: 11px; color: #b8860b; font-weight: bold; margin-top: 4px; }
+  .selectAllRow { font-size: 12px; margin-bottom: 8px; }
+  .selectAllRow a { cursor: pointer; color: #1a5fb4; margin-inline-end: 10px; }
+  .filterRow { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .filterBtn { font-size: 11px; padding: 4px 9px; border-radius: 12px; border: 1.5px solid #ccc; background: #fff; cursor: pointer; color: #333; }
+  .filterBtn[data-cat]:not([data-cat="all"]) { border-color: var(--cat-color); color: var(--cat-color); }
+  .filterBtn.active { color: #fff; background: #555; border-color: #555; font-weight: bold; }
+  .filterBtn.active[data-cat]:not([data-cat="all"]) { background: var(--cat-color); }
+  #suggestBtn { width: 100%; margin-top: 10px; padding: 10px; font-size: 13px; font-weight: bold; background: #1a5fb4; color: white; border: none; border-radius: 6px; cursor: pointer; }
+  #fullViewBtn { width: 100%; margin-bottom: 10px; padding: 9px; font-size: 12.5px; font-weight: bold; background: #fff; color: #1a5fb4; border: 1.5px solid #1a5fb4; border-radius: 6px; cursor: pointer; }
+  #fullViewBtn:hover { background: #eef4fc; }
+  #suggestBtn:hover { background: #124a8f; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="map"></div>
+  <div id="sidebar">
+    <h2>מסלול קורפו - יוון — כל נקודות העניין</h2>
+    <button id="fullViewBtn">🗺️ תצוגה מלאה — כל האזורים</button>
+    <div class="filterRow" id="filterRow">
+      <button class="filterBtn active" data-cat="all">הצג הכל</button>
+      <button class="filterBtn" data-cat="Nature" style="--cat-color:#27ae60">טבע</button>
+      <button class="filterBtn" data-cat="City" style="--cat-color:#8e44ad">עיר</button>
+      <button class="filterBtn" data-cat="Beach" style="--cat-color:#2980b9">חוף</button>
+      <button class="filterBtn" data-cat="Attraction" style="--cat-color:#e67e22">אטרקציה</button>
+      <button class="filterBtn" data-cat="Food" style="--cat-color:#c0392b">אוכל</button>
+      <button class="filterBtn" data-cat="Sleep" style="--cat-color:#1a1a4e">לינה</button>
+    </div>
+    <div class="legend">
+      <span><span class="dot" style="background:#27ae60"></span>טבע</span>
+      <span><span class="dot" style="background:#8e44ad"></span>עיר</span>
+      <span><span class="dot" style="background:#2980b9"></span>חוף</span>
+      <span><span class="dot" style="background:#e67e22"></span>אטרקציה</span>
+      <span><span class="dot" style="background:#c0392b"></span>אוכל</span>
+      <span><span class="dot" style="background:#1a1a4e"></span>לינה</span>
+    </div>
+    <div class="legend-rec">⭐ = מומלץ — מקורות מרובים מציינים כ"חובה לראות"</div>
+    <div class="selectAllRow"><a id="selectAll">בחר הכל</a><a id="clearAll">נקה הכל</a></div>
+    <div id="checklist">טוען נקודות...</div>
+    <button id="suggestBtn">💡 הצע בחירה מתאימה לטיול</button>
+    <button id="confirmBtn">✅ נעילת הבחירה הסופית</button>
+    <button id="backBtn" class="hidden">⬅ חזרה לעריכת הרשימה</button>
+    <div id="routeSummary"></div>
+    <div id="status"></div>
+  </div>
+</div>
+
+<script>
+// Sent along with the confirmed selection so the local server knows which
+// destination folder to write <Destination>_Selection.json into. Must match
+// this destination's actual folder name exactly.
+const DESTINATION_NAME = "קורפו - יוון";
+const GEOCODE_COUNTRY = "GR";
+const MAIN_CITY_QUERY = "Corfu Town, Corfu";
+const MAIN_CITY_NAME = "העיר קורפו";
+const MAIN_CITY_REGION = "העיר קורפו וסביבתה (קרקירה)";
+const MAIN_CITY_LATLNG = {"lat":39.6243,"lng":19.9217};
+const ONE_HOUR_DRIVE_M = 65000;
+const LOCAL_SERVER_URL = 'http://localhost:8234/confirm-selection';
+// Computed once from מילאנו_Trip_Input.md at generation time (22-23.7 = two full trip
+// days, inclusive of arrival and departure day; emphases are shopping/walking/food with
+// no car -- a light, unhurried pace) -- the auto-suggest heuristic below reads these but
+// never parses dates itself. Days, not nights: a 2-day/1-night trip plans for 2 full days.
+const TRIP_DAYS = 5;
+const TRIP_PACE = "רגוע";
+
+const CATEGORY_COLORS = {
+  Nature: '#27ae60', City: '#8e44ad', Beach: '#2980b9',
+  Attraction: '#e67e22', Food: '#c0392b', Sleep: '#1a1a4e'
+};
+const CATEGORY_LABELS_HE = {
+  Nature: 'טבע', City: 'עיר', Beach: 'חוף', Attraction: 'אטרקציה', Food: 'אוכל', Sleep: 'לינה'
+};
+
+// Full point-of-interest list, extracted from מילאנו_Master_Plan.md (all 8 regions).
+const REGIONS = [
+  {
+    "region": "העיר קורפו וסביבתה (קרקירה)",
+    "points": [
+      {
+        "id": "p1",
+        "name": "העיר קורפו (קרקירה) והעיר העתיקה",
+        "query": "העיר קורפו (קרקירה) והעיר העתיקה, Corfu",
+        "category": "City",
+        "rec": true,
+        "desc": "עיר הבירה של קורפו, שהוכרזה כאתר מורשת עולמית של אונסק\"ו, מתאפיינת באווירה מיוחדת עם השפעות ונציאניות, בריטיות וצרפתיות הניכרות במבנים, בבתי האחוזה, בכיכרות ובסמטאות הצרות (קנטוניה). בעיר פועלים מוזיאונים מרתקים, כנסיות היסטוריות, פאבים ומסעדות.",
+        "source": "masa.co.il / lonelyplanet.com / ricksteves.com / wikiloc.com / nomadicmatt.com / tzatchickie.gr / discovergreece.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "spianada2",
+        "name": "טיילת וכיכר הספיאנאדה (Spianada)",
+        "query": "טיילת וכיכר הספיאנאדה (Spianada), Corfu",
+        "category": "City",
+        "rec": true,
+        "desc": "הכיכר הציבורית הגדולה ביותר ביוון וטיילת יפהפייה שלאורכה נטועים גנים ירוקים ומטופחים. הכיכר שוכנת לרגלי המצודה העתיקה וכוללת אכסדרת עמודים מרשימה ומגרש קריקט, ומהווה מוקד מרכזי לטיול רגלי בעיר.",
+        "source": "masa.co.il / gotravel.co.il / lonelyplanet.com / nomadicmatt.com / discovergreece.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "liston3",
+        "name": "מתחם הליסטון (Liston)",
+        "query": "מתחם הליסטון (Liston), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "ארקדת מבנים מקושתים מפוארת שנבנתה בתקופת הכיבוש הצרפתי בהשראת רחוב ריבולי בפריז. המקום שוכן בכיכר הספיאנאדה ומאכלס את בתי הקפה האלגנטיים ביותר באי לצד חנויות ומסעדות.",
+        "source": "masa.co.il / lonelyplanet.com / wikiloc.com / nomadicmatt.com / tzatchickie.gr / discovergreece.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "oldfortresspalaiofrourio4",
+        "name": "המבצר הישן (Old Fortress / Palaio Frourio)",
+        "query": "המבצר הישן (Old Fortress / Palaio Frourio), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "מבצר ונציאני מרשים שנבנה במאה ה-15 על חצי אי סלעי במקום שבו שכנה הבירה הביזנטית. המבצר כולל תערוכות היסטוריות ומציע תצפית פנורמית מרהיבה על העיר קורפו והים.",
+        "source": "masa.co.il / gotravel.co.il / lonelyplanet.com / ricksteves.com / nomadicmatt.com / tzatchickie.gr / discovergreece.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "newfortressneofrourio5",
+        "name": "המבצר החדש (New Fortress / Neo Frourio)",
+        "query": "המבצר החדש (New Fortress / Neo Frourio), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "מבצר ונציאני מהמאה ה-16 המוקף חומות אבן ומגדלים, המתנשא מעל העיר העתיקה והנמל ומציע נקודת תצפית יפהפייה על קורפו וקו החוף.",
+        "source": "masa.co.il / gotravel.co.il / ricksteves.com / wikiloc.com / nomadicmatt.com / discovergreece.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "agiosspyridon6",
+        "name": "כנסיית איוס ספירידון (Agios Spyridon)",
+        "query": "כנסיית איוס ספירידון (Agios Spyridon), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "כנסייה יוונית-אורתודוקסית מהמאה ה-16 עם מגדל פעמונים בולט. בכנסייה שמור ארון כסף ובו גופתו החנוטה של הקדוש ספירידון, פטרון האי שנודע כמחולל ניסים, לצד אוסף פריטי כסף וציורי קיר מרהיבים.",
+        "source": "masa.co.il / atlasobscura.com / nomadicmatt.com / tzatchickie.gr",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "monrepos7",
+        "name": "ארמון ופארק מון רפו (Mon Repos)",
+        "query": "ארמון ופארק מון רפו (Mon Repos), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "ארמון היסטורי שבו נולד הנסיך פיליפ, השוכן בתוך פארק ירוק ומטופח מול שרידי פליאופוליס. במקום פועל מוזיאון המציג ממצאים ארכיאולוגיים עתיקים ושבילי הליכה נעימים.",
+        "source": "masa.co.il / wikiloc.com / nomadicmatt.com / tzatchickie.gr",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "p8",
+        "name": "המוזיאון לאמנות המזרח הרחוק וארמון מייקל וג'ורג'",
+        "query": "המוזיאון לאמנות המזרח הרחוק וארמון מייקל וג'ורג', Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "מוזיאון ייחודי השוכן בארמון ניאו-קלאסי מפואר בעיר קורפו, המוקדש לאמנות ותרבות ממדינות אסיה וכולל שריונים, פרגודים ויצירות אמנות אותנטיות.",
+        "source": "masa.co.il / atlasobscura.com / discovergreece.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "p9",
+        "name": "המוזיאון הארכיאולוגי של קורפו",
+        "query": "המוזיאון הארכיאולוגי של קורפו, Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "מוזיאון המציג אוסף עשיר של עתיקות שנמצאו ברחבי האי, ביניהן גמלון האבן העתיק של מקדש ארטמיס עם דמות הגורגונה מדוזה ופסל אריה האבן של מנקראטס.",
+        "source": "masa.co.il / nomadicmatt.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "kanonipontikonisi10",
+        "name": "קאנוני, מנזר ולאכרנה ואי העכבר (Kanoni & Pontikonisi)",
+        "query": "קאנוני, מנזר ולאכרנה ואי העכבר (Kanoni & Pontikonisi), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "אזור תצפית מפורסם הצופה אל מסלול הנחיתה של שדה התעופה בלגונה, מנזר ולאכרנה הלבן הניצב על המים, ואי העכבר (פונטיקוניסי) הירוק אליו ניתן לשוט בסירה קצרה.",
+        "source": "gotravel.co.il / wikiloc.com / nomadicmatt.com / tzatchickie.gr",
+        "url": "https://gotravel.co.il"
+      },
+      {
+        "id": "cafekanoni11",
+        "name": "קפה קאנוני (Cafe Kanoni)",
+        "query": "קפה קאנוני (Cafe Kanoni), Corfu",
+        "category": "Food",
+        "rec": false,
+        "desc": "בית קפה ברובע קאנוני המציע טרסה עם תצפית מרהיבה על מסלול ההמראה והנחיתה של שדה התעופה ועל אי העכבר.",
+        "source": "gotravel.co.il",
+        "url": "https://gotravel.co.il"
+      },
+      {
+        "id": "banknotemuseum12",
+        "name": "מוזיאון השטרות של הבנק היוני (Banknote Museum)",
+        "query": "מוזיאון השטרות של הבנק היוני (Banknote Museum), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "מוזיאון השוכן במבנה היסטורי משנת 1839 בכיכר הגיבורים, המציג שטרות, מטבעות ומסמכים בנקאיים מ-1822 ועד עידן האירו, כולל שטר נדיר של 100 מיליארד דרכמות.",
+        "source": "atlasobscura.com / nomadicmatt.com",
+        "url": "https://atlasobscura.com"
+      },
+      {
+        "id": "casaparlante13",
+        "name": "קאסה פרלנטה (Casa Parlante)",
+        "query": "קאסה פרלנטה (Casa Parlante), Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "מוזיאון חי והיסטורי בעיר קורפו המציג המחשה מוחשית לאורח חייה של משפחת אצולה מקומית במהלך המאה ה-19.",
+        "source": "nomadicmatt.com",
+        "url": "https://nomadicmatt.com"
+      },
+      {
+        "id": "campiello14",
+        "name": "שכונת קמפיילו (Campiello)",
+        "query": "שכונת קמפיילו (Campiello), Corfu",
+        "category": "City",
+        "rec": true,
+        "desc": "הרובע העתיק והציורי ביותר בעיר קורפו, המתאפיין באווירה ונציאנית ייחודית, סמטאות מרוצפות אבן צרות ומבנים היסטוריים.",
+        "source": "ricksteves.com / discovergreece.com",
+        "url": "https://ricksteves.com"
+      },
+      {
+        "id": "centralmarket15",
+        "name": "השוק המרכזי של קורפו (Central Market)",
+        "query": "השוק המרכזי של קורפו (Central Market), Corfu",
+        "category": "Food",
+        "rec": true,
+        "desc": "שוק עירוני תוסס ליד המבצר החדש, המציע דגה טרייה, פירות, ירקות, דבש מקומי, ליקרים וממתקי קומקוואט.",
+        "source": "ricksteves.com / discovergreece.com",
+        "url": "https://ricksteves.com"
+      },
+      {
+        "id": "patounissoapfactory16",
+        "name": "מפעל הסבון פאטוניס (Patounis Soap Factory)",
+        "query": "מפעל הסבון פאטוניס (Patounis Soap Factory), Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "יצרן הסבון המסורתי היחיד מהמאה ה-19 שעדיין פועל בקורפו ומייצר סבונים טבעיים משמן זית מקומי בשיטות מסורתיות.",
+        "source": "discovergreece.com",
+        "url": "https://discovergreece.com"
+      },
+      {
+        "id": "alexisperiklisdairyshop17",
+        "name": "מחלבת אלקסיס פריקליס (Alexis Periklis Dairy Shop)",
+        "query": "מחלבת אלקסיס פריקליס (Alexis Periklis Dairy Shop), Corfu",
+        "category": "Food",
+        "rec": true,
+        "desc": "חנות חלב ומעדנייה הפועלת מאז 1935, המפורסמת בחמאה מיוחדת, יוגורט וקינוח גלקטובורקו מסורתי.",
+        "source": "discovergreece.com",
+        "url": "https://discovergreece.com"
+      },
+      {
+        "id": "corfubritishcemetery18",
+        "name": "בית הקברות הבריטי (Corfu British Cemetery)",
+        "query": "בית הקברות הבריטי (Corfu British Cemetery), Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "בית קברות היסטורי ושליו בעיר קורפו המשמש עדות למורשת ולתקופת השלטון הבריטי באי.",
+        "source": "atlasobscura.com",
+        "url": "https://atlasobscura.com"
+      },
+      {
+        "id": "p19",
+        "name": "המוזיאון הביזנטי ומנזר פלאטיטרה",
+        "query": "המוזיאון הביזנטי ומנזר פלאטיטרה, Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "אתרי מורשת ותרבות בעיר קורפו הכוללים תצוגות של היסטוריה ביזנטית ואתרי פולחן היסטוריים.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "p20",
+        "name": "כנסיית אייה קרקירה (פיאופוליס)",
+        "query": "כנסיית אייה קרקירה (פיאופוליס), Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "כנסייה היסטורית בעיר קורפו המהווה את אחד ממוקדי העניין הדתיים בבירת האי.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "p21",
+        "name": "מוזיאון קפודיסטריאס",
+        "query": "מוזיאון קפודיסטריאס, Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "מוזיאון בעיר קורפו המוקדש לקורות חייו ופועלו של יואניס קפודיסטריאס.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "vidosisland22",
+        "name": "האי וידוס (Vidos Island)",
+        "query": "האי וידוס (Vidos Island), Corfu",
+        "category": "Nature",
+        "rec": false,
+        "desc": "אי ירוק ושקט השוכן במרחק הפלגה קצר מול העיר קורפו, ומציע שבילי הליכה קלים וטבע שליו.",
+        "source": "wikiloc.com",
+        "url": "https://wikiloc.com"
+      },
+      {
+        "id": "mantouki23",
+        "name": "מנטוקי (Mantouki)",
+        "query": "מנטוקי (Mantouki), Corfu",
+        "category": "City",
+        "rec": false,
+        "desc": "אזור פרברי סמוך לעיר קורפו הנכלל במסלולי טיול והליכה רגליים.",
+        "source": "wikiloc.com",
+        "url": "https://wikiloc.com"
+      },
+      {
+        "id": "bellavenezia24",
+        "name": "מלון Bella Venezia",
+        "query": "מלון Bella Venezia, Corfu",
+        "category": "Sleep",
+        "rec": false,
+        "desc": "מלון בוטיק יוקרתי השוכן בתוך וילה ניאו-קלאסית ברחוב שליו במרכז העיר קורפו, עם טרסת גן מטופחת.",
+        "source": "lonelyplanet.com",
+        "url": "https://lonelyplanet.com"
+      },
+      {
+        "id": "hippodromeapokalypsisdna25",
+        "name": "מועדוני לילה באזור הנמל החדש (Hippodrome, Apokalypsis, DNA)",
+        "query": "מועדוני לילה באזור הנמל החדש (Hippodrome, Apokalypsis, DNA), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "מתחם מועדוני הלילה המרכזי של קורפו סמוך לנמל החדש, המציע מסיבות וחיי לילה תוססים.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "hoponhopoff26",
+        "name": "סיור אוטובוס תיירים קורפו (Hop-On Hop-Off)",
+        "query": "סיור אוטובוס תיירים קורפו (Hop-On Hop-Off), Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "אוטובוס תיירים דו-קומתי המאפשר סיור פנורמי וגישה נוחה בין אתריה המרכזיים של העיר.",
+        "source": "ricksteves.com",
+        "url": "https://ricksteves.com"
+      },
+      {
+        "id": "faliraki27",
+        "name": "טברנה Faliraki",
+        "query": "טברנה Faliraki, Corfu",
+        "category": "Food",
+        "rec": false,
+        "desc": "טברנה מסורתית השוכנת למרגלות המבצר העתיק ומשקיפה ישירות על הים.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      }
+    ]
+  },
+  {
+    "region": "צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)",
+    "points": [
+      {
+        "id": "canaldamour28",
+        "name": "תעלת האהבה (Canal d'Amour)",
+        "query": "תעלת האהבה (Canal d'Amour), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "תצורת סלע טבעית מרהיבה מאבן חול עם תעלות ומפרצי רחצה בסידארי. על פי האגדה המקומית, זוגות ששוחים יחד בתעלה יישארו מאוהבים לנצח.",
+        "source": "masa.co.il / lonelyplanet.com / tzatchickie.gr",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "sidari29",
+        "name": "סידארי (Sidari)",
+        "query": "סידארי (Sidari), Corfu",
+        "category": "City",
+        "rec": true,
+        "desc": "עיירת נופש בצפון האי המציעה חופים חוליים רחבים, טברנות, בתי קפה, פעילויות ספורט מים והפלגות לאורך המפרצים.",
+        "source": "masa.co.il / lonelyplanet.com / nomadicmatt.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "capedrastis30",
+        "name": "מצוק דראסטיס (Cape Drastis)",
+        "query": "מצוק דראסטיס (Cape Drastis), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "תצורות סלע לבנות ומרשימות המזדקרות אל תוך מי תכלת צלולים בקצה הצפוני של קורפו, המהוות מוקד מרהיב לתצפית שקיעה ולשחייה.",
+        "source": "masa.co.il / tzatchickie.gr",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "7thheavenlogasbeach31",
+        "name": "חוף לוגאס וקפה 7th Heaven (Logas Beach)",
+        "query": "חוף לוגאס וקפה 7th Heaven (Logas Beach), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "חוף עוצר נשימה מתחת לצוקי אבן חול תלולים בכפר פרולאדס, עם בר-קפה הצופה לנופי שקיעה מרהיבים מעל הים.",
+        "source": "tzatchickie.gr",
+        "url": "https://tzatchickie.gr"
+      },
+      {
+        "id": "portotimoni32",
+        "name": "פורטו טימוני (Porto Timoni)",
+        "query": "פורטו טימוני (Porto Timoni), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "תופעת טבע ייחודית של שני חופים מרהיבים גב-אל-גב עם מי טורקיז, אליהם מגיעים במסלול הליכה מהכפר אפיאונס או בסירה.",
+        "source": "lonelyplanet.com / tzatchickie.gr",
+        "url": "https://lonelyplanet.com"
+      },
+      {
+        "id": "mountpantokrator33",
+        "name": "הר ומנזר הפנדוקראטור (Mount Pantokrator)",
+        "query": "הר ומנזר הפנדוקראטור (Mount Pantokrator), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "ההר הגבוה ביותר בקורפו (906 מטרים). בפסגתו שוכנים מנזר היסטורי ובית קפה, והוא מציע תצפית פנורמית של 360 מעלות על האי כולו, חופי אלבניה ואיטליה.",
+        "source": "masa.co.il / atlasobscura.com / tzatchickie.gr",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "paleaperithia34",
+        "name": "הכפר פריתיה העתיקה (Palea Perithia)",
+        "query": "הכפר פריתיה העתיקה (Palea Perithia), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "כפר ביזנטי עתיק מהמאה ה-14 על מדרונות הר פנטוקראטור. הכפר כולל שרידי בתי אבן היסטוריים (כמו אחוזת סקורדיליס), שבילי טיול וטברנות מסורתיות.",
+        "source": "atlasobscura.com / wikiloc.com / discovergreece.com",
+        "url": "https://atlasobscura.com"
+      },
+      {
+        "id": "newperithia35",
+        "name": "ניו פריתיה (New Perithia)",
+        "query": "ניו פריתיה (New Perithia), Corfu",
+        "category": "City",
+        "rec": false,
+        "desc": "כפר יווני מסורתי בקרבת כביש החוף הצפוני, הכולל טברנות, בית בד וחנויות מקומיות.",
+        "source": "atlasobscura.com",
+        "url": "https://atlasobscura.com"
+      },
+      {
+        "id": "kassiopi36",
+        "name": "קסיופי (Kassiopi)",
+        "query": "קסיופי (Kassiopi), Corfu",
+        "category": "City",
+        "rec": true,
+        "desc": "כפר דייגים ציורי בצפון-מזרח קורפו עם נמל מסורתי, שרידי טירה ביזנטית, חופי חלוקים יפהפיים, מסעדות דגים וטברנות מול המים.",
+        "source": "masa.co.il / lonelyplanet.com / nomadicmatt.com / tzatchickie.gr",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "nymfesvillageaskitario37",
+        "name": "הכפר נימפס ומפלי נימפס (Nymfes Village & Askitario)",
+        "query": "הכפר נימפס ומפלי נימפס (Nymfes Village & Askitario), Corfu",
+        "category": "Nature",
+        "rec": false,
+        "desc": "כפר פסטורלי המוקף מטעי זיתים ומפלי מים שבהם לפי המיתולוגיה רחצו נימפות, לצד שרידי מנזר ההתבודדות אסקיטריו מהמאה ה-5.",
+        "source": "nomadicmatt.com",
+        "url": "https://nomadicmatt.com"
+      },
+      {
+        "id": "agiosgeorgiospagon38",
+        "name": "אגיוס גאורגיוס פאגון (Agios Georgios Pagon)",
+        "query": "אגיוס גאורגיוס פאגון (Agios Georgios Pagon), Corfu",
+        "category": "Nature",
+        "rec": false,
+        "desc": "מפרץ חוף רחב ומוכר בצפון-מערב האי המתאים לרחצה ולפעילויות ספורט מים.",
+        "source": "lonelyplanet.com",
+        "url": "https://lonelyplanet.com"
+      },
+      {
+        "id": "acharaviroda39",
+        "name": "אחארבי ורודה (Acharavi & Roda)",
+        "query": "אחארבי ורודה (Acharavi & Roda), Corfu",
+        "category": "City",
+        "rec": false,
+        "desc": "יישובי נופש פופולריים בחוף הצפוני של קורפו המציעים רצועות חוף ארוכות, טברנות ומגוון שירותי תיירות.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "arillasagiosstefanos40",
+        "name": "ארילס ואגיוס סטפאנוס (Arillas & Agios Stefanos)",
+        "query": "ארילס ואגיוס סטפאנוס (Arillas & Agios Stefanos), Corfu",
+        "category": "City",
+        "rec": false,
+        "desc": "אתרי נופש חופיים ורגועים בצפון-מערב קורפו עם מפרצים יפים ושקיעות מרשימות.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "kalamikaminakinissaki41",
+        "name": "קאלאמי, קאמינאקי וניסאקי (Kalami, Kaminaki & Nissaki)",
+        "query": "קאלאמי, קאמינאקי וניסאקי (Kalami, Kaminaki & Nissaki), Corfu",
+        "category": "City",
+        "rec": false,
+        "desc": "כפרי חוף ומפרצונים ציוריים בחוף הצפון-מזרחי של האי, המאופיינים במי ים צלולים וטברנות מסורתיות.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "barbatiipsospyrgi42",
+        "name": "בארמבטי, איפסוס ופירגי (Barbati, Ipsos & Pyrgi)",
+        "query": "בארמבטי, איפסוס ופירגי (Barbati, Ipsos & Pyrgi), Corfu",
+        "category": "City",
+        "rec": true,
+        "desc": "רצועת חופי נופש לאורך החוף המזרחי למרגלות הר פנטוקראטור, המציעה ספורט מים, ברים ומסעדות.",
+        "source": "masa.co.il / lonelyplanet.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "spartilasvalanio43",
+        "name": "ספרטילאס ו-ולאניו (Spartilas & Valanio)",
+        "query": "ספרטילאס ו-ולאניו (Spartilas & Valanio), Corfu",
+        "category": "City",
+        "rec": false,
+        "desc": "כפרים הרריים מסורתיים בצפון האי המשמשים כנקודות מעבר ותצפית לאורך מסלולי הטיול.",
+        "source": "wikiloc.com",
+        "url": "https://wikiloc.com"
+      }
+    ]
+  },
+  {
+    "region": "מערב ומרכז קורפו (פליאוקסטריצה, גליפדה ועמק רופה)",
+    "points": [
+      {
+        "id": "paleokastritsa44",
+        "name": "פליאוקסטריצה (Paleokastritsa)",
+        "query": "פליאוקסטריצה (Paleokastritsa), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "מפרץ ציורי מהיפים באי, המוקף גבעות מיוערות, צוקים ומי טורקיז. המקום מציע חופים מרהיבים, מערות ימיות, טברנות דגים והשכרת סירות.",
+        "source": "masa.co.il / lonelyplanet.com / nomadicmatt.com / tzatchickie.gr",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "theotokosmonastery45",
+        "name": "מנזר תאוטוקו (Theotokos Monastery)",
+        "query": "מנזר תאוטוקו (Theotokos Monastery), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "מנזר היסטורי מהמאה ה-13 השוכן על צוק מעל מפרץ פליאוקסטריצה, ובו גנים מטופחים, מוזיאון קטן ותצפית מרהיבה על הים.",
+        "source": "masa.co.il / nomadicmatt.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "angelokastrocastle46",
+        "name": "מבצר אנגלוקסטרו (Angelokastro Castle)",
+        "query": "מבצר אנגלוקסטרו (Angelokastro Castle), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "מבצר ביזנטי מרשים מהמאה ה-13 הניצב על צוק תלול מעל הים בסמוך לפליאוקסטריצה ומציע נופים פנורמיים עוצרי נשימה.",
+        "source": "masa.co.il / nomadicmatt.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "liapadesroviniaparadiseb47",
+        "name": "חופי ומערות ליאפאדס (Liapades, Rovinia & Paradise Beach)",
+        "query": "חופי ומערות ליאפאדס (Liapades, Rovinia & Paradise Beach), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "אזור חופי בתולי ומפרצים נסתרים הסמוכים לליאפאדס, בהם חוף רוביניה, חוף פרדייז, חוף סטלארי ומערת ליניודורוס, הנגישים בעיקר בסירות.",
+        "source": "tzatchickie.gr",
+        "url": "https://tzatchickie.gr"
+      },
+      {
+        "id": "lagrotta48",
+        "name": "לה גרוטה (La Grotta)",
+        "query": "לה גרוטה (La Grotta), Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "מפרץ סלעי ייחודי ובר חוף מפורסם בתוך נקרת סלע בפליאוקסטריצה, המציע מים צלולים וקפיצה למים.",
+        "source": "tzatchickie.gr",
+        "url": "https://tzatchickie.gr"
+      },
+      {
+        "id": "corfuaquarium49",
+        "name": "אקווריום קורפו (Corfu Aquarium)",
+        "query": "אקווריום קורפו (Corfu Aquarium), Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "אקווריום בפליאוקסטריצה המציג מיני דגים, זוחלים ובעלי חיים ימיים האופייניים לים היוני.",
+        "source": "nomadicmatt.com",
+        "url": "https://nomadicmatt.com"
+      },
+      {
+        "id": "glifada50",
+        "name": "חוף גליפדה (Glifada)",
+        "query": "חוף גליפדה (Glifada), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "אחד החופים החוליים היפים והפופולריים ביותר באי, המוקף צוקים דרמטיים ומציע מגוון פעילויות ספורט מים וטברנות.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "agiosgordios51",
+        "name": "איוס גורדיוס (Agios Gordios)",
+        "query": "איוס גורדיוס (Agios Gordios), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "עיירת חוף נעימה עם רצועת חוף חולית רחבה המוקפת הרים ירוקים, מסעדות ומלונות למול הים.",
+        "source": "masa.co.il / tzatchickie.gr",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "pelekaskaisersthrone52",
+        "name": "הכפר פלאקאס ותצפית כיסא הקיסר (Pelekas & Kaiser's Throne)",
+        "query": "הכפר פלאקאס ותצפית כיסא הקיסר (Pelekas & Kaiser's Throne), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "כפר הררי ציורי שבראשו תצפית שבנה קיסר גרמניה וילהלם השני, המציעה פנורמה מרהיבה על כל מרחבי האי והשקיעה.",
+        "source": "masa.co.il / tzatchickie.gr",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "aqualandcorfu53",
+        "name": "פארק המים אקוולנד (Aqualand Corfu)",
+        "query": "פארק המים אקוולנד (Aqualand Corfu), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "פארק מים גדול במרכז האי הכולל עשרות מגלשות, בריכות גלים ומתקני מים לכל הגילאים.",
+        "source": "gotravel.co.il / nomadicmatt.com / tzatchickie.gr",
+        "url": "https://gotravel.co.il"
+      },
+      {
+        "id": "theotokyestate54",
+        "name": "אחוזת תיאוטוקי (Theotoky Estate)",
+        "query": "אחוזת תיאוטוקי (Theotoky Estate), Corfu",
+        "category": "Food",
+        "rec": false,
+        "desc": "יקב היסטורי ואחוזה חקלאית בעמק רופה המציעה סיורים בכרמים, טעימות יין ומוזיאון יין קטן.",
+        "source": "discovergreece.com",
+        "url": "https://discovergreece.com"
+      },
+      {
+        "id": "ambelonascorfu55",
+        "name": "יקב אמבלונס קורפו (Ambelonas Corfu)",
+        "query": "יקב אמבלונס קורפו (Ambelonas Corfu), Corfu",
+        "category": "Food",
+        "rec": false,
+        "desc": "יקב ומסעדה כפרית המציגים זני ענבים מקומיים, מורשת חקלאית וטעימות יין מקומיות.",
+        "source": "discovergreece.com",
+        "url": "https://discovergreece.com"
+      },
+      {
+        "id": "gouviakontokalidassia56",
+        "name": "גוביה, קונדוקאלי ודסיה (Gouvia, Kontokali & Dassia)",
+        "query": "גוביה, קונדוקאלי ודסיה (Gouvia, Kontokali & Dassia), Corfu",
+        "category": "City",
+        "rec": true,
+        "desc": "אתרי נופש ומרינה מרכזית ליאכטות מצפון לעיר קורפו, הכוללים חופים, שפע מסעדות, מלונות וחיי לילה.",
+        "source": "masa.co.il / wikiloc.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "akrotiribeachagiatriada57",
+        "name": "חוף ומלון אקרוטירי ביץ' (Akrotiri Beach & Agia Triada)",
+        "query": "חוף ומלון אקרוטירי ביץ' (Akrotiri Beach & Agia Triada), Corfu",
+        "category": "Sleep",
+        "rec": false,
+        "desc": "מלון נופש השוכן על חצי אי במערב קורפו לצד חוף ומפרץ אגיה טריאדה השליו.",
+        "source": "gotravel.co.il",
+        "url": "https://gotravel.co.il"
+      },
+      {
+        "id": "thepinkpalace58",
+        "name": "The Pink Palace",
+        "query": "The Pink Palace, Corfu",
+        "category": "Sleep",
+        "rec": false,
+        "desc": "הוסטל מסיבות מפורסם בחוף המערבי של קורפו, הפופולרי בקרב צעירים ותרמילאים.",
+        "source": "nomadicmatt.com",
+        "url": "https://nomadicmatt.com"
+      },
+      {
+        "id": "kalistoresorts59",
+        "name": "Kalisto Resorts",
+        "query": "Kalisto Resorts, Corfu",
+        "category": "Sleep",
+        "rec": false,
+        "desc": "מתחם וילות ודירות אירוח השוכן מעל הכפר פלאקאס ומציע נופים פנורמיים ירוקים.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "yaliskaribeachstudios60",
+        "name": "חוף יאליסקארי (Yaliskari Beach Studios)",
+        "query": "חוף יאליסקארי (Yaliskari Beach Studios), Corfu",
+        "category": "Sleep",
+        "rec": false,
+        "desc": "חוף קטן ואינטימי בחוף המערבי שלצידו פועל מתחם אירוח וטברנה כפרית.",
+        "source": "lonelyplanet.com",
+        "url": "https://lonelyplanet.com"
+      }
+    ]
+  },
+  {
+    "region": "דרום קורפו (כולל בניטצ'ס, קאבוס ואגם קוריסיה)",
+    "points": [
+      {
+        "id": "achilleionpalace61",
+        "name": "ארמון האכיליון (Achilleion Palace)",
+        "query": "ארמון האכיליון (Achilleion Palace), Corfu",
+        "category": "Attraction",
+        "rec": true,
+        "desc": "ארמון קיץ מפואר שהוקם בשנת 1890 עבור אליזבת קיסרית אוסטריה (סיסי) ושימש בהמשך את הקייזר וילהלם השני. הארמון מציע גנים מרהיבים, פסלי מיתולוגיה יוונית ותצפית פנורמית.",
+        "source": "masa.co.il / lonelyplanet.com / nomadicmatt.com / tzatchickie.gr",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "benitses62",
+        "name": "בניטצ'ס (Benitses)",
+        "query": "בניטצ'ס (Benitses), Corfu",
+        "category": "City",
+        "rec": true,
+        "desc": "כפר דייגים שהפך לעיירת נופש שוקקת עם טברנות, חופים נעימים, ומסלולי הליכה בטבע של 'עמק האזמרגד'.",
+        "source": "masa.co.il / lonelyplanet.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "lakekorissiaissosbeach63",
+        "name": "אגם קוריסיה, חוף חליקורנאס וחוף איסוס (Lake Korissia & Issos Beach)",
+        "query": "אגם קוריסיה, חוף חליקורנאס וחוף איסוס (Lake Korissia & Issos Beach), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "שמורת טבע בדרום קורפו הכוללת אגם עשיר בעופות מים (כולל פלמינגו), דיונות חול פראיות ורצועות חוף חוליות ורחבות.",
+        "source": "masa.co.il / tzatchickie.gr",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "gardenobeach64",
+        "name": "חוף גרדנו (Gardeno Beach)",
+        "query": "חוף גרדנו (Gardeno Beach), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "חוף חולי ושקט בדרום קורפו המגובה בצוקים מרשימים ומציע מפלט שקט ופחות מתויר.",
+        "source": "tzatchickie.gr",
+        "url": "https://tzatchickie.gr"
+      },
+      {
+        "id": "agiosgeorgiossouth65",
+        "name": "אגיוס גאורגיוס דרום (Agios Georgios South)",
+        "query": "אגיוס גאורגיוס דרום (Agios Georgios South), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "רצועת חוף ארוכה בדרום קורפו הנחשבת לאזור מומלץ לצלילה ולנופש רגוע.",
+        "source": "masa.co.il / nomadicmatt.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "kavos66",
+        "name": "קאבוס (Kavos)",
+        "query": "קאבוס (Kavos), Corfu",
+        "category": "City",
+        "rec": true,
+        "desc": "עיירת נופש בקצה הדרומי של קורפו, הידועה בחיי לילה תוססים ובסמיכות לנקודת ההתחלה של שביל קורפו.",
+        "source": "masa.co.il / wikiloc.com",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "thegovernor67",
+        "name": "חוות שמן הזית The Governor (אגיוס מתאוס)",
+        "query": "חוות שמן הזית The Governor (אגיוס מתאוס), Corfu",
+        "category": "Food",
+        "rec": false,
+        "desc": "בית בד ומפיק שמן זית עטור פרסים באזור הר אגיוס מתאוס, המציע סיורים וטעימות שמן זית מסורתי.",
+        "source": "discovergreece.com",
+        "url": "https://discovergreece.com"
+      },
+      {
+        "id": "donatospaipetisolivemuse68",
+        "name": "מוזיאון הזית דונאטוס פאיפטיס (Donatos Paipetis Olive Museum)",
+        "query": "מוזיאון הזית דונאטוס פאיפטיס (Donatos Paipetis Olive Museum), Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "מוזיאון בכפר קינופיאסטס המשמר את מסורת גידול עצי הזית והפקת שמן הזית ההיסטורית של קורפו.",
+        "source": "discovergreece.com",
+        "url": "https://discovergreece.com"
+      },
+      {
+        "id": "alykessaltwetland69",
+        "name": "מלחת אליקס (Alykes Salt Wetland)",
+        "query": "מלחת אליקס (Alykes Salt Wetland), Corfu",
+        "category": "Nature",
+        "rec": false,
+        "desc": "אתר טבע ומלחה היסטורית בדרום האי המהווה מוקד משיכה לחובבי טבע וצפרות.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "angsanacorfuresortspa70",
+        "name": "מלון אנגסאנה קורפו (Angsana Corfu Resort & Spa)",
+        "query": "מלון אנגסאנה קורפו (Angsana Corfu Resort & Spa), Corfu",
+        "category": "Sleep",
+        "rec": true,
+        "desc": "אתר נופש יוקרתי על צלע הר מדרום לבירת קורפו הכולל וילות, בריכת אינפיניטי וספא מפואר.",
+        "source": "gotravel.co.il",
+        "url": "https://gotravel.co.il"
+      },
+      {
+        "id": "lomous71",
+        "name": "לומוס (Lomous)",
+        "query": "לומוס (Lomous), Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "נקודת עניין נופית בדרום האי קורפו.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      }
+    ]
+  },
+  {
+    "region": "טרק שביל קורפו (The Corfu Trail)",
+    "points": [
+      {
+        "id": "thecorfutrail72",
+        "name": "שביל קורפו (The Corfu Trail)",
+        "query": "שביל קורפו (The Corfu Trail), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "מסלול הליכה מרהיב לאורך יותר מ-150-200 ק\"מ החוצה את קורפו מקאבוס בדרום ועד צפון האי. השביל עובר בכפרים נידחים, חופים, חורשות זיתים ורכסי הרים.",
+        "source": "lonelyplanet.com / wikiloc.com / nomadicmatt.com",
+        "url": "https://lonelyplanet.com"
+      },
+      {
+        "id": "mejanishausbasilikapensi73",
+        "name": "אירוח לאורך שביל קורפו (Mejanis, Haus Basilika, Pension Skala, Bella Vista)",
+        "query": "אירוח לאורך שביל קורפו (Mejanis, Haus Basilika, Pension Skala, Bella Vista), Corfu",
+        "category": "Sleep",
+        "rec": false,
+        "desc": "פנסיונים ובתי הארחה כפריים המשמשים כנקודות לינה לצועדים במקטעים השונים של טרק שביל קורפו.",
+        "source": "wikiloc.com",
+        "url": "https://wikiloc.com"
+      }
+    ]
+  },
+  {
+    "region": "איים סמוכים וסיורי יום (פאקסוס, דיאפונטיה, לפקדה ואלבניה)",
+    "points": [
+      {
+        "id": "paxosgaios74",
+        "name": "האי פאקסוס והעיירה גאיוס (Paxos & Gaios)",
+        "query": "האי פאקסוס והעיירה גאיוס (Paxos & Gaios), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "אי שליו מדרום לקורפו המפורסם במצוקי גיר מרשימים, נקרות ים כחולות, מטעי זיתים ועיירת נמל ציורית.",
+        "source": "masa.co.il / gotravel.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "antipaxos75",
+        "name": "האי אנטי-פאקסוס (Antipaxos)",
+        "query": "האי אנטי-פאקסוס (Antipaxos), Corfu",
+        "category": "Nature",
+        "rec": false,
+        "desc": "אי זעיר ופסטורלי דרומית לפאקסוס הידוע בחופים עם חול בהיר ומי טורקיז צלולים במיוחד.",
+        "source": "gotravel.co.il",
+        "url": "https://gotravel.co.il"
+      },
+      {
+        "id": "diapontiaislandsothonier76",
+        "name": "איי דיאפונטיה (Diapontia Islands: Othoni, Erikousa, Mathraki)",
+        "query": "איי דיאפונטיה (Diapontia Islands: Othoni, Erikousa, Mathraki), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "שלושה איים נידחים ושלווים מצפון-מערב לקורפו, המציעים חופים שקטים, כפרים אותנטיים ומפלט מההמונים.",
+        "source": "lonelyplanet.com",
+        "url": "https://lonelyplanet.com"
+      },
+      {
+        "id": "butrintalbania77",
+        "name": "אתר העתיקות בוטרינט (Butrint, Albania)",
+        "query": "אתר העתיקות בוטרינט (Butrint, Albania), Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "אתר עתיקות היסטורי ופארק לאומי באלבניה, השוכן מול חופי קורפו ונגיש בשיט קצר מהאי.",
+        "source": "atlasobscura.com",
+        "url": "https://atlasobscura.com"
+      },
+      {
+        "id": "lefkada78",
+        "name": "האי לפקדה (Lefkada)",
+        "query": "האי לפקדה (Lefkada), Corfu",
+        "category": "Nature",
+        "rec": true,
+        "desc": "אי יוני סמוך הכולל את העיר לפקדה, מפרץ מיקרוס גיאלוס, עיירת הנמל נידרי, חוף פורטו קציקי המפורסם ועיירת הגלישה ואסיליקי.",
+        "source": "gotravel.co.il",
+        "url": "https://gotravel.co.il"
+      },
+      {
+        "id": "skorpios79",
+        "name": "האי סקורפיוס (Skorpios)",
+        "query": "האי סקורפיוס (Skorpios), Corfu",
+        "category": "Attraction",
+        "rec": false,
+        "desc": "אי פרטי מול נידרי בלפקדה שהיה בבעלות משפחת אונאסיס ובו קבורים בני המשפחה.",
+        "source": "gotravel.co.il",
+        "url": "https://gotravel.co.il"
+      },
+      {
+        "id": "tartaruga80",
+        "name": "האי זקינתוס - קמפינג Tartaruga",
+        "query": "האי זקינתוס - קמפינג Tartaruga, Corfu",
+        "category": "Sleep",
+        "rec": false,
+        "desc": "אתר קמפינג על מצוקי האי זקינתוס בים היוני המשקיף על חוף ומים צלולים.",
+        "source": "masa.co.il",
+        "url": "https://masa.co.il"
+      },
+      {
+        "id": "naxostown81",
+        "name": "האי נקוס (Naxos Town)",
+        "query": "האי נקוס (Naxos Town), Corfu",
+        "category": "City",
+        "rec": false,
+        "desc": "עיירת הנמל המרכזית באי נקוס בארכיפלג הקיקלאדיים שביוון.",
+        "source": "ricksteves.com",
+        "url": "https://ricksteves.com"
+      }
+    ]
+  }
+];
+// IMPORTANT: keep the same object identity between REGIONS and POINTS (no spread/copy here).
+// The checklist below is built by walking REGIONS, while geocoding/markers are attached to
+// POINTS -- if these were different object copies of the same data, a checkbox toggle would
+// check `.marker` on an object that never actually got a marker, and silently do nothing.
+REGIONS.forEach(r => r.points.forEach(p => { p.regionName = r.region; }));
+
+// Within each region, City-category points are actual towns/villages -- the
+// real candidates for where to base overnight in this area -- so they lead
+// the list as their own group, recommended first. Everything else follows,
+// grouped by category (same order as the legend), recommended first within
+// each. Makes "where could I sleep here" the first thing scanned per region,
+// not buried alphabetically among attractions.
+const SLEEP_CANDIDATE_CATEGORY = 'City';
+const CATEGORY_ORDER = ['Nature', 'Beach', 'Attraction', 'Food', 'Sleep'];
+REGIONS.forEach(r => {
+  r.points.sort((a, b) => {
+    const aSleep = a.category === SLEEP_CANDIDATE_CATEGORY ? 0 : 1;
+    const bSleep = b.category === SLEEP_CANDIDATE_CATEGORY ? 0 : 1;
+    if (aSleep !== bSleep) return aSleep - bSleep;
+    const recDiff = (b.rec ? 1 : 0) - (a.rec ? 1 : 0);
+    if (recDiff !== 0) return recDiff;
+    if (aSleep === 0) return 0; // both sleep candidates -- recommended-order only, no further split
+    return CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category);
+  });
+});
+
+const POINTS = REGIONS.flatMap(r => r.points);
+
+function baseScaleFor(p) {
+  return p.isSleep ? 10 : (p.rec ? 9 : 7);
+}
+
+// Google's localized duration/distance text can come back as a mix of Hebrew and English
+// (e.g. "3 שעות 5 mins") even with &language=he on the API load -- so we build our own
+// fully-Hebrew strings from the raw numeric value instead of trusting that text field.
+function formatHebrewDuration(totalSeconds) {
+  const totalMinutes = Math.round(totalSeconds / 60);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours === 0) return `${minutes} דקות`;
+  if (minutes === 0) return `${hours} שעות`;
+  return `${hours} שעות ו-${minutes} דקות`;
+}
+function formatHebrewDistance(meters) {
+  return `${Math.round(meters / 1000)} ק"מ`;
+}
+
+let map, geocoder, directionsService, sharedInfoWindow, focusedPoint;
+
+// Pure *view* filter -- completely separate from each point's checkbox/selection state.
+// A marker is only ever actually shown on the map when both conditions hold: the user
+// has it checked AND it matches the active category filter (or the filter is 'all').
+// Never flip p.checked because of the filter -- filtering must never uncheck anything.
+let currentFilter = 'all';
+function pointVisible(p) {
+  return !!p.checked && (currentFilter === 'all' || p.category === currentFilter);
+}
+function updateMarkerForPoint(p) {
+  if (p.marker) p.marker.setMap(pointVisible(p) ? map : null);
+}
+
+function setFilter(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.filterBtn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  POINTS.forEach(p => updateMarkerForPoint(p));
+  document.querySelectorAll('.poi-row').forEach(row => {
+    row.classList.toggle('hidden', !(cat === 'all' || row.dataset.category === cat));
+  });
+}
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: 39.62, lng: 19.85 },
+    zoom: 12
+  });
+  geocoder = new google.maps.Geocoder();
+  directionsService = new google.maps.DirectionsService();
+  // Single shared InfoWindow so opening a new bubble always closes any other open one.
+  sharedInfoWindow = new google.maps.InfoWindow();
+  new google.maps.Circle({
+    center: MAIN_CITY_LATLNG, radius: ONE_HOUR_DRIVE_M,
+    strokeColor: '#c8a24a', strokeOpacity: 0.9, strokeWeight: 2,
+    fillColor: '#c8a24a', fillOpacity: 0.06, map: map, clickable: false, zIndex: 1
+  });
+  buildChecklist();
+  geocodeAllPoints();
+  document.getElementById('confirmBtn').addEventListener('click', onConfirm);
+  document.getElementById('backBtn').addEventListener('click', onBack);
+  document.getElementById('selectAll').addEventListener('click', () => setAll(true));
+  document.getElementById('clearAll').addEventListener('click', () => setAll(false));
+  document.getElementById('suggestBtn').addEventListener('click', applySuggestedSelection);
+  document.getElementById('fullViewBtn').addEventListener('click', showAllRegions);
+  document.querySelectorAll('.filterBtn').forEach(b => b.addEventListener('click', () => setFilter(b.dataset.cat)));
+}
+
+function setAll(state) {
+  POINTS.forEach(p => {
+    p.checked = state;
+    const chk = document.getElementById('chk_' + p.id);
+    if (chk) chk.checked = state;
+    updateMarkerForPoint(p);
+  });
+  REGIONS.forEach(r => syncRegionCheckbox(r));
+}
+
+// Straight-line distance in km between two geocoded points -- used only to rank "nearest
+// unused point" candidates within/around a region, not for real routing.
+function haversineKm(a, b) {
+  if (!a || !b) return Infinity;
+  const toRad = d => d * Math.PI / 180;
+  const R = 6371;
+  const dLat = toRad(b.lat() - a.lat());
+  const dLng = toRad(b.lng() - a.lng());
+  const lat1 = toRad(a.lat()), lat2 = toRad(b.lat());
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+// 3 points/day for a relaxed/family/light pace, 5 for a packed/intense pace, 4 otherwise.
+function pointsPerDayFromPace(pace) {
+  const s = (pace || '').toString();
+  if (/רגוע|משפחתי|קל/.test(s)) return 3;
+  if (/עמוס|אינטנסיבי|הרבה/.test(s)) return 5;
+  return 4;
+}
+
+// Pure client-side heuristic -- no network calls. Builds TRIP_DAYS day-shaped geographic
+// clusters (never a flat, ungrouped pick) and stops there; it never auto-confirms, the
+// user still reviews/adjusts every cluster before confirming.
+function applySuggestedSelection() {
+  const pointsPerDay = pointsPerDayFromPace(TRIP_PACE);
+  const nonSleep = p => p.category !== 'Sleep';
+  const allNonSleep = POINTS.filter(nonSleep);
+  const recommendedPool = allNonSleep.filter(p => p.rec);
+
+  const used = new Set();
+  const seededRegions = new Set();
+  const clusters = [];
+
+  function pickSeed() {
+    // Prefer an unused recommended point from a region not yet used as a seed this run,
+    // so days don't all pile into the same corner of the map.
+    let pool = recommendedPool.filter(p => !used.has(p.id) && !seededRegions.has(p.regionName));
+    if (!pool.length) pool = recommendedPool.filter(p => !used.has(p.id));
+    if (!pool.length) pool = allNonSleep.filter(p => !used.has(p.id) && !seededRegions.has(p.regionName));
+    if (!pool.length) pool = allNonSleep.filter(p => !used.has(p.id));
+    return pool[0] || null;
+  }
+
+  for (let day = 1; day <= TRIP_DAYS; day++) {
+    const seed = pickSeed();
+    if (!seed) break; // ran out of points entirely
+    seededRegions.add(seed.regionName);
+    used.add(seed.id);
+    const dayPoints = [seed];
+
+    // Fill the rest of this day's quota with the nearest unused points -- same region first,
+    // spilling into the nearest points from other regions if this region runs out, so every
+    // day ends up genuinely full rather than thin. Mix categories so a day isn't all-Nature
+    // or all-Food.
+    while (dayPoints.length < pointsPerDay) {
+      const sameRegion = allNonSleep.filter(p => !used.has(p.id) && p.regionName === seed.regionName);
+      const pool = sameRegion.length ? sameRegion : allNonSleep.filter(p => !used.has(p.id));
+      if (!pool.length) break;
+
+      const catCounts = {};
+      dayPoints.forEach(p => { catCounts[p.category] = (catCounts[p.category] || 0) + 1; });
+      pool.sort((a, b) => {
+        const ca = catCounts[a.category] || 0, cb = catCounts[b.category] || 0;
+        if (ca !== cb) return ca - cb; // least-represented category in this day first
+        return haversineKm(seed.location, a.location) - haversineKm(seed.location, b.location);
+      });
+      const next = pool[0];
+      dayPoints.push(next);
+      used.add(next.id);
+    }
+    clusters.push({ day, points: dayPoints });
+  }
+
+  // Separately, one Sleep-tagged point per region actually used across the clusters --
+  // a base needs somewhere to sleep even though the lodging point itself isn't a "visit",
+  // and it doesn't count against the per-day point target.
+  const usedRegions = new Set();
+  clusters.forEach(c => c.points.forEach(p => usedRegions.add(p.regionName)));
+  let sleepAdded = 0;
+  usedRegions.forEach(regionName => {
+    const sleepPoint = POINTS.find(p => p.regionName === regionName && p.category === 'Sleep' && !used.has(p.id));
+    if (sleepPoint) {
+      used.add(sleepPoint.id);
+      sleepAdded++;
+    }
+  });
+
+  POINTS.forEach(p => {
+    p.checked = used.has(p.id);
+    const chk = document.getElementById('chk_' + p.id);
+    if (chk) chk.checked = p.checked;
+    updateMarkerForPoint(p);
+  });
+  REGIONS.forEach(r => syncRegionCheckbox(r));
+
+  // Number of days per region is part of the suggestion, not an afterthought --
+  // count how many of the suggested days actually touch each region, and push
+  // that into the region's own day dropdown so it's visible and adjustable,
+  // not just implied by which points got checked.
+  const regionDayCounts = {};
+  clusters.forEach(c => {
+    const daysTouched = new Set(c.points.map(p => p.regionName));
+    daysTouched.forEach(rn => { regionDayCounts[rn] = (regionDayCounts[rn] || 0) + 1; });
+  });
+  REGIONS.forEach((r, ri) => {
+    r.days = Math.min(TRIP_DAYS, regionDayCounts[r.region] || r.days || 1);
+    const sel = document.getElementById('regiondays_' + ri);
+    if (sel) sel.value = String(r.days);
+  });
+
+  const perDayText = clusters.map(c => `יום ${c.day}: ${c.points.length} נקודות`).join(', ');
+  let msg = `💡 הצעה ל-${TRIP_DAYS} ימי טיול (קצב ${TRIP_PACE}, ${pointsPerDay} נקודות ליום) -- ${perDayText}. `;
+  msg += `בסה"כ ${used.size - sleepAdded} נקודות ביקור + ${sleepAdded} נקודות לינה, ב-${usedRegions.size} אזורים. `;
+  if (clusters.length < TRIP_DAYS) {
+    msg += `לא נמצאו מספיק נקודות פנויות למלא את כל ${TRIP_DAYS} הימים. `;
+  }
+  msg += 'זו הצעת פתיחה לבדיקה בלבד -- לא שיבוץ ימים סופי ולא בחירה סופית. אפשר לשנות ולסמן/להסיר נקודות לפני האישור.';
+  document.getElementById('status').textContent = msg;
+}
+
+// Keep a region's own master checkbox in sync with its points: checked if every point in the
+// region is checked, unchecked if none are, indeterminate if it's a mix.
+function syncRegionCheckbox(r) {
+  if (!r._regionCheckboxEl) return;
+  const total = r.points.length;
+  const checkedCount = r.points.filter(p => p.checked).length;
+  r._regionCheckboxEl.checked = checkedCount === total;
+  r._regionCheckboxEl.indeterminate = checkedCount > 0 && checkedCount < total;
+}
+
+function buildChecklist() {
+  const container = document.getElementById('checklist');
+  container.innerHTML = '';
+  REGIONS.forEach((r, ri) => {
+    const rTitle = document.createElement('div');
+    rTitle.className = 'region-title';
+    const dayOptions = Array.from({ length: TRIP_DAYS }, (_, i) => i + 1)
+      .map(n => `<option value="${n}"${n === (r.days || 1) ? ' selected' : ''}>${n}</option>`).join('');
+    rTitle.innerHTML = `
+      <div class="region-title-row">
+        <input type="checkbox" class="region-check" id="regionchk_${ri}" checked>
+        <span class="region-label" title="לחץ כדי לסמן על המפה את גבולות האזור הזה">${r.region} (${r.points.length})</span>
+      </div>
+      <div class="region-days-row">
+        <label for="regiondays_${ri}">מספר ימים באזור זה:</label>
+        <select id="regiondays_${ri}" class="region-days-select">${dayOptions}</select>
+      </div>
+      <span class="region-dist" id="regiondist_${ri}"></span>
+    `;
+    container.appendChild(rTitle);
+    r.days = r.days || 1;
+    rTitle.querySelector('.region-days-select').addEventListener('change', (e) => {
+      r.days = parseInt(e.target.value, 10) || 1;
+    });
+    r._regionCheckboxEl = rTitle.querySelector('.region-check');
+    r._regionCheckboxEl.addEventListener('change', (e) => {
+      const state = e.target.checked;
+      r.points.forEach(p => {
+        p.checked = state;
+        const chk = document.getElementById('chk_' + p.id);
+        if (chk) chk.checked = state;
+        updateMarkerForPoint(p);
+      });
+    });
+    rTitle.querySelector('.region-label').addEventListener('click', () => focusRegion(r.points, r.region));
+
+    const sleepCandidates = r.points.filter(p => p.category === SLEEP_CANDIDATE_CATEGORY);
+    if (sleepCandidates.length) {
+      const sleepHeader = document.createElement('div');
+      sleepHeader.className = 'sleep-subheader';
+      sleepHeader.textContent = '🛏 אפשרויות מומלצות ללינה באזור זה';
+      container.appendChild(sleepHeader);
+    }
+    let restHeaderShown = !sleepCandidates.length;
+    r.points.forEach(p => {
+      if (!restHeaderShown && p.category !== SLEEP_CANDIDATE_CATEGORY) {
+        const restHeader = document.createElement('div');
+        restHeader.className = 'sleep-subheader';
+        restHeader.textContent = 'שאר הנקודות באזור';
+        container.appendChild(restHeader);
+        restHeaderShown = true;
+      }
+      const row = document.createElement('div');
+      row.className = 'poi-row';
+      row.dataset.category = p.category;
+      row.innerHTML = `
+        <span class="dot" style="background:${CATEGORY_COLORS[p.category]}"></span>
+        <input type="checkbox" id="chk_${p.id}" checked>
+        <span class="poi-name" dir="rtl" title="לחץ כדי למקד את המפה על המקום הזה">${p.name}</span>
+        ${p.rec ? '<span class="rec-star" title="מומלץ">⭐</span>' : ''}
+        ${p.isSleep ? '<span class="sleep-tag">לינה</span>' : ''}
+        ${p.rec ? '<span class="rec-tag">מומלץ</span>' : ''}
+      `;
+      container.appendChild(row);
+      row.querySelector('input').addEventListener('change', (e) => {
+        p.checked = e.target.checked;
+        updateMarkerForPoint(p);
+        syncRegionCheckbox(r);
+      });
+      row.querySelector('.poi-name').addEventListener('click', () => focusPoint(p));
+      row.querySelector('.dot').addEventListener('click', () => focusPoint(p));
+    });
+  });
+}
+
+// Animate a marker's icon scale from its current size up to a bigger size and back down,
+// so clicking a checklist item visibly "grows" the pin on the map instead of just panning to it.
+function animateMarkerScale(marker, fromScale, toScale, duration) {
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // ease-in-out
+    const icon = Object.assign({}, marker.getIcon());
+    icon.scale = fromScale + (toScale - fromScale) * eased;
+    marker.setIcon(icon);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function focusPoint(p) {
+  if (!p.marker || !p.location) {
+    document.getElementById('status').textContent = 'עדיין מאתר את המיקום של ' + p.name + '...';
+    return;
+  }
+  // Shrink whatever was previously focused back to its normal size.
+  if (focusedPoint && focusedPoint !== p && focusedPoint.marker) {
+    animateMarkerScale(focusedPoint.marker, baseScaleFor(focusedPoint) * 1.9, baseScaleFor(focusedPoint), 250);
+  }
+  focusedPoint = p;
+  const base = baseScaleFor(p);
+  animateMarkerScale(p.marker, base, base * 1.9, 300);
+  map.panTo(p.location);
+  if (map.getZoom() < 12) {
+    map.setZoom(12);
+  }
+  // Clicking the checklist row should feel identical to clicking the marker itself -- both grow
+  // the pin AND pop the info bubble, not just pan the map to it.
+  if (p.infoContent) {
+    sharedInfoWindow.setContent(p.infoContent);
+    sharedInfoWindow.open(map, p.marker);
+  }
+}
+
+// Andrew's monotone-chain convex hull over a set of google.maps.LatLng points -- gives us a
+// simple polygon tracing the outermost points, which reads as "the general area" much better
+// than just tightly zooming in on individual pins.
+function convexHullLatLng(points) {
+  if (points.length < 3) return points;
+  const pts = points.map(p => ({ lng: p.lng(), lat: p.lat(), orig: p }))
+    .sort((a, b) => a.lng - b.lng || a.lat - b.lat);
+  const cross = (o, a, b) => (a.lng - o.lng) * (b.lat - o.lat) - (a.lat - o.lat) * (b.lng - o.lng);
+  const lower = [];
+  for (const p of pts) {
+    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
+    lower.push(p);
+  }
+  const upper = [];
+  for (let i = pts.length - 1; i >= 0; i--) {
+    const p = pts[i];
+    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
+    upper.push(p);
+  }
+  lower.pop();
+  upper.pop();
+  return lower.concat(upper).map(h => h.orig);
+}
+
+// A region circle must read as "a reasonable area to base yourself in", not a
+// shape that happens to enclose whatever's in that region -- a region with
+// far-flung points (e.g. Cluj-Napoca to Baia Mare) would otherwise draw a
+// circle spanning a huge chunk of the country. Capped at roughly a 1.5hr
+// driving radius regardless of how spread the region's actual points are.
+const MAX_REGION_RADIUS_M = 70000;
+let regionOverlay;
+let allRegionOverlays = [];
+function clearAllRegionOverlays() {
+  allRegionOverlays.forEach(o => o.setMap(null));
+  allRegionOverlays = [];
+}
+
+// Shared by showAllRegions() and focusRegion()'s circle-drawing (the latter
+// is server-injected, see rendermaps.js) -- one formula (a 1.15x buffer
+// around the farthest point, capped at MAX_REGION_RADIUS_M so a region with
+// far-flung points can't draw a circle spanning a huge chunk of the
+// country), one place to tune it instead of two independently-typed copies.
+function computeRegionCircle(locs) {
+  const bounds = new google.maps.LatLngBounds();
+  locs.forEach(l => bounds.extend(l));
+  const center = bounds.getCenter();
+  let radius = 4000;
+  locs.forEach(l => { radius = Math.max(radius, google.maps.geometry.spherical.computeDistanceBetween(center, l) * 1.15); });
+  radius = Math.min(radius, MAX_REGION_RADIUS_M);
+  return { center, radius };
+}
+
+// "Full view" (🗺️ תצוגה מלאה) -- draws every region's circle at once and zooms
+// out to fit them all, instead of the one-at-a-time view a normal region click
+// gives. Always circles (never the convex-hull polygon focusRegion can use
+// for 3+ points) -- with every region on screen together a polygon connecting
+// far-apart points across the whole map reads as route lines, not areas.
+function showAllRegions() {
+  if (regionOverlay) { regionOverlay.setMap(null); regionOverlay = null; }
+  clearAllRegionOverlays();
+  const combinedBounds = new google.maps.LatLngBounds();
+  let anyDrawn = false;
+  REGIONS.forEach(r => {
+    const locs = r.points.filter(p => p.location).map(p => p.location);
+    if (!locs.length) return;
+    const { center, radius } = computeRegionCircle(locs);
+    const circle = new google.maps.Circle({
+      center: center, radius: radius,
+      strokeColor: '#1a5fb4', strokeOpacity: 0.7, strokeWeight: 2,
+      fillColor: '#1a5fb4', fillOpacity: 0.08, map: map
+    });
+    allRegionOverlays.push(circle);
+    combinedBounds.union(circle.getBounds());
+    anyDrawn = true;
+  });
+  if (anyDrawn) {
+    map.fitBounds(combinedBounds);
+    document.getElementById('status').textContent = 'תצוגה מלאה — כל האזורים מוצגים יחד.';
+  } else {
+    document.getElementById('status').textContent = 'עדיין מאתר מיקומים... נסו שוב בעוד רגע.';
+  }
+}
+
+function focusRegion(regionPoints, regionName) {
+  if (regionName === MAIN_CITY_REGION) {
+    if (regionOverlay) { regionOverlay.setMap(null); regionOverlay = null; }
+    regionOverlay = new google.maps.Circle({
+      center: MAIN_CITY_LATLNG, radius: ONE_HOUR_DRIVE_M,
+      strokeColor: '#1a5fb4', strokeOpacity: 0.85, strokeWeight: 2,
+      fillColor: '#1a5fb4', fillOpacity: 0.12, map: map
+    });
+    map.fitBounds(regionOverlay.getBounds());
+    document.getElementById('status').textContent = 'האזור המרכזי — עיגול של כשעת נסיעה סביב ' + MAIN_CITY_NAME + '.';
+    return;
+  }
+  const locs = regionPoints.filter(p => p.location).map(p => p.location);
+  if (locs.length === 0) {
+    document.getElementById('status').textContent = 'עדיין מאתר את מיקומי האזור הזה...';
+    return;
+  }
+  clearAllRegionOverlays();
+  if (regionOverlay) {
+    regionOverlay.setMap(null);
+    regionOverlay = null;
+  }
+  const bounds = new google.maps.LatLngBounds();
+  locs.forEach(l => bounds.extend(l));
+
+  const { center: _rc, radius: _rr } = computeRegionCircle(locs);
+  regionOverlay = new google.maps.Circle({ center: _rc, radius: _rr, strokeColor: '#1a5fb4', strokeOpacity: 0.85, strokeWeight: 2, fillColor: '#1a5fb4', fillOpacity: 0.12, map: map });
+
+  // Fit the map to the highlighted region so the circle/polygon is actually
+  // visible -- on a country-scale trip regions are far apart, so a static
+  // city-overview would leave the overlay off-screen.
+  const overlayBounds = (regionOverlay.getBounds && regionOverlay.getBounds()) || bounds;
+  map.fitBounds(overlayBounds);
+}
+
+function geocodeAllPoints() {
+  const status = document.getElementById('status');
+  let done = 0;
+  POINTS.forEach((p, i) => {
+    p.checked = true;
+    // Stagger requests slightly to stay well under geocoding rate limits
+    setTimeout(() => {
+      // componentRestrictions locks results to Italy the country (ISO "IT") -- without this,
+      // a short/ambiguous query can silently resolve to the wrong country, since a status of
+      // "OK" does not mean "found the right country".
+      geocoder.geocode({ address: p.query, componentRestrictions: { country: GEOCODE_COUNTRY } }, (results, status2) => {
+        done++;
+        status.textContent = `מאתר מיקומים... (${done}/${POINTS.length})`;
+        if (status2 === 'OK' && results[0]) {
+          try {
+            p.location = results[0].geometry.location;
+            const markerOptions = {
+              position: p.location,
+              map: pointVisible(p) ? map : null,
+              title: (p.rec ? '⭐ ' : '') + p.name,
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: baseScaleFor(p),
+                fillColor: CATEGORY_COLORS[p.category],
+                fillOpacity: 1,
+                strokeColor: p.rec ? '#FFD700' : '#fff',
+                strokeWeight: p.rec ? 3 : 2
+              }
+            };
+            // IMPORTANT: only set `label` when there's an actual label to show.
+            // Passing label:null explicitly throws inside the Marker constructor
+            // and silently aborts this whole callback (no info window, no click
+            // listener) for every marker that hits that branch.
+            if (p.isSleep) {
+              markerOptions.label = { text: '🛏', fontSize: '11px' };
+            }
+            p.marker = new google.maps.Marker(markerOptions);
+            // Stored on `p` (not just closed over here) so focusPoint() -- triggered by clicking
+            // the place in the sidebar checklist, not just clicking the marker itself -- can open
+            // the exact same bubble content.
+            p.infoContent = `<div dir="rtl" style="text-align:right; font-family:-apple-system,Segoe UI,Arial,sans-serif;">
+                <b>${p.name}</b> <span style="color:${CATEGORY_COLORS[p.category]}">● ${CATEGORY_LABELS_HE[p.category]}</span>
+                ${p.rec ? '<div class="info-rec">⭐ מומלץ — מקורות מציינים כחובה לראות</div>' : ''}
+                <div class="info-desc">${p.desc}</div>
+                <div class="info-source">מקור: ${p.source}${p.url ? ` — <a href="${p.url}" target="_blank" rel="noopener">קישור</a>` : ''}</div>
+              </div>`;
+            p.marker.addListener('click', () => {
+              sharedInfoWindow.setContent(p.infoContent);
+              sharedInfoWindow.open(map, p.marker);
+            });
+          } catch (err) {
+            p.geocodeFailed = true;
+            console.error('Marker/InfoWindow setup failed for', p.name, err);
+          }
+        } else {
+          p.geocodeFailed = true;
+          console.warn('Geocode failed for', p.name, status2);
+        }
+        if (done === POINTS.length) {
+          const failed = POINTS.filter(x => x.geocodeFailed);
+          status.textContent = 'מוכן. סמן/הסר נקודות ולחץ על אישור.' + (failed.length ? ` (${failed.length} לא אותרו: ${failed.map(f=>f.name).join(', ')})` : '');
+          computeRegionDistances();
+        }
+      });
+    }, i * 150);
+  });
+}
+
+// Shows, under each region's title, the driving time from the Duomo (the city's central
+// reference point) to a representative point in that region -- gives a quick sense of how far
+// a region/day-trip is before deciding whether to include it in the trip at all.
+function computeRegionDistances() {
+  REGIONS.forEach((r, ri) => {
+    const distEl = document.getElementById('regiondist_' + ri);
+    if (!distEl) return;
+    if (r.region === MAIN_CITY_REGION) {
+      distEl.textContent = 'אזור העיר הראשית (' + MAIN_CITY_NAME + ')';
+      return;
+    }
+    // Prefer a City-tagged point as the representative for the region (more meaningful
+    // than a random trailhead), falling back to the first successfully geocoded point.
+    const rep = r.points.find(p => p.location && p.category === 'City')
+             || r.points.find(p => p.location);
+    if (!rep) {
+      distEl.textContent = 'לא ניתן היה לחשב מרחק';
+      return;
+    }
+    distEl.textContent = 'מחשב מרחק מ' + MAIN_CITY_NAME + '...';
+    // Stagger these too -- firing several Directions requests at once right when geocoding
+    // finishes risks silent rate-limit failures.
+    setTimeout(() => {
+      directionsService.route({
+        origin: MAIN_CITY_QUERY,
+        destination: rep.location,
+        travelMode: google.maps.TravelMode.DRIVING
+      }, (result, status) => {
+        if (status === 'OK') {
+          const leg = result.routes[0].legs[0];
+          distEl.textContent = `כ-${formatHebrewDuration(leg.duration.value)} נסיעה מ${MAIN_CITY_NAME}`;
+        } else {
+          console.warn('Distance-from-Duomo failed for region', r.region, status);
+          distEl.textContent = 'זמן נסיעה לא זמין כרגע';
+        }
+      });
+    }, ri * 300);
+  });
+}
+
+// Confirm just locks in the current selection -- it does NOT build a route. Sequencing days
+// and computing walking/driving times between legs is a separate skill's job, one step further
+// down the pipeline; this artifact's whole purpose ends at "here are the curated points."
+function onConfirm() {
+  const checked = POINTS.filter(p => p.checked && p.marker);
+
+  if (checked.length === 0) {
+    alert('סמן לפחות נקודה אחת לפני אישור.');
+    return;
+  }
+
+  document.getElementById('checklist').classList.add('hidden');
+  document.getElementById('filterRow').classList.add('hidden');
+  document.querySelector('.legend').classList.add('hidden');
+  document.querySelector('.legend-rec').classList.add('hidden');
+  document.querySelector('.selectAllRow').classList.add('hidden');
+  document.getElementById('suggestBtn').classList.add('hidden');
+  document.getElementById('confirmBtn').classList.add('hidden');
+  document.getElementById('backBtn').classList.remove('hidden');
+
+  if (regionOverlay) {
+    regionOverlay.setMap(null);
+    regionOverlay = null;
+  }
+
+  const summary = document.getElementById('routeSummary');
+  summary.innerHTML = `<div class="region-title">הבחירה ננעלה (${checked.length} נקודות)</div>
+    <div style="font-size:12px; color:#555; margin:6px 0 12px;">הרשימה הזו היא הקלט לסקיל הבא בפייפליין, שיבנה ממנה את המסלול בפועל (סדר ביקור וזמני הליכה/נסיעה).</div>`;
+
+  REGIONS.forEach(r => {
+    const inRegion = r.points.filter(p => p.checked && p.marker);
+    if (inRegion.length === 0) return;
+    const rTitle = document.createElement('div');
+    rTitle.className = 'region-title';
+    rTitle.textContent = r.region + ' (' + inRegion.length + ')';
+    summary.appendChild(rTitle);
+    inRegion.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'leg';
+      div.style.borderInlineStartColor = CATEGORY_COLORS[p.category];
+      div.innerHTML = `${p.rec ? '⭐ ' : ''}${p.name}${p.isSleep ? ' <span class="sleep-tag">לינה</span>' : ''}`;
+      summary.appendChild(div);
+    });
+  });
+
+  const bounds = new google.maps.LatLngBounds();
+  checked.forEach(p => bounds.extend(p.location));
+  map.fitBounds(bounds);
+
+  sendSelectionToLocalServer(checked);
+}
+
+// Sends the confirmed selection to the local helper server (local_server.js,
+// started via start_local_server.bat) so it gets written straight to
+// <Destination>_Selection.json -- this is what lets the next pipeline stage
+// pick up the confirmed points without the user needing to describe them or
+// screenshot this page. If the local server isn't running, this fails
+// silently into a plain-language status message; the on-screen locked list
+// above still works as a fallback exactly like before.
+function sendSelectionToLocalServer(checked) {
+  const statusEl = document.getElementById('status');
+  const points = checked.map(p => ({
+    id: p.id, name: p.name, category: p.category, region: p.regionName,
+    rec: !!p.rec, isSleep: !!p.isSleep
+  }));
+  // Per-region day count, from each region's own dropdown -- feeds the final
+  // itinerary as a real constraint (see finalplan.js), not just an implicit
+  // side-effect of which points happen to be checked.
+  const regionDays = {};
+  REGIONS.forEach(r => { regionDays[r.region] = r.days || 1; });
+
+  fetch(LOCAL_SERVER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ destination: DESTINATION_NAME, points, regionDays })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.ok) {
+        statusEl.textContent = `✅ הבחירה נשלחה ונשמרה אוטומטית (${data.count} נקודות). אפשר לחזור לצ'אט ולומר "תמשיך" — אין צורך לתאר את הבחירה.`;
+      } else {
+        statusEl.textContent = '⚠️ השרת המקומי הגיב עם שגיאה: ' + (data.error || 'שגיאה לא ידועה') + '. הרשימה למעלה עדיין תקפה -- אפשר לדווח עליה בצ\'אט כרגיל.';
+      }
+    })
+    .catch(() => {
+      statusEl.textContent = '⚠️ לא הצלחתי להתחבר לשרת המקומי (ודאו ש-start_local_server.bat פועל). הרשימה למעלה עדיין תקפה -- אפשר לדווח עליה בצ\'אט כרגיל.';
+    });
+}
+
+function onBack() {
+  document.getElementById('checklist').classList.remove('hidden');
+  document.getElementById('filterRow').classList.remove('hidden');
+  document.querySelector('.legend').classList.remove('hidden');
+  document.querySelector('.legend-rec').classList.remove('hidden');
+  document.querySelector('.selectAllRow').classList.remove('hidden');
+  document.getElementById('suggestBtn').classList.remove('hidden');
+  document.getElementById('confirmBtn').classList.remove('hidden');
+  document.getElementById('backBtn').classList.add('hidden');
+  document.getElementById('routeSummary').innerHTML = '';
+}
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjZ4x9SilKEMNW1NByB5YPprLfcDloEFQ&libraries=geometry&language=he&region=GR&callback=initMap">
+</script>
+</body>
+</html>

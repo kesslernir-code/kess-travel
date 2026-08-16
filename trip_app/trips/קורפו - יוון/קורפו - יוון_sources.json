@@ -1,0 +1,138 @@
+[
+  {
+    "name": "מסע אחר (Masa)",
+    "domain": "masa.co.il",
+    "type": "כללי",
+    "urls": [
+      "https://www.masa.co.il/location/%D7%A7%D7%95%D7%A8%D7%A4%D7%95-%D7%95%D7%94%D7%90%D7%99%D7%99%D7%9D-%D7%94%D7%99%D7%95%D7%A0%D7%99%D7%99%D7%9D/",
+      "https://www.masa.co.il/%D7%94%D7%9E%D7%93%D7%A8%D7%99%D7%9A-%D7%94%D7%A9%D7%99%D7%9E%D7%95%D7%A9%D7%99/%D7%A7%D7%95%D7%A8%D7%A4%D7%95-%D7%95%D7%94%D7%90%D7%99%D7%99%D7%9D-%D7%94%D7%99%D7%95%D7%A0%D7%99%D7%99%D7%9D",
+      "https://www.masa.co.il/article/%D7%A7%D7%95%D7%A8%D7%A4%D7%95-%D7%90%D7%9C%D7%A3-%D7%92%D7%95%D7%95%D7%A0%D7%99%D7%9D-%D7%A9%D7%9C-%D7%97%D7%95%D7%A4%D7%A9/",
+      "https://www.masa.co.il/article/%D7%A7%D7%95%D7%A8%D7%A4%D7%95-%D7%95%D7%9C%D7%A4%D7%A0%D7%99%D7%A0%D7%95-%D7%A0%D7%97-%D7%94%D7%90%D7%99/"
+    ],
+    "standing": true
+  },
+  {
+    "name": "GoTravel (גוטרוול)",
+    "domain": "gotravel.co.il",
+    "type": "כללי",
+    "urls": [
+      "https://www.gotravel.co.il/travel/?p=3311"
+    ],
+    "standing": true
+  },
+  {
+    "name": "למטייל",
+    "domain": "lametayel.co.il",
+    "type": "כללי",
+    "urls": [
+      "https://www.lametayel.co.il/destinations/kerkyra-585",
+      "https://www.lametayel.co.il/pois/2wmnn",
+      "https://www.lametayel.co.il/articles/2rdx88",
+      "https://www.lametayel.co.il/articles/n0qv72"
+    ],
+    "standing": true
+  },
+  {
+    "name": "Lonely Planet",
+    "domain": "lonelyplanet.com",
+    "type": "כללי",
+    "urls": [
+      "https://www.lonelyplanet.com/articles/guide-to-corfu",
+      "https://www.lonelyplanet.com/destinations/greece/corfu-town",
+      "https://lonelyplanet.com/greece/corfu-town/travel-tips-and-articles/secrets-of-corfu-the-hidden-depths-of-greeces-holiday-isle/40625c8c-8a11-5710-a052-1479d276fc48"
+    ],
+    "standing": true
+  },
+  {
+    "name": "Rick Steves' Europe",
+    "domain": "ricksteves.com",
+    "type": "כללי",
+    "urls": [
+      "https://community.ricksteves.com/travel-forum/greece/travel-guide-to-corfu-greece",
+      "https://community.ricksteves.com/travel-forum/greece/corfu-what-to-see-and-do"
+    ],
+    "standing": true
+  },
+  {
+    "name": "Time Out",
+    "domain": "timeout.com",
+    "type": "כללי",
+    "urls": [
+      "https://www.timeout.com/corfu"
+    ],
+    "standing": true
+  },
+  {
+    "name": "Culture Trip",
+    "domain": "theculturetrip.com",
+    "type": "תרבות והיסטוריה",
+    "urls": [
+      "https://theculturetrip.com/europe/greece/corfu",
+      "https://theculturetrip.com/europe/greece/corfu-island/articles/the-top-10-things-to-do-see-in-corfu",
+      "https://theculturetrip.com/europe/greece/corfu/articles/how-to-make-the-most-of-48-hours-in-corfu-greece",
+      "https://theculturetrip.com/europe/greece/corfu/articles/the-most-beautiful-beaches-in-corfu-greece"
+    ],
+    "standing": true
+  },
+  {
+    "name": "Atlas Obscura",
+    "domain": "atlasobscura.com",
+    "type": "תרבות והיסטוריה",
+    "urls": [
+      "https://www.atlasobscura.com/places/perithia-at-corfu",
+      "https://www.atlasobscura.com/places/banknote-museum-of-the-ionian-bank",
+      "https://www.atlasobscura.com/things-to-do/corfu-greece"
+    ],
+    "standing": true
+  },
+  {
+    "name": "AllTrails",
+    "domain": "alltrails.com",
+    "type": "הייקינג וטבע",
+    "urls": [
+      "https://www.alltrails.com/greece/corfu",
+      "https://www.alltrails.com/en-gb/trail/greece/corfu/cape-drastis-loop",
+      "https://www.alltrails.com/trail/greece/corfu/the-corfu-trail",
+      "https://www.alltrails.com/greece/corfu/beach"
+    ],
+    "standing": true
+  },
+  {
+    "name": "Wikiloc",
+    "domain": "wikiloc.com",
+    "type": "הייקינג וטבע",
+    "urls": [
+      "https://www.wikiloc.com/trails/hiking/greece/ionian-islands/corfu",
+      "https://www.wikiloc.com/hiking-trails/corfu-trail-5610311",
+      "https://www.wikiloc.com/hiking-trails/corfu-old-perithia-13830913"
+    ],
+    "standing": true
+  },
+  {
+    "name": "Nomadic Matt",
+    "domain": "nomadicmatt.com",
+    "type": "כללי",
+    "urls": [
+      "https://www.nomadicmatt.com/travel-guides/greece-travel-tips/corfu/"
+    ],
+    "standing": true
+  },
+  {
+    "name": "Tzatchickie",
+    "domain": "tzatchickie.gr",
+    "type": "כללי",
+    "urls": [
+      "https://tzatchickie.gr/corfu-island-greece-complete-travel-guide/"
+    ],
+    "standing": false
+  },
+  {
+    "name": "Discover Greece",
+    "domain": "discovergreece.com",
+    "type": "אוכל ויין",
+    "urls": [
+      "https://www.discovergreece.com/experiences/food-tour-corfu"
+    ],
+    "standing": false
+  }
+]
