@@ -1042,7 +1042,7 @@ function initMap() {
   directionsService = new google.maps.DirectionsService();
   // Single shared InfoWindow so opening a new bubble always closes any other open one.
   sharedInfoWindow = new google.maps.InfoWindow();
-  new google.maps.Circle({
+  mainAreaCircle = new google.maps.Circle({
     center: MAIN_CITY_LATLNG, radius: ONE_HOUR_DRIVE_M,
     strokeColor: '#c8a24a', strokeOpacity: 0.9, strokeWeight: 2,
     fillColor: '#c8a24a', fillOpacity: 0.06, map: map, clickable: false, zIndex: 1
@@ -1340,11 +1340,16 @@ function convexHullLatLng(points) {
 // A region circle must read as "a reasonable area to base yourself in", not a
 // shape that happens to enclose whatever's in that region -- a region with
 // far-flung points (e.g. Cluj-Napoca to Baia Mare) would otherwise draw a
-// circle spanning a huge chunk of the country. Capped at roughly a 1.5hr
-// driving radius regardless of how spread the region's actual points are.
-const MAX_REGION_RADIUS_M = 70000;
+// circle spanning a huge chunk of the country. A single flat cap doesn't
+// work across destination sizes though -- a real Corfu run showed a
+// 70km-radius circle (fine for a country-scale trip like Romania) dwarfing
+// the ENTIRE island, spilling into the sea and across into Albania. The cap
+// must scale with how big the destination actually is: see regionRadiusCap().
+const MAX_REGION_RADIUS_M = 70000; // absolute ceiling, for country-scale trips
+const MIN_REGION_RADIUS_M = 15000; // floor -- roughly a 30min drive, for small/dense destinations (an island)
 let regionOverlay;
 let allRegionOverlays = [];
+let mainAreaCircle; // the persistent "main city area" circle -- see geocodeAllPoints()'s completion handler
 function clearAllRegionOverlays() {
   allRegionOverlays.forEach(o => o.setMap(null));
   allRegionOverlays = [];
@@ -1364,6 +1369,40 @@ function clearAllRegionOverlays() {
 // outside the circle entirely. Reject points far from the rough (median,
 // not mean -- robust to a single wild value) center before computing the
 // real circle; fall back to all points if that would reject everything.
+// How big IS this whole destination, robustly? Using the farthest point
+// would be wrecked by the same kind of day-trip outlier computeRegionCircle
+// already guards against (a few distant-but-real islands don't make Corfu a
+// "large" destination) -- the 75th-percentile distance from the overall
+// center is dominated by the bulk of ordinary points and barely moves for a
+// minority of far-flung ones. Recomputed fresh each call (cheap, ~100s of
+// points) rather than cached, since geocoding finishes progressively and a
+// cached early result from a handful of geocoded points would be wrong.
+function destinationSpanM() {
+  const allLocs = REGIONS.flatMap(r => r.points.filter(p => p.location).map(p => p.location));
+  if (allLocs.length < 2) return MAX_REGION_RADIUS_M;
+  // Median lat/lng, NOT a bounding-box center -- a bounding box is wrecked by
+  // even one extreme outlier the same way computeRegionCircle's per-region
+  // box was. A real check on this fixed destination still showed genuinely
+  // local north-Corfu beaches (Sidari, Canal d'Amour) computed as ~280km
+  // from "center", because the raw bounds included one ~300km-away outlier
+  // (Naxos) and a bounding box's center shifts toward whatever it contains,
+  // one point or ten.
+  const lats = allLocs.map(l => l.lat()).sort((a, b) => a - b);
+  const lngs = allLocs.map(l => l.lng()).sort((a, b) => a - b);
+  const mid = Math.floor(allLocs.length / 2);
+  const center = new google.maps.LatLng(lats[mid], lngs[mid]);
+  const dists = allLocs.map(l => google.maps.geometry.spherical.computeDistanceBetween(center, l)).sort((a, b) => a - b);
+  return dists[Math.floor(dists.length * 0.75)];
+}
+
+// Scale the per-region cap to that: roughly 60% of the destination's own
+// core span, so a country-scale trip still gets the full 70km ceiling
+// (unchanged from before) while a small, dense destination like an island
+// gets a cap closer to a real "how far would you actually drive" distance.
+function regionRadiusCap() {
+  return Math.min(MAX_REGION_RADIUS_M, Math.max(MIN_REGION_RADIUS_M, destinationSpanM() * 0.6));
+}
+
 function computeRegionCircle(locs) {
   let finalLocs = locs;
   if (locs.length > 2) {
@@ -1380,7 +1419,7 @@ function computeRegionCircle(locs) {
   const center = bounds.getCenter();
   let radius = 4000;
   finalLocs.forEach(l => { radius = Math.max(radius, google.maps.geometry.spherical.computeDistanceBetween(center, l) * 1.15); });
-  radius = Math.min(radius, MAX_REGION_RADIUS_M);
+  radius = Math.min(radius, regionRadiusCap());
   return { center, radius };
 }
 
@@ -1418,13 +1457,14 @@ function showAllRegions() {
 function focusRegion(regionPoints, regionName) {
   if (regionName === MAIN_CITY_REGION) {
     if (regionOverlay) { regionOverlay.setMap(null); regionOverlay = null; }
+    const _mainRadius = regionRadiusCap();
     regionOverlay = new google.maps.Circle({
-      center: MAIN_CITY_LATLNG, radius: ONE_HOUR_DRIVE_M,
+      center: MAIN_CITY_LATLNG, radius: _mainRadius,
       strokeColor: '#1a5fb4', strokeOpacity: 0.85, strokeWeight: 2,
       fillColor: '#1a5fb4', fillOpacity: 0.12, map: map
     });
     map.fitBounds(regionOverlay.getBounds());
-    document.getElementById('status').textContent = 'האזור המרכזי — עיגול של כשעת נסיעה סביב ' + MAIN_CITY_NAME + '.';
+    document.getElementById('status').textContent = 'האזור המרכזי — עיגול של כ-' + Math.round(_mainRadius/1000) + ' ק\"מ סביב ' + MAIN_CITY_NAME + '.';
     return;
   }
   const locs = regionPoints.filter(p => p.location).map(p => p.location);
@@ -1512,6 +1552,13 @@ function geocodeAllPoints() {
           const failed = POINTS.filter(x => x.geocodeFailed);
           status.textContent = 'מוכן. סמן/הסר נקודות ולחץ על אישור.' + (failed.length ? ` (${failed.length} לא אותרו: ${failed.map(f=>f.name).join(', ')})` : '');
           computeRegionDistances();
+          // The persistent main-area circle is drawn at map init, before any
+          // point has geocoded -- regionRadiusCap() had nothing to measure
+          // yet then, so it's redrawn here at its real size now that every
+          // point's location is known (a real Corfu run showed exactly why
+          // this matters: the un-scaled circle was hugely oversized for a
+          // small island).
+          if (mainAreaCircle) mainAreaCircle.setRadius(regionRadiusCap());
         }
       });
     }, i * 150);

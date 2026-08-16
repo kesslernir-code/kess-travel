@@ -117,7 +117,7 @@ function renderRouteMap(plan, enrich, input, serverPort) {
     // on map init, kept lightly styled so it doesn't fight the region overlays.
     .replace(
       /(sharedInfoWindow = new google\.maps\.InfoWindow\(\);\n)/,
-      `$1  new google.maps.Circle({\n`
+      `$1  mainAreaCircle = new google.maps.Circle({\n`
       + `    center: MAIN_CITY_LATLNG, radius: ONE_HOUR_DRIVE_M,\n`
       + `    strokeColor: '#c8a24a', strokeOpacity: 0.9, strokeWeight: 2,\n`
       + `    fillColor: '#c8a24a', fillOpacity: 0.06, map: map, clickable: false, zIndex: 1\n`
@@ -132,13 +132,14 @@ function renderRouteMap(plan, enrich, input, serverPort) {
       `function focusRegion(regionPoints, regionName) {\n`
       + `  if (regionName === MAIN_CITY_REGION) {\n`
       + `    if (regionOverlay) { regionOverlay.setMap(null); regionOverlay = null; }\n`
+      + `    const _mainRadius = regionRadiusCap();\n`
       + `    regionOverlay = new google.maps.Circle({\n`
-      + `      center: MAIN_CITY_LATLNG, radius: ONE_HOUR_DRIVE_M,\n`
+      + `      center: MAIN_CITY_LATLNG, radius: _mainRadius,\n`
       + `      strokeColor: '#1a5fb4', strokeOpacity: 0.85, strokeWeight: 2,\n`
       + `      fillColor: '#1a5fb4', fillOpacity: 0.12, map: map\n`
       + `    });\n`
       + `    map.fitBounds(regionOverlay.getBounds());\n`
-      + `    document.getElementById('status').textContent = 'האזור המרכזי — עיגול של כשעת נסיעה סביב ' + MAIN_CITY_NAME + '.';\n`
+      + `    document.getElementById('status').textContent = 'האזור המרכזי — עיגול של כ-' + Math.round(_mainRadius/1000) + ' ק\\"מ סביב ' + MAIN_CITY_NAME + '.';\n`
       + `    return;\n`
       + `  }\n`
       + `  const locs =`
