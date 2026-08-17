@@ -373,7 +373,9 @@ ${typeGroups}
   .result-msg.show { display:block; }
   .result-msg.pending { background:#faf6ef; color:var(--muted); border-right:4px solid var(--gold); }
   .result-msg.success { background:#f0f7ed; color:#22863a; border-right:4px solid #22863a; }
-  .result-msg.error { background:#fdf0f1; color:var(--accent); border-right:4px solid var(--accent); }`;
+  .result-msg.error { background:#fdf0f1; color:var(--accent); border-right:4px solid var(--accent); }
+  .spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(0,0,0,0.15); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; vertical-align:-2px; margin-inline-end:7px; }
+  @keyframes spin { to { transform:rotate(360deg); } }`;
 
   const bodyHtml = `  <div class="container">
     <h1>מקורות מחקר — ${esc(destination)}</h1>
@@ -406,19 +408,24 @@ ${tiersHtml}
     if (!domains.length) { alert('בחר לפחות מקור אחד.'); return; }
     inFlight = true;
     this.disabled = true;
-    this.textContent = 'שולח...';
+    this.innerHTML = '<span class="spinner"></span>שולח...';
     const msg = document.getElementById('resultMsg');
     msg.className = 'result-msg show pending';
-    msg.textContent = 'שולח בחירה לשרת...';
+    msg.innerHTML = '<span class="spinner"></span>שולח בחירה לשרת...';
     try {
       const res = await fetch(SERVER_URL, {
         method: 'POST', headers: { 'Content-Type': 'application/json; charset=utf-8' },
         body: JSON.stringify({ destination: DESTINATION_NAME, domains })
       });
       if (res.ok) {
-        msg.className = 'result-msg show success';
-        msg.textContent = 'אושר! הסריקה מתחילה ברקע -- עבור/י ללשונית 1 בדשבורד כדי לעקוב אחרי ההתקדמות.';
-        this.textContent = 'אושר';
+        msg.className = 'result-msg show pending';
+        msg.innerHTML = '<span class="spinner"></span>בונה נקודות עניין ומפה... פותח את הדשבורד';
+        this.innerHTML = '<span class="spinner"></span>בונה נקודות עניין ומפה...';
+        // The dashboard already auto-refreshes itself once tabs 3/4 are
+        // ready (see render.js's renderDashboard) -- opening it now instead
+        // of waiting here means that polling, not this page, is what tells
+        // the user when mining actually finishes.
+        setTimeout(() => { window.location.href = '/' + encodeURIComponent(DESTINATION_NAME) + '/' + encodeURIComponent(DESTINATION_NAME) + '_KESSLER_TRIP.html'; }, 900);
       } else {
         msg.className = 'result-msg show error';
         msg.textContent = 'שגיאת שרת: ' + res.status;

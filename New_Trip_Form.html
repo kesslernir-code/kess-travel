@@ -84,6 +84,8 @@
   }
   #statusBox.ok { display: block; background: var(--ok-bg); color: var(--ok); }
   #statusBox.err { display: block; background: var(--err-bg); color: var(--err); }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: -2px; margin-inline-end: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -190,7 +192,7 @@
 
     const submitBtn = form.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
-    submitBtn.textContent = 'מחפש מקורות ליעד... (יכול לקחת דקה)';
+    submitBtn.innerHTML = '<span class="spinner"></span>בונה רשימת מקורות ליעד... (יכול לקחת דקה)';
 
     try {
       const res = await fetch(SERVER_URL, {
