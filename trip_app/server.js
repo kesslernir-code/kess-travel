@@ -11,7 +11,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const {
-  runDiscoveryStage, runMiningStage, runFinalPlanStage,
+  runDiscoveryStage, runMiningStage, runFinalPlanStage, runExpandSourcesStage,
   ensureTripDir, tripDir
 } = require('./pipeline/run');
 const { renderDashboard } = require('./pipeline/render');
@@ -171,6 +171,23 @@ const server = http.createServer(async (req, res) => {
         log(`[${folderName}] שלב הכרייה נכשל: ${err.message}`);
         try { fs.writeFileSync(path.join(dir, `${folderName}_KESSLER_TRIP.html`), renderDashboard(folderName, input, { 2: true, 3: 'error', 4: 'error' }), 'utf-8'); } catch { /* best-effort */ }
       });
+    return;
+  }
+
+  // ---- Top-up: search for more sources in specific categories ---------
+  if (req.method === 'POST' && urlPath === '/expand-sources') {
+    let body;
+    try { body = await readJsonBody(req); } catch { sendJson(res, 400, { ok: false, error: 'invalid JSON body' }); return; }
+    const folderName = sanitizeFolderName(body.destination);
+    if (!folderName || !Array.isArray(body.categories) || !body.categories.length) {
+      sendJson(res, 400, { ok: false, error: 'destination and categories[] are required' });
+      return;
+    }
+    // Real ~$0.35 claude -p call, same as initial discovery -- ack immediately,
+    // run in the background, the Sources page polls itself for the new count.
+    sendJson(res, 200, { ok: true, message: 'expand started' });
+    runExpandSourcesStage(folderName, body.categories, PORT, log)
+      .catch((err) => log(`[${folderName}] חיפוש מקורות נוספים נכשל: ${err.message}`));
     return;
   }
 

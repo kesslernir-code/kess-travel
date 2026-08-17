@@ -1,7 +1,7 @@
 {
   "destination": "קורפו - יוון",
   "discoveredAt": "2026-08-16T18:33:30.568Z",
-  "costUsd": 0.35889715,
+  "costUsd": 0.6910286000000001,
   "sources": [
     {
       "name": "מסע אחר (Masa)",
@@ -136,6 +136,98 @@
       "type": "אוכל ויין",
       "urls": [
         "https://www.discovergreece.com/experiences/food-tour-corfu"
+      ],
+      "standing": false
+    },
+    {
+      "name": "Johnny Africa",
+      "domain": "johnnyafrica.com",
+      "type": "בלוגרים אישיים",
+      "urls": [
+        "https://johnnyafrica.com/corfu-travel-guide/"
+      ],
+      "standing": false
+    },
+    {
+      "name": "Bucket List Bums",
+      "domain": "bucketlistbums.com",
+      "type": "בלוגרים אישיים",
+      "urls": [
+        "https://bucketlistbums.com/single-post/corfu/"
+      ],
+      "standing": false
+    },
+    {
+      "name": "Passport for Living",
+      "domain": "passport-for-living.com",
+      "type": "אטרקציות ופעילויות",
+      "urls": [
+        "https://passport-for-living.com/guide-to-corfu-greece/"
+      ],
+      "standing": false
+    },
+    {
+      "name": "Ever the Wanderer",
+      "domain": "everthewanderer.com",
+      "type": "בלוגרים אישיים",
+      "urls": [
+        "https://everthewanderer.com/corfu-travel-guide/"
+      ],
+      "standing": false
+    },
+    {
+      "name": "The Globewanderin",
+      "domain": "theglobewanderin.com",
+      "type": "בלוגרים אישיים",
+      "urls": [
+        "https://www.theglobewanderin.com/corfu-greece-travel-guide-things-to-do-in-corfu/"
+      ],
+      "standing": false
+    },
+    {
+      "name": "Walking Corfu",
+      "domain": "walkingcorfu.com",
+      "type": "הייקינג וטבע",
+      "urls": [
+        "https://walkingcorfu.com/"
+      ],
+      "standing": false
+    },
+    {
+      "name": "Anima Wings",
+      "domain": "animawings.com",
+      "type": "אטרקציות ופעילויות",
+      "urls": [
+        "https://www.animawings.com/en/blog/complete-guide-to-corfu-beaches"
+      ],
+      "standing": false
+    },
+    {
+      "name": "My Corfu Experience",
+      "domain": "mycorfuexperience.com",
+      "type": "בלוגרים אישיים",
+      "urls": [
+        "https://mycorfuexperience.com/blog/2023/01/19/earn-your-day-at-the-beach-with-a-hike/"
+      ],
+      "standing": false
+    },
+    {
+      "name": "Villa Kapella",
+      "domain": "villakapella.com",
+      "type": "תרבות והיסטוריה",
+      "urls": [
+        "https://villakapella.com/the-venetian-footprint-on-corfus-architecture-and-identity/",
+        "https://villakapella.com/olive-grove-wonders-exploring-corfus-ancient-trees/"
+      ],
+      "standing": false
+    },
+    {
+      "name": "Discover Corfu",
+      "domain": "discover-corfu.com",
+      "type": "אטרקציות ופעילויות",
+      "urls": [
+        "https://discover-corfu.com/ultimate-3-day-corfu-itinerary/",
+        "https://discover-corfu.com/corfu-villages/"
       ],
       "standing": false
     }

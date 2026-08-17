@@ -39,12 +39,20 @@
   .result-msg.error { background:#fdf0f1; color:var(--accent); border-right:4px solid var(--accent); }
   .spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(0,0,0,0.15); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; vertical-align:-2px; margin-inline-end:7px; }
   @keyframes spin { to { transform:rotate(360deg); } }
+  .expand-section { background:#fff; border:1.5px dashed #ddd3bd; border-radius:10px; padding:18px 20px; margin-bottom:24px; }
+  .expand-title { font-size:15px; margin:0 0 4px; }
+  .expand-section .hint { font-size:12.5px; color:var(--muted); margin:0 0 12px; }
+  .expand-cats { display:flex; flex-wrap:wrap; gap:8px 16px; margin-bottom:14px; }
+  .expand-cat { font-size:13px; display:flex; align-items:center; gap:5px; cursor:pointer; }
+  .expand-btn { padding:10px 18px; font-size:13.5px; font-weight:700; background:#fff; color:var(--accent); border:1.5px solid var(--accent); border-radius:8px; cursor:pointer; }
+  .expand-btn:hover:not(:disabled) { background:#fdf0f1; }
+  .expand-btn:disabled { opacity:0.6; cursor:not-allowed; }
 </style>
 </head>
 <body>
   <div class="container">
     <h1>מקורות מחקר — קורפו - יוון</h1>
-    <p class="subtitle">13 מקורות רלוונטיים נמצאו. הסר מה שלא רוצים לכלול, ולחץ אישור.</p>
+    <p class="subtitle">23 מקורות רלוונטיים נמצאו. הסר מה שלא רוצים לכלול, ולחץ אישור.</p>
     <div class="toolbar">
       <a id="selectAll">בחר הכל</a>
       <a id="clearAll">נקה הכל</a>
@@ -171,7 +179,7 @@
     </div>
   </div>
   <div class="tier">
-    <h2 class="tier-title">מקורות חדשים שנמצאו ליעד הזה <span class="tier-count">2</span></h2>
+    <h2 class="tier-title">מקורות חדשים שנמצאו ליעד הזה <span class="tier-count">12</span></h2>
 
     <div class="type-group">
       <div class="type-title">כללי</div>
@@ -202,13 +210,143 @@
     </div>
       </div>
     </div>
+
+    <div class="type-group">
+      <div class="type-title">בלוגרים אישיים</div>
+      <div class="source-cards">
+    <div class="source-card">
+      <div class="card-header">
+        <input type="checkbox" class="source-check" id="src_13" data-domain="johnnyafrica.com" checked>
+        <label for="src_13" class="card-title">Johnny Africa</label>
+      </div>
+      <div class="card-domain"><a href="https://johnnyafrica.com" target="_blank" rel="noopener">johnnyafrica.com</a></div>
+      
+      <div class="card-meta">1 דפים מועמדים לסריקה</div>
+    </div>
+    <div class="source-card">
+      <div class="card-header">
+        <input type="checkbox" class="source-check" id="src_14" data-domain="bucketlistbums.com" checked>
+        <label for="src_14" class="card-title">Bucket List Bums</label>
+      </div>
+      <div class="card-domain"><a href="https://bucketlistbums.com" target="_blank" rel="noopener">bucketlistbums.com</a></div>
+      
+      <div class="card-meta">1 דפים מועמדים לסריקה</div>
+    </div>
+    <div class="source-card">
+      <div class="card-header">
+        <input type="checkbox" class="source-check" id="src_16" data-domain="everthewanderer.com" checked>
+        <label for="src_16" class="card-title">Ever the Wanderer</label>
+      </div>
+      <div class="card-domain"><a href="https://everthewanderer.com" target="_blank" rel="noopener">everthewanderer.com</a></div>
+      
+      <div class="card-meta">1 דפים מועמדים לסריקה</div>
+    </div>
+    <div class="source-card">
+      <div class="card-header">
+        <input type="checkbox" class="source-check" id="src_17" data-domain="theglobewanderin.com" checked>
+        <label for="src_17" class="card-title">The Globewanderin</label>
+      </div>
+      <div class="card-domain"><a href="https://theglobewanderin.com" target="_blank" rel="noopener">theglobewanderin.com</a></div>
+      
+      <div class="card-meta">1 דפים מועמדים לסריקה</div>
+    </div>
+    <div class="source-card">
+      <div class="card-header">
+        <input type="checkbox" class="source-check" id="src_20" data-domain="mycorfuexperience.com" checked>
+        <label for="src_20" class="card-title">My Corfu Experience</label>
+      </div>
+      <div class="card-domain"><a href="https://mycorfuexperience.com" target="_blank" rel="noopener">mycorfuexperience.com</a></div>
+      
+      <div class="card-meta">1 דפים מועמדים לסריקה</div>
+    </div>
+      </div>
+    </div>
+
+    <div class="type-group">
+      <div class="type-title">אטרקציות ופעילויות</div>
+      <div class="source-cards">
+    <div class="source-card">
+      <div class="card-header">
+        <input type="checkbox" class="source-check" id="src_15" data-domain="passport-for-living.com" checked>
+        <label for="src_15" class="card-title">Passport for Living</label>
+      </div>
+      <div class="card-domain"><a href="https://passport-for-living.com" target="_blank" rel="noopener">passport-for-living.com</a></div>
+      
+      <div class="card-meta">1 דפים מועמדים לסריקה</div>
+    </div>
+    <div class="source-card">
+      <div class="card-header">
+        <input type="checkbox" class="source-check" id="src_19" data-domain="animawings.com" checked>
+        <label for="src_19" class="card-title">Anima Wings</label>
+      </div>
+      <div class="card-domain"><a href="https://animawings.com" target="_blank" rel="noopener">animawings.com</a></div>
+      
+      <div class="card-meta">1 דפים מועמדים לסריקה</div>
+    </div>
+    <div class="source-card">
+      <div class="card-header">
+        <input type="checkbox" class="source-check" id="src_22" data-domain="discover-corfu.com" checked>
+        <label for="src_22" class="card-title">Discover Corfu</label>
+      </div>
+      <div class="card-domain"><a href="https://discover-corfu.com" target="_blank" rel="noopener">discover-corfu.com</a></div>
+      
+      <div class="card-meta">2 דפים מועמדים לסריקה</div>
+    </div>
+      </div>
+    </div>
+
+    <div class="type-group">
+      <div class="type-title">הייקינג וטבע</div>
+      <div class="source-cards">
+    <div class="source-card">
+      <div class="card-header">
+        <input type="checkbox" class="source-check" id="src_18" data-domain="walkingcorfu.com" checked>
+        <label for="src_18" class="card-title">Walking Corfu</label>
+      </div>
+      <div class="card-domain"><a href="https://walkingcorfu.com" target="_blank" rel="noopener">walkingcorfu.com</a></div>
+      
+      <div class="card-meta">1 דפים מועמדים לסריקה</div>
+    </div>
+      </div>
+    </div>
+
+    <div class="type-group">
+      <div class="type-title">תרבות והיסטוריה</div>
+      <div class="source-cards">
+    <div class="source-card">
+      <div class="card-header">
+        <input type="checkbox" class="source-check" id="src_21" data-domain="villakapella.com" checked>
+        <label for="src_21" class="card-title">Villa Kapella</label>
+      </div>
+      <div class="card-domain"><a href="https://villakapella.com" target="_blank" rel="noopener">villakapella.com</a></div>
+      
+      <div class="card-meta">2 דפים מועמדים לסריקה</div>
+    </div>
+      </div>
+    </div>
   </div>
+    <div class="expand-section">
+      <h2 class="expand-title">חסר מקורות בקטגוריה מסוימת?</h2>
+      <p class="hint">סמן/י את הקטגוריות שלדעתך צריך בהן עוד מקורות, ולחצי על החיפוש -- זה מריץ חיפוש ממוקד נוסף (לא חוזר על מקורות שכבר נמצאו)</p>
+      <div class="expand-cats">
+        <label class="expand-cat"><input type="checkbox" class="expand-check" value="כללי"> כללי</label>
+        <label class="expand-cat"><input type="checkbox" class="expand-check" value="הייקינג וטבע"> הייקינג וטבע</label>
+        <label class="expand-cat"><input type="checkbox" class="expand-check" value="אוכל ויין"> אוכל ויין</label>
+        <label class="expand-cat"><input type="checkbox" class="expand-check" value="תרבות והיסטוריה"> תרבות והיסטוריה</label>
+        <label class="expand-cat"><input type="checkbox" class="expand-check" value="מקומי ועירוני"> מקומי ועירוני</label>
+        <label class="expand-cat"><input type="checkbox" class="expand-check" value="בלוגרים אישיים"> בלוגרים אישיים</label>
+        <label class="expand-cat"><input type="checkbox" class="expand-check" value="אטרקציות ופעילויות"> אטרקציות ופעילויות</label>
+      </div>
+      <button class="expand-btn" id="expandBtn">🔍 חיפוש מקורות נוספים</button>
+      <div class="result-msg" id="expandMsg"></div>
+    </div>
     <button class="confirm-btn" id="confirmBtn">אישור מקורות והתחלת סריקה</button>
     <div class="result-msg" id="resultMsg"></div>
   </div>
 <script>
   const DESTINATION_NAME = "קורפו - יוון";
   const SERVER_URL = 'http://localhost:8234/confirm-sources';
+  const EXPAND_URL = 'http://localhost:8234/expand-sources';
   const checks = () => Array.from(document.querySelectorAll('.source-check'));
   function updateCount() {
     document.getElementById('countLabel').textContent = checks().filter(c => c.checked).length + ' מתוך ' + checks().length + ' נבחרו';
@@ -217,6 +355,50 @@
   document.getElementById('selectAll').addEventListener('click', () => { checks().forEach(c => c.checked = true); updateCount(); });
   document.getElementById('clearAll').addEventListener('click', () => { checks().forEach(c => c.checked = false); updateCount(); });
   updateCount();
+
+  // Self-disabling poll: only runs after a real expand-search was fired, and
+  // stops the moment the source count actually changes -- same pattern as
+  // the dashboard's own auto-refresh, reused here since this page has the
+  // same "a background stage will finish later" problem.
+  function pollForNewSources(startCount) {
+    const poll = setInterval(() => {
+      fetch(location.pathname + '?_poll=' + Date.now(), { cache: 'no-store' })
+        .then((r) => r.text())
+        .then((html) => {
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const newCount = doc.querySelectorAll('.source-check').length;
+          if (newCount !== startCount) { clearInterval(poll); location.reload(); }
+        })
+        .catch(() => { /* transient fetch error -- just try again next tick */ });
+    }, 6000);
+  }
+
+  document.getElementById('expandBtn').addEventListener('click', async function() {
+    const categories = Array.from(document.querySelectorAll('.expand-check:checked')).map((c) => c.value);
+    if (!categories.length) { alert('סמן/י לפחות קטגוריה אחת.'); return; }
+    this.disabled = true;
+    this.innerHTML = '<span class="spinner"></span>מחפש מקורות נוספים...';
+    const msg = document.getElementById('expandMsg');
+    msg.className = 'result-msg show pending';
+    msg.innerHTML = '<span class="spinner"></span>מחפש... יכול לקחת דקה. הדף יתרענן אוטומטית כשיהיו תוצאות.';
+    try {
+      const res = await fetch(EXPAND_URL, {
+        method: 'POST', headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({ destination: DESTINATION_NAME, categories })
+      });
+      if (res.ok) {
+        pollForNewSources(checks().length);
+      } else {
+        msg.className = 'result-msg show error';
+        msg.textContent = 'שגיאת שרת: ' + res.status;
+        this.disabled = false; this.textContent = '🔍 חיפוש מקורות נוספים';
+      }
+    } catch (err) {
+      msg.className = 'result-msg show error';
+      msg.textContent = 'לא ניתן להתחבר לשרת.';
+      this.disabled = false; this.textContent = '🔍 חיפוש מקורות נוספים';
+    }
+  });
 
   let inFlight = false;
   document.getElementById('confirmBtn').addEventListener('click', async function() {

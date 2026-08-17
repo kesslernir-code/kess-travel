@@ -300,7 +300,8 @@ ${cards}
 // server so mining only touches what the user actually approved. serverPort
 // is injected so this file works against whichever port server.js is running
 // on for this machine.
-function renderSources(destination, sources, serverPort) {
+function renderSources(destination, sources, serverPort, allTypes) {
+  const types = allTypes && allTypes.length ? allTypes : [...new Set(sources.map((s) => s.type || 'כללי'))];
   const card = (s, i) => {
     const urlCount = (s.urls || []).length;
     return `    <div class="source-card">
@@ -375,7 +376,15 @@ ${typeGroups}
   .result-msg.success { background:#f0f7ed; color:#22863a; border-right:4px solid #22863a; }
   .result-msg.error { background:#fdf0f1; color:var(--accent); border-right:4px solid var(--accent); }
   .spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(0,0,0,0.15); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; vertical-align:-2px; margin-inline-end:7px; }
-  @keyframes spin { to { transform:rotate(360deg); } }`;
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .expand-section { background:#fff; border:1.5px dashed #ddd3bd; border-radius:10px; padding:18px 20px; margin-bottom:24px; }
+  .expand-title { font-size:15px; margin:0 0 4px; }
+  .expand-section .hint { font-size:12.5px; color:var(--muted); margin:0 0 12px; }
+  .expand-cats { display:flex; flex-wrap:wrap; gap:8px 16px; margin-bottom:14px; }
+  .expand-cat { font-size:13px; display:flex; align-items:center; gap:5px; cursor:pointer; }
+  .expand-btn { padding:10px 18px; font-size:13.5px; font-weight:700; background:#fff; color:var(--accent); border:1.5px solid var(--accent); border-radius:8px; cursor:pointer; }
+  .expand-btn:hover:not(:disabled) { background:#fdf0f1; }
+  .expand-btn:disabled { opacity:0.6; cursor:not-allowed; }`;
 
   const bodyHtml = `  <div class="container">
     <h1>מקורות מחקר — ${esc(destination)}</h1>
@@ -386,12 +395,22 @@ ${typeGroups}
       <span class="count" id="countLabel"></span>
     </div>
 ${tiersHtml}
+    <div class="expand-section">
+      <h2 class="expand-title">חסר מקורות בקטגוריה מסוימת?</h2>
+      <p class="hint">סמן/י את הקטגוריות שלדעתך צריך בהן עוד מקורות, ולחצי על החיפוש -- זה מריץ חיפוש ממוקד נוסף (לא חוזר על מקורות שכבר נמצאו)</p>
+      <div class="expand-cats">
+${types.map((t) => `        <label class="expand-cat"><input type="checkbox" class="expand-check" value="${esc(t)}"> ${esc(t)}</label>`).join('\n')}
+      </div>
+      <button class="expand-btn" id="expandBtn">🔍 חיפוש מקורות נוספים</button>
+      <div class="result-msg" id="expandMsg"></div>
+    </div>
     <button class="confirm-btn" id="confirmBtn">אישור מקורות והתחלת סריקה</button>
     <div class="result-msg" id="resultMsg"></div>
   </div>
 <script>
   const DESTINATION_NAME = ${JSON.stringify(destination)};
   const SERVER_URL = 'http://localhost:${serverPort}/confirm-sources';
+  const EXPAND_URL = 'http://localhost:${serverPort}/expand-sources';
   const checks = () => Array.from(document.querySelectorAll('.source-check'));
   function updateCount() {
     document.getElementById('countLabel').textContent = checks().filter(c => c.checked).length + ' מתוך ' + checks().length + ' נבחרו';
@@ -400,6 +419,50 @@ ${tiersHtml}
   document.getElementById('selectAll').addEventListener('click', () => { checks().forEach(c => c.checked = true); updateCount(); });
   document.getElementById('clearAll').addEventListener('click', () => { checks().forEach(c => c.checked = false); updateCount(); });
   updateCount();
+
+  // Self-disabling poll: only runs after a real expand-search was fired, and
+  // stops the moment the source count actually changes -- same pattern as
+  // the dashboard's own auto-refresh, reused here since this page has the
+  // same "a background stage will finish later" problem.
+  function pollForNewSources(startCount) {
+    const poll = setInterval(() => {
+      fetch(location.pathname + '?_poll=' + Date.now(), { cache: 'no-store' })
+        .then((r) => r.text())
+        .then((html) => {
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const newCount = doc.querySelectorAll('.source-check').length;
+          if (newCount !== startCount) { clearInterval(poll); location.reload(); }
+        })
+        .catch(() => { /* transient fetch error -- just try again next tick */ });
+    }, 6000);
+  }
+
+  document.getElementById('expandBtn').addEventListener('click', async function() {
+    const categories = Array.from(document.querySelectorAll('.expand-check:checked')).map((c) => c.value);
+    if (!categories.length) { alert('סמן/י לפחות קטגוריה אחת.'); return; }
+    this.disabled = true;
+    this.innerHTML = '<span class="spinner"></span>מחפש מקורות נוספים...';
+    const msg = document.getElementById('expandMsg');
+    msg.className = 'result-msg show pending';
+    msg.innerHTML = '<span class="spinner"></span>מחפש... יכול לקחת דקה. הדף יתרענן אוטומטית כשיהיו תוצאות.';
+    try {
+      const res = await fetch(EXPAND_URL, {
+        method: 'POST', headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({ destination: DESTINATION_NAME, categories })
+      });
+      if (res.ok) {
+        pollForNewSources(checks().length);
+      } else {
+        msg.className = 'result-msg show error';
+        msg.textContent = 'שגיאת שרת: ' + res.status;
+        this.disabled = false; this.textContent = '🔍 חיפוש מקורות נוספים';
+      }
+    } catch (err) {
+      msg.className = 'result-msg show error';
+      msg.textContent = 'לא ניתן להתחבר לשרת.';
+      this.disabled = false; this.textContent = '🔍 חיפוש מקורות נוספים';
+    }
+  });
 
   let inFlight = false;
   document.getElementById('confirmBtn').addEventListener('click', async function() {

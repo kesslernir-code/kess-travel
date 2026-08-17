@@ -42,7 +42,7 @@ function parseKnowledgeHubs() {
 
 // type is one of a fixed small set so the Sources page (Tab 2) can group by
 // it consistently regardless of destination -- not a free-form label.
-const SOURCE_TYPES = ['כללי', 'הייקינג וטבע', 'אוכל ויין', 'תרבות והיסטוריה', 'מקומי ועירוני'];
+const SOURCE_TYPES = ['כללי', 'הייקינג וטבע', 'אוכל ויין', 'תרבות והיסטוריה', 'מקומי ועירוני', 'בלוגרים אישיים', 'אטרקציות ופעילויות'];
 
 const RESULT_SCHEMA_HINT = `{
   "sources": [
@@ -82,12 +82,13 @@ function extractJson(text) {
   return JSON.parse(candidate.slice(start, end + 1));
 }
 
-function discoverSources(destinationHe, destinationEn, onProgress) {
+// Shared by discoverSources (fresh destination) and discoverMoreSources
+// (targeted top-up search) -- both are "spawn the one claude -p session,
+// wait, parse JSON" with only the prompt differing. hubDomains marks which
+// results are from the standing index vs newly found either way.
+function runDiscoveryPrompt(prompt, hubDomains, startLog, onProgress) {
   const log = onProgress || (() => {});
   return new Promise((resolve, reject) => {
-    const hubs = parseKnowledgeHubs();
-    const prompt = buildPrompt(destinationHe, destinationEn, hubs);
-
     const args = [
       '--permission-mode', 'bypassPermissions',
       '--strict-mcp-config',
@@ -101,7 +102,7 @@ function discoverSources(destinationHe, destinationEn, onProgress) {
       '-p'
     ];
 
-    log(`מתחיל גילוי מקורות ל-${destinationHe} (מודל: ${DISCOVER_MODEL}, ${hubs.length} מקורות קבועים לבדיקה)...`);
+    log(startLog);
 
     let stdoutBuf = '';
     let stderrBuf = '';
@@ -140,7 +141,6 @@ function discoverSources(destinationHe, destinationEn, onProgress) {
       // the actual hub domain set, not trusted from the model's own claim --
       // it already has this exact list, no need to have it self-report
       // membership in something we can check deterministically.
-      const hubDomains = new Set(hubs.map((h) => h.domain));
       const sources = (resultJson.sources || [])
         .filter((s) => s.domain && Array.isArray(s.urls) && s.urls.length)
         .map((s) => ({
@@ -148,8 +148,6 @@ function discoverSources(destinationHe, destinationEn, onProgress) {
           standing: hubDomains.has(s.domain),
           type: SOURCE_TYPES.includes(s.type) ? s.type : SOURCE_TYPES[0]
         }));
-      const standingCount = sources.filter((s) => s.standing).length;
-      log(`גילוי מקורות הסתיים | עלות: $${costUsd.toFixed(4)} | ${sources.length} מקורות רלוונטיים נמצאו (${standingCount} קבועים, ${sources.length - standingCount} חדשים)`);
       resolve({ sources, costUsd });
     });
 
@@ -160,4 +158,56 @@ function discoverSources(destinationHe, destinationEn, onProgress) {
   });
 }
 
-module.exports = { discoverSources, parseKnowledgeHubs, SOURCE_TYPES };
+async function discoverSources(destinationHe, destinationEn, onProgress) {
+  const log = onProgress || (() => {});
+  const hubs = parseKnowledgeHubs();
+  const prompt = buildPrompt(destinationHe, destinationEn, hubs);
+  const hubDomains = new Set(hubs.map((h) => h.domain));
+  const { sources, costUsd } = await runDiscoveryPrompt(
+    prompt, hubDomains,
+    `מתחיל גילוי מקורות ל-${destinationHe} (מודל: ${DISCOVER_MODEL}, ${hubs.length} מקורות קבועים לבדיקה)...`,
+    log
+  );
+  const standingCount = sources.filter((s) => s.standing).length;
+  log(`גילוי מקורות הסתיים | עלות: $${costUsd.toFixed(4)} | ${sources.length} מקורות רלוונטיים נמצאו (${standingCount} קבועים, ${sources.length - standingCount} חדשים)`);
+  return { sources, costUsd };
+}
+
+// Targeted top-up search: the user marked specific categories as "not enough
+// sources here" on the Sources page and asked for more, instead of the app
+// silently deciding the original discovery pass was final. Explicitly told
+// which domains are already known so it doesn't waste its search budget
+// re-finding the same sources, and restricted to only the requested types.
+function buildExpandPrompt(destinationHe, destinationEn, categories, existingDomains) {
+  return `אתה עוזר למצוא מקורות ודפים אמיתיים נוספים לתכנון טיול. שימוש ב-WebSearch בלבד -- אין לך גישה לכלים אחרים, אל תנסה.
+
+יעד הטיול: ${destinationHe}${destinationEn && destinationEn !== destinationHe ? ` (${destinationEn})` : ''}
+
+כבר יש לנו מקורות מהדומיינים הבאים -- אל תציע אותם שוב, רק מקורות חדשים לגמרי:
+${existingDomains.join(', ')}
+
+המשימה: חפש עד 10 מקורות איכותיים חדשים (לא מהרשימה למעלה) שממוקדים ספציפית בקטגוריות הבאות עבור היעד הזה: ${categories.join(', ')}. לכל מקור מצא עד 5 כתובות URL אמיתיות וספציפיות (לא דף הבית הכללי) עם מידע מפורט. קבע type אחד בדיוק מתוך: ${SOURCE_TYPES.join(' / ')} (לפי התוכן בפועל, לרוב אחת מהקטגוריות המבוקשות). מקסימום כ-12 חיפושים בסך הכל. חיפוש snippet בלבד -- אל תבצע WebFetch על אף עמוד.
+
+החזר אך ורק JSON תקני בפורמט הבא, ללא טקסט נוסף, ללא markdown fencing:
+${RESULT_SCHEMA_HINT}`;
+}
+
+async function discoverMoreSources(destinationHe, destinationEn, categories, existingSources, onProgress) {
+  const log = onProgress || (() => {});
+  const hubs = parseKnowledgeHubs();
+  const hubDomains = new Set(hubs.map((h) => h.domain));
+  const existingDomains = existingSources.map((s) => s.domain);
+  const prompt = buildExpandPrompt(destinationHe, destinationEn, categories, existingDomains);
+  const { sources, costUsd } = await runDiscoveryPrompt(
+    prompt, hubDomains,
+    `מחפש מקורות נוספים ל-${destinationHe} בקטגוריות: ${categories.join(', ')}...`,
+    log
+  );
+  // Belt-and-suspenders against the model proposing a domain we already
+  // have anyway despite being told not to -- drop it rather than duplicate.
+  const fresh = sources.filter((s) => !existingDomains.includes(s.domain));
+  log(`חיפוש נוסף הסתיים | עלות: $${costUsd.toFixed(4)} | ${fresh.length} מקורות חדשים נמצאו`);
+  return { sources: fresh, costUsd };
+}
+
+module.exports = { discoverSources, discoverMoreSources, parseKnowledgeHubs, SOURCE_TYPES };

@@ -23,7 +23,7 @@ const { renderMasterPlanMd, renderDashboard, renderShowcase, renderSources, rend
 const { renderRouteMap, renderFinalMap } = require('./rendermaps');
 const { suggestSelection } = require('./suggest');
 const { buildItinerary } = require('./finalplan');
-const { discoverSources } = require('./discover');
+const { discoverSources, discoverMoreSources, SOURCE_TYPES } = require('./discover');
 
 const ROOT = path.join(__dirname, '..', '..');
 loadEnvLocal(ROOT);
@@ -107,10 +107,38 @@ async function runDiscoveryStage(destination, input, serverPort, onProgress) {
   if (!sources.length) throw new Error('No relevant sources were found for this destination -- nothing to mine.');
 
   writeJson(dir, `${destination}_discovered_sources.json`, { destination, discoveredAt: nowStamp(), costUsd, sources });
-  writeText(dir, `${destination}_Sources.html`, renderSources(input.destination || destination, sources, serverPort));
+  writeText(dir, `${destination}_Sources.html`, renderSources(input.destination || destination, sources, serverPort, SOURCE_TYPES));
   writeText(dir, `${destination}_KESSLER_TRIP.html`, renderDashboard(destination, input, { 2: true }));
   log(`discovery done: ${sources.length} sources, $${costUsd.toFixed(4)}`);
   return { sources, costUsd };
+}
+
+// Targeted top-up: the user marked specific categories as "not enough
+// sources" on the Sources page and asked for more, instead of quietly
+// accepting the original discovery pass as final. Appends to the existing
+// discovered_sources.json (never replaces it) and re-renders Tab 2 only --
+// mining/organize/enrich haven't run yet at this point in a fresh trip, so
+// there's nothing else to touch.
+async function runExpandSourcesStage(destination, categories, serverPort, onProgress) {
+  const log = onProgress || (() => {});
+  const dir = ensureTripDir(destination);
+  const inputPath = path.join(dir, `${destination}_input.json`);
+  const discoveredPath = path.join(dir, `${destination}_discovered_sources.json`);
+  if (!fs.existsSync(inputPath) || !fs.existsSync(discoveredPath)) throw new Error('Trip input / discovered sources missing -- run discovery first.');
+  const input = JSON.parse(fs.readFileSync(inputPath, 'utf-8'));
+  const discovered = JSON.parse(fs.readFileSync(discoveredPath, 'utf-8'));
+
+  log('== searching for additional sources ==');
+  const { sources: newSources, costUsd } = await discoverMoreSources(
+    input.destination || destination, input.destinationEn || null, categories, discovered.sources, log
+  );
+  const mergedSources = discovered.sources.concat(newSources);
+  writeJson(dir, `${destination}_discovered_sources.json`, {
+    destination, discoveredAt: discovered.discoveredAt, costUsd: (discovered.costUsd || 0) + costUsd, sources: mergedSources
+  });
+  writeText(dir, `${destination}_Sources.html`, renderSources(input.destination || destination, mergedSources, serverPort, SOURCE_TYPES));
+  log(`expand done: ${newSources.length} new sources added ($${costUsd.toFixed(4)})`);
+  return { newSources, sources: mergedSources };
 }
 
 // Stage A2: mine only the sources the user actually approved on Tab 2, then
@@ -335,6 +363,6 @@ if (require.main === module) {
 
 module.exports = {
   runPipeline, mine,
-  runDiscoveryStage, runMiningStage, runFinalPlanStage,
+  runDiscoveryStage, runMiningStage, runFinalPlanStage, runExpandSourcesStage,
   ensureTripDir, tripDir, writeJson, writeText
 };
