@@ -424,7 +424,15 @@
         // ready (see render.js's renderDashboard) -- opening it now instead
         // of waiting here means that polling, not this page, is what tells
         // the user when mining actually finishes.
-        setTimeout(() => { window.location.href = '/' + encodeURIComponent(DESTINATION_NAME) + '/' + encodeURIComponent(DESTINATION_NAME) + '_KESSLER_TRIP.html'; }, 900);
+        // window.top, NOT window -- this page is usually viewed embedded as
+        // an iframe inside the dashboard's own tab-2 (renderDashboard embeds
+        // every tab). Navigating plain window only redirects that iframe,
+        // which then loads the WHOLE dashboard recursively inside itself --
+        // a second full header+tab-bar rendered inside the first, defaulting
+        // to tab 1, stacked directly under the real one. top is the
+        // outermost window regardless of nesting, and is safely just window
+        // itself on a direct, non-embedded page load.
+        setTimeout(() => { window.top.location.href = '/' + encodeURIComponent(DESTINATION_NAME) + '/' + encodeURIComponent(DESTINATION_NAME) + '_KESSLER_TRIP.html'; }, 900);
       } else {
         msg.className = 'result-msg show error';
         msg.textContent = 'שגיאת שרת: ' + res.status;
