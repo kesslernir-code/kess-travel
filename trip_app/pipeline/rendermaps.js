@@ -298,14 +298,28 @@ function renderFinalMap(plan, enrich, input, selection, itinerary) {
     const baseQuery = d.sleepPointName ? `${d.sleepPointName}, ${destinationEn}` : `${base}, ${destinationEn}`;
     return {
       id: dayNum, label: `יום ${dayNum}`, date: d.dateLabel || `יום ${dayNum}`,
-      colorKey: dayNum, base, baseQuery,
+      colorKey: dayNum, base, baseQuery, sleepPointName: d.sleepPointName || null,
       isDeparture: idx === (itinerary.days.length - 1),
       intro: d.intro || '', route, restaurants, note: d.note || null
     };
   });
+  // Second pass (needs every day's baseQuery already resolved): a day whose
+  // base is the SAME as tomorrow's is a day-trip out-and-back from a stable
+  // accommodation (or day 1 traveling in to that first night's base) -- the
+  // map should draw the way back too, not just stop at the last sightseeing
+  // point. A day that relocates to a genuinely different base tomorrow (a
+  // road-trip leg) should NOT get an artificial return leg -- ending near
+  // the new base IS the point of that day. isDeparture days never qualify
+  // either (they end at the airport). Every real trip's last day is always
+  // isDeparture today (see the unconditional idx===length-1 above), so the
+  // "last day, not departure" edge case can't currently occur.
+  DAYS.forEach((d, idx) => {
+    const next = DAYS[idx + 1];
+    d.returnsToBase = !d.isDeparture && !!next && next.baseQuery === d.baseQuery;
+  });
   // Serialize DAYS with color pulled from DAY_COLORS (template references DAY_COLORS[n]).
   const daysJs = '[\n' + DAYS.map((d) =>
-    `  { id:${d.id}, label:${JSON.stringify(d.label)}, date:${JSON.stringify(d.date)}, color:DAY_COLORS[${d.colorKey}], base:${JSON.stringify(d.base)}, baseQuery:${JSON.stringify(d.baseQuery)}, isDeparture:${d.isDeparture}, intro:${JSON.stringify(d.intro)}, route:${JSON.stringify(d.route)}, restaurants:${JSON.stringify(d.restaurants)}, note:${JSON.stringify(d.note)} }`
+    `  { id:${d.id}, label:${JSON.stringify(d.label)}, date:${JSON.stringify(d.date)}, color:DAY_COLORS[${d.colorKey}], base:${JSON.stringify(d.base)}, baseQuery:${JSON.stringify(d.baseQuery)}, sleepPointName:${JSON.stringify(d.sleepPointName)}, isDeparture:${d.isDeparture}, returnsToBase:${d.returnsToBase}, intro:${JSON.stringify(d.intro)}, route:${JSON.stringify(d.route)}, restaurants:${JSON.stringify(d.restaurants)}, note:${JSON.stringify(d.note)} }`
   ).join(',\n') + '\n]';
 
   // Unique overnight towns across the whole itinerary, in first-used order --
@@ -360,15 +374,6 @@ function renderFinalMap(plan, enrich, input, selection, itinerary) {
     .replace(/center: \{ lat: [\d.\-]+, lng: [\d.\-]+ \}/, `center: { lat: ${center.lat}, lng: ${center.lng} }`)
     .replace(/(maps\.googleapis\.com\/maps\/api\/js\?[^"]*?)&region=[A-Z]{2}/, `$1&region=${countryCode}`)
     .replace(/componentRestrictions: \{ country: '[A-Z]{2}' \}/g, `componentRestrictions: { country: ${JSON.stringify(countryCode)} }`)
-    // Each day's route used to start from one fixed trip-wide BASE_ADDRESS,
-    // which is wrong for a relocating road trip -- day 5's drive should start
-    // from where day 4 actually ended up sleeping, not day 1's city. Chain it:
-    // day 0 starts from the trip's real starting address, every later day
-    // starts from the PREVIOUS day's own overnight base.
-    .replace(
-      /directionsService\.route\(\{\n        origin: BASE_ADDRESS,/,
-      'directionsService.route({\n        origin: di === 0 ? BASE_ADDRESS : DAYS[di - 1].baseQuery,'
-    )
     // "Worth knowing about" distances are already cached per d.base (this
     // function's own worthCache[d.base] key proves it knows better) but still
     // measured every leg from the single trip-wide BASE_ADDRESS -- e.g. day 6's
@@ -377,21 +382,6 @@ function renderFinalMap(plan, enrich, input, selection, itinerary) {
     .replace(
       /directionsService\.route\(\{\n            origin: BASE_ADDRESS,/,
       'directionsService.route({\n            origin: d.baseQuery,'
-    )
-    // Distance labels on the road used to show only the km figure ("165 ק\"מ")
-    // with no indication of what that leg leads to -- add the destination
-    // place name so a label on the map reads "Sighisoara — 165 ק\"מ".
-    .replace(
-      /dayLabelOverlays\[d\.id\] = legs\.map\(leg => \{\n            const mid = google\.maps\.geometry\n              \? google\.maps\.geometry\.spherical\.interpolate\(leg\.start_location, leg\.end_location, 0\.5\)\n              : leg\.start_location;\n            const overlay = new DistanceLabel\(mid, formatHebrewDistance\(leg\.distance\.value\)\);\n            return overlay;\n          \}\);/,
-      `dayLabelOverlays[d.id] = legs.map((leg, li) => {
-            const mid = google.maps.geometry
-              ? google.maps.geometry.spherical.interpolate(leg.start_location, leg.end_location, 0.5)
-              : leg.start_location;
-            const destPoint = POINTS[d.route[li]];
-            const labelText = (destPoint ? destPoint.name + ' — ' : '') + formatHebrewDistance(leg.distance.value);
-            const overlay = new DistanceLabel(mid, labelText);
-            return overlay;
-          });`
     )
     // Bed-icon marker for every real overnight town, so it's visually obvious
     // on the map itself which stops are "sleep here tonight" vs. a same-day
@@ -440,9 +430,13 @@ function geocodeAllPoints() {`
 // QC guard for the final map, same spirit as the route map's: a leftover
 // BASE_ADDRESS-as-origin or an un-rewired 'הדואומו' string would silently
 // produce wrong distances for a multi-city trip -- fail loudly instead.
+// The chained-origin logic used to be regex-patched in from rendermaps.js;
+// it's now baked directly into final_map.template.html's own
+// fetchAllDayRoutes (`const origin = di === 0 ? BASE_ADDRESS : ...`), so the
+// guard checks for that baseline string instead of a patch having landed.
 function validateFinalMapLeftovers(html, destinationEn) {
   const problems = [];
-  if (!html.includes('origin: di === 0 ? BASE_ADDRESS : DAYS[di - 1].baseQuery')) problems.push('per-day chained origin was not wired in');
+  if (!html.includes('const origin = di === 0 ? BASE_ADDRESS : DAYS[di - 1].baseQuery')) problems.push('per-day chained origin is missing from fetchAllDayRoutes');
   if (/origin: BASE_ADDRESS,\s*\n\s*destination/.test(html)) problems.push('a day route still uses the single fixed BASE_ADDRESS as its origin');
   // Same escaped-quote fix as the route map's guard -- a name like Hebrew
   // "ע\"ש" (an abbreviation for "named after") is valid JSON but [^"]* alone

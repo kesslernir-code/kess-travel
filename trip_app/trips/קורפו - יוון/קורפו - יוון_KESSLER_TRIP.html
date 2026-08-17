@@ -21,6 +21,8 @@
   .tab-content.full-bleed { padding:0; max-width:none; margin:0; }
   .pending { text-align:center; padding:100px 6vw; color:var(--muted); }
   .pending .pending-icon { font-size:40px; margin-bottom:16px; opacity:0.5; }
+  .pending .pending-spinner { display:inline-block; width:34px; height:34px; margin-bottom:16px; border:4px solid #e2d8c4; border-top-color:var(--gold); border-radius:50%; animation:pending-spin 0.9s linear infinite; }
+  @keyframes pending-spin { to { transform:rotate(360deg); } }
   .pending.error { color:var(--accent); }
   .pending.error .pending-icon { opacity:0.9; }
   .field-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; margin-top:20px; }

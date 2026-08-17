@@ -401,10 +401,29 @@ function geocodeAllPoints() {
 function fetchAllDayRoutes() {
   DAYS.forEach((d, di) => {
     setTimeout(() => {
-      const waypoints = d.route.slice(0, -1).map(id => ({ location: POINTS[id].query, stopover: true }));
-      const destination = POINTS[d.route[d.route.length - 1]].query;
+      // Chained origin: day N starts from where day N-1 actually ended up
+      // sleeping, not from one fixed trip-wide address (a relocating road
+      // trip's day 5 should start from day 4's town, not day 1's).
+      const origin = di === 0 ? BASE_ADDRESS : DAYS[di - 1].baseQuery;
+      const hasStops = d.route.length > 0;
+      // returnsToBase: this day's own overnight base is the SAME as
+      // tomorrow's -- i.e. it's a day-trip out-and-back from a stable
+      // accommodation (or day 1 traveling in to that first-night base),
+      // not a leg of a relocating road trip. In that case route back to the
+      // base itself instead of stopping dead at the last sightseeing stop --
+      // "we go from the house and back to the house every day" needs the way
+      // back drawn too. ALL of d.route becomes waypoints (not slice(0,-1))
+      // since none of them is the final destination anymore; when d.route is
+      // empty (a pure travel day -- a late arrival's day 1 legitimately has
+      // no stops at all) this degrades to a single clean origin->base leg
+      // instead of crashing on POINTS[undefined].
+      const waypoints = (d.returnsToBase ? d.route : d.route.slice(0, -1))
+        .map(id => ({ location: POINTS[id].query, stopover: true }));
+      const destination = (d.returnsToBase || !hasStops)
+        ? d.baseQuery
+        : POINTS[d.route[d.route.length - 1]].query;
       directionsService.route({
-        origin: BASE_ADDRESS,
+        origin: origin,
         destination: destination,
         waypoints: waypoints,
         travelMode: google.maps.TravelMode.WALKING
@@ -424,12 +443,20 @@ function fetchAllDayRoutes() {
           renderer.setDirections(result);
           dayRenderers[d.id] = renderer;
 
-          dayLabelOverlays[d.id] = legs.map(leg => {
+          // Each leg's on-map label names where that leg actually leads --
+          // for a normal stop that's POINTS[d.route[li]]; the one extra
+          // trailing leg a returnsToBase day adds (the drive back) has no
+          // corresponding route entry, so it falls through to naming the
+          // accommodation instead.
+          dayLabelOverlays[d.id] = legs.map((leg, li) => {
             const mid = google.maps.geometry
               ? google.maps.geometry.spherical.interpolate(leg.start_location, leg.end_location, 0.5)
               : leg.start_location;
-            const overlay = new DistanceLabel(mid, formatHebrewDistance(leg.distance.value));
-            return overlay;
+            const destPoint = POINTS[d.route[li]];
+            const labelText = destPoint
+              ? (destPoint.name + ' — ' + formatHebrewDistance(leg.distance.value))
+              : (d.returnsToBase ? ('🏠 חזרה ל' + (d.sleepPointName || d.base) + ' — ' + formatHebrewDistance(leg.distance.value)) : formatHebrewDistance(leg.distance.value));
+            return new DistanceLabel(mid, labelText);
           });
         } else {
           console.warn('Directions failed for day', d.id, status);
@@ -543,8 +570,13 @@ function renderOverviewContent() {
 
 function renderDayContent(d) {
   const el = document.getElementById('content');
+  // Prefer the exact manually-designated accommodation name over the
+  // generic town when one was set (see finalplan.js's sleepPointName) --
+  // the town-level d.base still backs the Checklist's "book a hotel in this
+  // town" search links, but the day card itself should show the real place.
+  const sleepLabel = d.sleepPointName || d.base;
   let html = `<div class="section-title">${d.label} — ${d.date}</div>`;
-  if (d.base) html += `<div class="base-line">🛏 לינה הלילה: ${d.base}</div>`;
+  if (d.base) html += `<div class="base-line">🛏 לינה הלילה: ${sleepLabel}${d._totalMeters ? ' · 🚗 ' + formatHebrewDistance(d._totalMeters) + ' נסיעה היום' : ''}</div>`;
   html += `<div class="intro-line">${d.intro}</div>`;
   html += `<div class="pie-wrap">${buildPieSVG(categoryCounts(d.route), 70)}
     <div class="pie-legend">
@@ -579,7 +611,7 @@ function renderDayContent(d) {
   if (d.isDeparture) {
     html += `<div class="departure-line">🛫 יציאה לנמל התעופה בהתאם לשעת הטיסה חזרה</div>`;
   } else {
-    html += `<div class="lodging-line">🛏 לינה הלילה: ${d.base}</div>`;
+    html += `<div class="lodging-line">🛏 לינה הלילה: ${sleepLabel}</div>`;
   }
 
   html += `<div class="worth-section" id="worthSection"><div class="section-title">עוד דברים ששווה לדעת עליהם</div><div id="worthList">מחשב מרחקים מ${d.base}...</div></div>`;
@@ -604,9 +636,16 @@ function buildScheduleHTML(d) {
     clock += 30;
     blocks.push({ time: clock, icon: '🥐', label: d.breakfast });
     clock += 45;
-  } else {
+  } else if (d.startTime) {
     clock = clockToMinutes(d.startTime);
     blocks.push({ time: clock, icon: '🛬', label: d.startLabel });
+  } else {
+    // wake/startTime/startLabel/breakfast are only ever present on the
+    // template's own Milan fixture data -- rendermaps.js's real DAYS never
+    // set them, so this crashed on clockToMinutes(undefined) the instant
+    // anyone opened a real trip's day tab. Default to a plain day-start
+    // instead of assuming either field exists.
+    clock = 540; // 09:00
   }
 
   d.route.forEach((id, idx) => {
@@ -621,6 +660,17 @@ function buildScheduleHTML(d) {
     clock += p.visitMin;
     clock = roundToHalfHour(clock);
   });
+
+  // returnsToBase adds one extra leg beyond d.route's own stops (the drive
+  // back) -- legs[d.route.length] is exactly that trailing leg, mirroring
+  // how isDeparture below appends its own final block. Mutually exclusive
+  // by construction (a departure day never returnsToBase), so no double-up.
+  if (d.returnsToBase && legs[d.route.length] !== undefined) {
+    const backMin = legs[d.route.length];
+    clock += backMin;
+    clock = roundToHalfHour(clock);
+    blocks.push({ time: clock, icon: '🏠', label: `חזרה ל${d.sleepPointName || d.base} (${formatHebrewDuration(backMin * 60)})`, muted: true });
+  }
 
   if (d.isDeparture) {
     blocks.push({ time: clock, icon: '🛫', label: 'יציאה לנמל התעופה' });

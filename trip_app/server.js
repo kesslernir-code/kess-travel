@@ -309,6 +309,20 @@ const server = http.createServer(async (req, res) => {
     } catch { /* no prior selection -- nothing to compare, definitely rebuild */ }
 
     sendJson(res, 200, { ok: true, message: 'final plan started' });
+    // Mark tabs 5-7 pending BEFORE the rebuild starts, not just on failure --
+    // a RE-confirm of an already-completed trip (exactly what just happened:
+    // an edited arrival time, same points, re-confirmed) leaves the OLD
+    // dashboard file on disk with those tabs already marked ready from the
+    // previous run. Without this, the browser's auto-navigate lands on a
+    // dashboard showing the stale (pre-rebuild) Final_Map/Checklist as if
+    // nothing were happening -- no pending state means the page's own
+    // auto-poll never even starts, so there is no progress indicator AND no
+    // auto-refresh once the real rebuild finishes; only a manual reload
+    // would ever show the update. A real report: "no message about
+    // progress, only the terminal window [from the netlify deploy step]
+    // popped up" -- because that was the only visible sign anything was
+    // running at all.
+    try { fs.writeFileSync(path.join(dir, `${folderName}_KESSLER_TRIP.html`), renderDashboard(folderName, input, { 2: true, 3: true, 4: true }), 'utf-8'); } catch { /* best-effort -- runFinalPlanStage will overwrite this again once it's actually done */ }
     runFinalPlanStage(folderName, input, body.points, log, { regionDays: body.regionDays || {}, reuseItinerary, reuseImages, serverPort: PORT })
       .then(() => {
         // Auto-publish: once a plan is actually finished, push the updated

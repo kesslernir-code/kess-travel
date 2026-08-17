@@ -42,7 +42,13 @@ function runNetlifyDeploy(onProgress) {
   return new Promise((resolve, reject) => {
     exec(
       'netlify deploy --dir=trip_app/trips --prod --message "Auto-publish after final plan"',
-      { cwd: ROOT },
+      // windowsHide: exec() on Windows runs the command through a fresh
+      // cmd.exe, which pops up a visible console window by default even
+      // though this whole app (including the server itself) is meant to run
+      // with no visible windows at all -- a real report: the ONLY thing a
+      // user saw after confirming was that flash, with no dashboard progress
+      // indicator visible yet.
+      { cwd: ROOT, windowsHide: true },
       (err, stdout, stderr) => {
         if (err) { log(`netlify deploy failed: ${err.message}`); reject(err); return; }
         log('netlify deploy complete');

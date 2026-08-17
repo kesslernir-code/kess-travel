@@ -116,7 +116,7 @@ function runDiscoveryPrompt(prompt, hubDomains, startLog, onProgress) {
     const timer = setTimeout(() => {
       timedOut = true;
       log('גילוי מקורות עבר את זמן ה-timeout — מחסל את התהליך.');
-      exec(`taskkill /PID ${child.pid} /T /F`, () => {});
+      exec(`taskkill /PID ${child.pid} /T /F`, { windowsHide: true }, () => {});
     }, DISCOVER_TIMEOUT_MS);
 
     child.on('close', (code) => {
