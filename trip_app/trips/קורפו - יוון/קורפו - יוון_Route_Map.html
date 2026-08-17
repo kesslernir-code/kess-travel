@@ -1532,7 +1532,7 @@ function convexHullLatLng(points) {
 // the ENTIRE island, spilling into the sea and across into Albania. The cap
 // must scale with how big the destination actually is: see regionRadiusCap().
 const MAX_REGION_RADIUS_M = 70000; // absolute ceiling, for country-scale trips
-const MIN_REGION_RADIUS_M = 25000; // floor -- roughly up to a 60min drive, for small/dense destinations (an island)
+const MIN_REGION_RADIUS_M = 2000; // degenerate-case-only floor (e.g. a region with 1 point) -- must stay well below any real 20%-of-area cap, or it overrides the area rule (a real Corfu run: 25000 floor > 9122 area cap, so every circle got floored back up to 25km)
 let regionOverlay;
 let allRegionOverlays = [];
 let mainAreaCircle; // the persistent "main city area" circle -- see geocodeAllPoints()'s completion handler
@@ -1594,9 +1594,18 @@ function destinationSpanM() {
 // instead), producing an oversized circle again. Before geocoding fully
 // completes, there simply isn't enough data to judge the destination's real
 // size yet -- fall back to the safe small floor rather than guess wrong.
+// A region circle's AREA must not exceed 20% of the whole destination's own
+// area (treating destinationSpanM() as that whole area's radius). Area scales
+// with radius SQUARED, so capping by area (not just a fraction of the radius)
+// is a meaningfully tighter, more principled constraint: area(r) <= 0.2 *
+// area(R) implies r <= sqrt(0.2) * R =~ 0.447 * R, not 0.6 * R as tried
+// before -- and reasoning in area is what "this region shouldn't dominate a
+// fifth of the map" actually means, rather than an arbitrary radius fraction.
 function regionRadiusCap() {
   if (!geocodingComplete) return MIN_REGION_RADIUS_M;
-  return Math.min(MAX_REGION_RADIUS_M, Math.max(MIN_REGION_RADIUS_M, destinationSpanM() * 0.6));
+  const totalRadius = destinationSpanM();
+  const maxByArea = Math.sqrt(0.2) * totalRadius;
+  return Math.min(MAX_REGION_RADIUS_M, Math.max(MIN_REGION_RADIUS_M, maxByArea));
 }
 
 function computeRegionCircle(locs) {
