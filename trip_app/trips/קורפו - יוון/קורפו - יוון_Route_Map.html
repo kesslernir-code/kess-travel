@@ -25,6 +25,11 @@
   .sleep-subheader { font-size: 11px; font-weight: bold; color: #1a1a4e; margin: 6px 0 3px; padding-inline-start: 4px; }
   .region-days-row { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: normal; color: #444; margin-top: 4px; }
   .region-days-row select { font-size: 11.5px; padding: 1px 4px; border-radius: 4px; border: 1px solid #ccc; }
+  .region-sleeploc-row { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: normal; margin-top: 4px; }
+  .region-sleeploc-row input { flex: 1 1 auto; font-size: 11.5px; padding: 3px 6px; border-radius: 4px; border: 1px solid #ccc; min-width: 0; }
+  .region-sleeploc-row button { flex: 0 0 auto; font-size: 11.5px; padding: 3px 7px; border-radius: 4px; border: 1px solid #1a1a4e; background: #eef0fa; color: #1a1a4e; cursor: pointer; }
+  .region-sleeploc-row button:hover { background: #dde1f5; }
+  .region-sleeploc-status { font-size: 11px; color: #1a1a4e; margin-top: 2px; margin-inline-start: 2px; }
   .region-title:hover { background: #e0e0e0; }
   .region-title-row { display: flex; align-items: center; gap: 6px; }
   .region-label { cursor: pointer; flex: 1 1 auto; }
@@ -1185,6 +1190,14 @@ function formatHebrewDistance(meters) {
 
 let map, geocoder, directionsService, sharedInfoWindow, focusedPoint;
 
+// setRegionSleepLocation() rebuilds the whole checklist (buildChecklist()) so
+// a newly-added custom point's row/count appears immediately -- that wipes
+// every <input> in #checklist, including any OTHER region's sleep-location
+// text the user typed but hasn't clicked "קבע במפה" on yet. Snapshotted here
+// (by region index) right before the rebuild and restored after, so typing in
+// one region's box while confirming another's doesn't lose unsaved text.
+const pendingSleepInputText = {};
+
 // Pure *view* filter -- completely separate from each point's checkbox/selection state.
 // A marker is only ever actually shown on the map when both conditions hold: the user
 // has it checked AND it matches the active category filter (or the filter is 'all').
@@ -1347,9 +1360,16 @@ function applySuggestedSelection() {
     daysTouched.forEach(rn => { regionDayCounts[rn] = (regionDayCounts[rn] || 0) + 1; });
   });
   REGIONS.forEach((r, ri) => {
-    r.days = Math.min(TRIP_DAYS, regionDayCounts[r.region] || r.days || 1);
+    // Not `|| r.days || 1` -- an untouched region should keep whatever the
+    // user already set (including an explicit 0), not get bounced to 1 just
+    // because 0 is falsy in JS.
+    const suggested = regionDayCounts[r.region];
+    const fallback = typeof r.days === 'number' ? r.days : 1;
+    r.days = Math.min(TRIP_DAYS, suggested !== undefined ? suggested : fallback);
     const sel = document.getElementById('regiondays_' + ri);
     if (sel) sel.value = String(r.days);
+    const slRow = document.getElementById('sleeploc_' + ri);
+    if (slRow) slRow.style.display = r.days >= 1 ? 'flex' : 'none';
   });
 
   const perDayText = clusters.map(c => `יום ${c.day}: ${c.points.length} נקודות`).join(', ');
@@ -1376,10 +1396,13 @@ function buildChecklist() {
   const container = document.getElementById('checklist');
   container.innerHTML = '';
   REGIONS.forEach((r, ri) => {
+    if (typeof r.days !== 'number') r.days = 1;
     const rTitle = document.createElement('div');
     rTitle.className = 'region-title';
-    const dayOptions = Array.from({ length: TRIP_DAYS }, (_, i) => i + 1)
-      .map(n => `<option value="${n}"${n === (r.days || 1) ? ' selected' : ''}>${n}</option>`).join('');
+    // 0 is a real, meaningful choice -- "we pass through / tour here but don't
+    // sleep here" -- not just an off-by-one gap below 1.
+    const dayOptions = Array.from({ length: TRIP_DAYS + 1 }, (_, i) => i)
+      .map(n => `<option value="${n}"${n === r.days ? ' selected' : ''}>${n === 0 ? '0 (סיור בלבד, ללא לינה)' : n}</option>`).join('');
     rTitle.innerHTML = `
       <div class="region-title-row">
         <input type="checkbox" class="region-check" id="regionchk_${ri}" checked>
@@ -1389,12 +1412,37 @@ function buildChecklist() {
         <label for="regiondays_${ri}">מספר ימים באזור זה:</label>
         <select id="regiondays_${ri}" class="region-days-select">${dayOptions}</select>
       </div>
+      <div class="region-sleeploc-row" id="sleeploc_${ri}" style="display:${r.days >= 1 ? 'flex' : 'none'}">
+        <input type="text" id="sleeplocinput_${ri}" placeholder="מיקום לינה סופי (מלון/כתובת) -- אפשר להשלים בהמשך">
+        <button type="button" id="sleeplocbtn_${ri}">🛏 קבע במפה</button>
+      </div>
+      <div class="region-sleeploc-status" id="sleeplocstatus_${ri}"></div>
       <span class="region-dist" id="regiondist_${ri}"></span>
     `;
     container.appendChild(rTitle);
-    r.days = r.days || 1;
+    // A returning visit already has this region's custom sleep point baked
+    // into r.points (see rendermaps.js's toRegions) -- prefill the field and
+    // status instead of showing an empty slot the user already filled once.
+    const existingCustom = r.points.find(p => p.custom);
+    const sleepInput = rTitle.querySelector('#sleeplocinput_' + ri);
+    const sleepStatus = rTitle.querySelector('#sleeplocstatus_' + ri);
+    if (existingCustom) {
+      sleepInput.value = existingCustom.name;
+      sleepStatus.textContent = '🛏 נקבע במפה';
+    } else if (pendingSleepInputText[ri]) {
+      sleepInput.value = pendingSleepInputText[ri];
+    }
+    rTitle.querySelector('#sleeplocbtn_' + ri).addEventListener('click', () => {
+      setRegionSleepLocation(r, ri, sleepInput.value.trim(), sleepStatus);
+    });
     rTitle.querySelector('.region-days-select').addEventListener('change', (e) => {
-      r.days = parseInt(e.target.value, 10) || 1;
+      // NOT `|| 1` -- 0 is falsy in JS but a legitimate, explicit choice here
+      // ("tour this region, don't sleep in it"); `0 || 1` would silently
+      // bounce it back up to 1 the moment the dropdown fires its change event.
+      const v = parseInt(e.target.value, 10);
+      r.days = Number.isNaN(v) ? 1 : v;
+      const slRow = document.getElementById('sleeploc_' + ri);
+      if (slRow) slRow.style.display = r.days >= 1 ? 'flex' : 'none';
     });
     r._regionCheckboxEl = rTitle.querySelector('.region-check');
     r._regionCheckboxEl.addEventListener('change', (e) => {
@@ -1457,6 +1505,81 @@ function buildChecklist() {
         if (p.marker) p.marker.setLabel(p.isSleep ? { text: '🛏', fontSize: '11px' } : null);
       });
     });
+  });
+}
+
+// A region with 1+ days set needs somewhere to actually sleep -- the existing
+// per-point 🛏 toggle only covers places that were already mined from a
+// source, but the accommodation someone actually books is very often NOT one
+// of those (a specific hotel found on Booking.com, not in any travel blog).
+// This geocodes whatever the user typed and drops a real point onto the map
+// for it (category 'Sleep', isSleep true), reusing the exact same pipeline
+// path (POINTS -> onConfirm() -> server -> buildItinerary's isSleep rule)
+// that an ordinary mined sleep point already goes through -- see run.js's
+// runFinalPlanStage, which now also accepts a `custom` point that has no
+// match in the mined plan instead of silently dropping it.
+function setRegionSleepLocation(r, ri, text, statusEl) {
+  if (!text) { statusEl.textContent = '⚠️ הזן שם מקום או כתובת'; return; }
+  statusEl.innerHTML = '<span class="spinner"></span> מאתר במפה...';
+  const query = `${text}, ${r.region}, ${DESTINATION_NAME}`;
+  geocoder.geocode({ address: query, componentRestrictions: { country: GEOCODE_COUNTRY } }, (results, status2) => {
+    if (status2 !== 'OK' || !results[0]) {
+      statusEl.textContent = '⚠️ לא אותר במפה. נסה כתובת/שם מדויקים יותר.';
+      return;
+    }
+    const location = results[0].geometry.location;
+    // Replace, don't duplicate -- a region has exactly one official sleep location.
+    const prevCustom = r.points.find(p => p.custom);
+    if (prevCustom) {
+      if (prevCustom.marker) prevCustom.marker.setMap(null);
+      r.points = r.points.filter(p => p !== prevCustom);
+      const gi = POINTS.indexOf(prevCustom);
+      if (gi !== -1) POINTS.splice(gi, 1);
+    }
+    const point = {
+      id: 'customsleep' + ri + '_' + Date.now(),
+      name: text,
+      category: 'Sleep',
+      regionName: r.region,
+      rec: false,
+      desc: '',
+      source: '',
+      url: '',
+      checked: true,
+      isSleep: true,
+      custom: true,
+      location: location
+    };
+    r.points.push(point);
+    POINTS.push(point);
+    point.marker = new google.maps.Marker({
+      position: location,
+      map: pointVisible(point) ? map : null,
+      title: '🛏 ' + text,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: baseScaleFor(point),
+        fillColor: CATEGORY_COLORS[point.category],
+        fillOpacity: 1,
+        strokeColor: '#fff',
+        strokeWeight: 2
+      },
+      label: { text: '🛏', fontSize: '11px' }
+    });
+    point.infoContent = buildInfoContent(point);
+    point.marker.addListener('click', () => {
+      sharedInfoWindow.setContent(point.infoContent);
+      sharedInfoWindow.open(map, point.marker);
+    });
+    delete pendingSleepInputText[ri];
+    // Full rebuild so the region's point count and the new row under it show
+    // up immediately -- snapshot every OTHER region's not-yet-confirmed typed
+    // text first so this doesn't wipe out what they were mid-typing.
+    REGIONS.forEach((rr, i) => {
+      const el = document.getElementById('sleeplocinput_' + i);
+      if (el && i !== ri) pendingSleepInputText[i] = el.value;
+    });
+    buildChecklist();
   });
 }
 
@@ -1940,13 +2063,15 @@ function sendSelectionToLocalServer(checked) {
   const statusEl = document.getElementById('status');
   const points = checked.map(p => ({
     id: p.id, name: p.name, category: p.category, region: p.regionName,
-    rec: !!p.rec, isSleep: !!p.isSleep
+    rec: !!p.rec, isSleep: !!p.isSleep, custom: !!p.custom
   }));
   // Per-region day count, from each region's own dropdown -- feeds the final
   // itinerary as a real constraint (see finalplan.js), not just an implicit
-  // side-effect of which points happen to be checked.
+  // side-effect of which points happen to be checked. NOT `|| 1`: 0 is a real,
+  // explicit choice ("tour this region, don't sleep in it") and 0 is falsy in
+  // JS -- `0 || 1` would silently turn it back into 1 right here at send time.
   const regionDays = {};
-  REGIONS.forEach(r => { regionDays[r.region] = r.days || 1; });
+  REGIONS.forEach(r => { regionDays[r.region] = typeof r.days === 'number' ? r.days : 1; });
 
   statusEl.innerHTML = '<span class="spinner"></span>שולח בחירה לשרת...';
 

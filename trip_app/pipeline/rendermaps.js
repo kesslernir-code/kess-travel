@@ -35,11 +35,15 @@ function inferCategory(p) {
 // confirmed selection -- lets a returning visit to this tab (after a trip
 // already has a final plan) show what was actually chosen last time instead
 // of resetting to "everything checked, nothing marked as a sleep base".
-function toRegions(plan, destinationEn, prevByName) {
+// customPoints (optional): prevSelection entries with custom=true -- a
+// region's manually-typed "final accommodation" point (see the map's
+// per-region sleep-location field) never came from the mined plan, so it has
+// no place to be re-derived from except the saved selection itself; without
+// this it would silently vanish the next time this tab is regenerated.
+function toRegions(plan, destinationEn, prevByName, customPoints, prevRegionDays) {
   let idx = 0;
-  return plan.regions.map((r) => ({
-    region: r.name,
-    points: r.places.map((p) => {
+  return plan.regions.map((r) => {
+    const points = r.places.map((p) => {
       idx++;
       const domain = (p.sources && p.sources[0]) || '';
       const prev = prevByName && prevByName.get(p.name);
@@ -55,8 +59,29 @@ function toRegions(plan, destinationEn, prevByName) {
         checked: prevByName ? !!prev : true,
         isSleep: !!(prev && prev.isSleep)
       };
-    })
-  }));
+    });
+    (customPoints || []).filter((cp) => cp.region === r.name).forEach((cp) => {
+      idx++;
+      points.push({
+        id: slug(cp.name, idx),
+        name: cp.name,
+        query: `${cp.name}, ${destinationEn}`,
+        category: 'Sleep',
+        rec: false,
+        desc: '',
+        source: '',
+        url: '',
+        checked: true,
+        isSleep: true,
+        custom: true
+      });
+    });
+    const region = { region: r.name, points };
+    if (prevRegionDays && Object.prototype.hasOwnProperty.call(prevRegionDays, r.name)) {
+      region.days = prevRegionDays[r.name];
+    }
+    return region;
+  });
 }
 
 function readTemplate(name) {
@@ -68,7 +93,7 @@ function readTemplate(name) {
 // array, from a trip that already has a final plan -- returning to this tab
 // then shows what's actually confirmed (and which points are official sleep
 // bases) instead of resetting to a blank "everything checked" slate.
-function renderRouteMap(plan, enrich, input, serverPort, prevSelection) {
+function renderRouteMap(plan, enrich, input, serverPort, prevSelection, prevRegionDays) {
   const destination = input.destination;
   const destinationEn = enrich.destinationEn || destination;
   const center = enrich.mapCenter || { lat: 0, lng: 0 };
@@ -78,7 +103,8 @@ function renderRouteMap(plan, enrich, input, serverPort, prevSelection) {
   const prevByName = prevSelection && prevSelection.length
     ? new Map(prevSelection.map((p) => [p.name, { isSleep: !!p.isSleep }]))
     : null;
-  const regions = toRegions(plan, destinationEn, prevByName);
+  const customPoints = (prevSelection || []).filter((p) => p.custom);
+  const regions = toRegions(plan, destinationEn, prevByName, customPoints, prevRegionDays);
 
   // Main-city reference: distances to each region are measured FROM here, and
   // the first region (organize puts the base city first) is treated as "the
