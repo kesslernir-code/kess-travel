@@ -34,11 +34,15 @@
   .poi-row .dot { flex: 0 0 auto; cursor: pointer; }
   .poi-row .poi-name { flex: 1 1 auto; cursor: pointer; }
   .sleep-tag { font-size: 10px; background: #1a1a4e; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
-  .sleep-toggle { flex: 0 0 auto; font-size: 13px; padding: 1px 5px; border-radius: 4px; border: 1.5px solid #ccc; background: #fff; cursor: pointer; opacity: 0.45; line-height: 1.4; }
-  .sleep-toggle.active { opacity: 1; border-color: #1a1a4e; background: #eef0fa; }
-  .sleep-toggle:hover { opacity: 0.8; }
-  .qc-flag { flex-shrink: 0; cursor: help; font-size: 12px; }
-  .info-qc { margin-top: 6px; font-size: 11.5px; color: #a13d3d; background: #fdf0f1; border-radius: 4px; padding: 4px 6px; }
+  /* Invisible by default -- at 0.45 opacity it still read as "every point has
+     a bed icon" at a glance, since the toggle itself is always present. Now
+     only a hovered row reveals it faintly, and only an actually-marked point
+     shows it for real (full opacity, regardless of hover), so a glance at
+     the list only shows a bed on what's actually designated. */
+  .sleep-toggle { flex: 0 0 auto; font-size: 13px; padding: 1px 5px; border-radius: 4px; border: 1.5px solid #ccc; background: #fff; cursor: pointer; opacity: 0; line-height: 1.4; transition: opacity .15s; }
+  .poi-row:hover .sleep-toggle { opacity: 0.35; }
+  .sleep-toggle:hover { opacity: 0.8 !important; }
+  .sleep-toggle.active { opacity: 1 !important; border-color: #1a1a4e; background: #eef0fa; }
   .rec-tag { font-size: 10px; background: #b8860b; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
   .rec-star { font-size: 12px; margin-inline-start: 4px; flex-shrink: 0; }
   #confirmBtn { width: 100%; margin-top: 16px; padding: 12px; font-size: 15px; font-weight: bold; background: #1a7a3c; color: white; border: none; border-radius: 6px; cursor: pointer; position: sticky; bottom: 0; }
@@ -1528,10 +1532,11 @@ function convexHullLatLng(points) {
 // the ENTIRE island, spilling into the sea and across into Albania. The cap
 // must scale with how big the destination actually is: see regionRadiusCap().
 const MAX_REGION_RADIUS_M = 70000; // absolute ceiling, for country-scale trips
-const MIN_REGION_RADIUS_M = 15000; // floor -- roughly a 30min drive, for small/dense destinations (an island)
+const MIN_REGION_RADIUS_M = 25000; // floor -- roughly up to a 60min drive, for small/dense destinations (an island)
 let regionOverlay;
 let allRegionOverlays = [];
 let mainAreaCircle; // the persistent "main city area" circle -- see geocodeAllPoints()'s completion handler
+let geocodingComplete = false; // guards regionRadiusCap() against judging destination size off a partial sample
 function clearAllRegionOverlays() {
   allRegionOverlays.forEach(o => o.setMap(null));
   allRegionOverlays = [];
@@ -1581,7 +1586,16 @@ function destinationSpanM() {
 // core span, so a country-scale trip still gets the full 70km ceiling
 // (unchanged from before) while a small, dense destination like an island
 // gets a cap closer to a real "how far would you actually drive" distance.
+// MUST NOT run on a partial geocoded set -- a real repeat of this exact bug
+// happened when a region was clicked before geocoding finished: with only a
+// handful of points resolved so far, destinationSpanM()'s 75th-percentile
+// read as a much bigger number than the true destination size (the same
+// class of skew a single outlier caused before, just from incompleteness
+// instead), producing an oversized circle again. Before geocoding fully
+// completes, there simply isn't enough data to judge the destination's real
+// size yet -- fall back to the safe small floor rather than guess wrong.
 function regionRadiusCap() {
+  if (!geocodingComplete) return MIN_REGION_RADIUS_M;
   return Math.min(MAX_REGION_RADIUS_M, Math.max(MIN_REGION_RADIUS_M, destinationSpanM() * 0.6));
 }
 
@@ -1678,37 +1692,44 @@ function buildInfoContent(p) {
       ${p.rec ? '<div class="info-rec">⭐ מומלץ — מקורות מציינים כחובה לראות</div>' : ''}
       <div class="info-desc">${p.desc}</div>
       <div class="info-source">מקור: ${p.source}${p.url ? ` — <a href="${p.url}" target="_blank" rel="noopener">קישור</a>` : ''}</div>
-      ${(p.qcFlags && p.qcFlags.length) ? `<div class="info-qc">⚠️ ${p.qcFlags.join('<br>⚠️ ')}</div>` : ''}
     </div>`;
 }
 
 // QC layer: geocoding a place name is not the same as verifying the result
 // actually makes sense. componentRestrictions biases results toward the
-// right country but doesn't guarantee it (a forced match can still land on
-// a real place in the wrong country), and nothing at all checks whether a
-// "Beach" point's resolved location is genuinely coastal rather than a
-// generic city-center fallback. These are heuristics, not certainties --
-// flagged for the user to glance at and confirm, never silently removed.
-function computeQcFlags(p, geocodeResult) {
-  const flags = [];
-  const countryComp = (geocodeResult.address_components || []).find(c => c.types.includes('country'));
+// right country but doesn't guarantee it, and nothing checks whether a
+// "Beach" point's resolved location is genuinely coastal. A suspicious point
+// is unchecked and hidden outright (not left in the plan with a warning) --
+// still reversible from its sidebar checkbox if the user disagrees, just not
+// included by default. Logged to the console for whoever wants to check why,
+// no remark shown in the UI itself.
+function isSuspicious(p, geocodeResult) {
+  const countryComp = (geocodeResult.address_components || []).find((c) => c.types.includes('country'));
   if (countryComp && countryComp.short_name !== GEOCODE_COUNTRY) {
-    flags.push(`המיקום שנמצא הוא ב-${countryComp.long_name}, לא ב-${DESTINATION_NAME} -- ייתכן חילוץ שגוי`);
+    console.warn('QC excluded (wrong country: ' + countryComp.long_name + '):', p.name);
+    return true;
   }
   if (p.category === 'Beach') {
     const types = geocodeResult.types || [];
     const looksSpecific = types.some((t) => ['natural_feature', 'point_of_interest', 'establishment', 'premise'].includes(t));
     if (!looksSpecific) {
-      flags.push('מסומן כחוף אך המיקום שהתקבל הוא כללי (עיר/אזור), לא נקודת חוף ספציפית -- ייתכן שהמיקום בפועל לא צמוד לים');
+      console.warn('QC excluded (beach resolved to a generic city/region, not a specific coastal feature):', p.name);
+      return true;
     }
   }
-  return flags;
+  return false;
+}
+
+function autoReject(p) {
+  p.checked = false;
+  const chk = document.getElementById('chk_' + p.id);
+  if (chk) chk.checked = false;
+  updateMarkerForPoint(p);
 }
 
 // Runs once ALL points have geocoded (needs every region's full point set to
 // judge what's "far from the rest") -- same median-based, outlier-robust
-// center as computeRegionCircle, but here to FLAG a suspicious point for
-// review rather than just exclude it from a radius calculation.
+// center as computeRegionCircle.
 function runGeoQcSummary() {
   REGIONS.forEach((r) => {
     const locs = r.points.filter((p) => p.location);
@@ -1720,33 +1741,11 @@ function runGeoQcSummary() {
     locs.forEach((p) => {
       const dist = google.maps.geometry.spherical.computeDistanceBetween(roughCenter, p.location);
       if (dist > 150000) {
-        p.qcFlags = p.qcFlags || [];
-        p.qcFlags.push(`מרוחק כ-${Math.round(dist / 1000)} ק"מ משאר הנקודות באזור "${r.region}" -- ייתכן שיוך שגוי לאזור, שם עמום שגרם לחילוץ מיקום שגוי, או שזו באמת יעד רחוק (טיול יום)`);
-        p.infoContent = buildInfoContent(p);
-        if (p.marker) {
-          const icon = p.marker.getIcon();
-          p.marker.setIcon({ ...icon, strokeColor: '#e74c3c', strokeWeight: 4 });
-        }
+        console.warn('QC excluded (~' + Math.round(dist / 1000) + 'km from the rest of region "' + r.region + '"):', p.name);
+        autoReject(p);
       }
     });
   });
-  const flagged = POINTS.filter((p) => p.qcFlags && p.qcFlags.length);
-  document.querySelectorAll('.poi-row').forEach((row) => {
-    const chk = row.querySelector('input[type="checkbox"]');
-    if (!chk) return;
-    const id = chk.id.replace(/^chk_/, '');
-    const p = POINTS.find((x) => x.id === id);
-    if (p && p.qcFlags && p.qcFlags.length && !row.querySelector('.qc-flag')) {
-      const badge = document.createElement('span');
-      badge.className = 'qc-flag';
-      badge.textContent = '⚠️';
-      badge.title = p.qcFlags.join(' | ');
-      row.appendChild(badge);
-    }
-  });
-  if (flagged.length) {
-    document.getElementById('status').textContent += ` | ⚠️ ${flagged.length} נקודות מסומנות לבדיקה (ראו סימון אדום במפה וברשימה)`;
-  }
 }
 
 function geocodeAllPoints() {
@@ -1768,7 +1767,11 @@ function geocodeAllPoints() {
         if (status2 === 'OK' && results[0]) {
           try {
             p.location = results[0].geometry.location;
-            p.qcFlags = computeQcFlags(p, results[0]);
+            if (isSuspicious(p, results[0])) {
+              p.checked = false;
+              const chk = document.getElementById('chk_' + p.id);
+              if (chk) chk.checked = false;
+            }
             const markerOptions = {
               position: p.location,
               map: pointVisible(p) ? map : null,
@@ -1789,16 +1792,10 @@ function geocodeAllPoints() {
             if (p.isSleep) {
               markerOptions.label = { text: '🛏', fontSize: '11px' };
             }
-            if (p.qcFlags && p.qcFlags.length) {
-              markerOptions.icon.strokeColor = '#e74c3c';
-              markerOptions.icon.strokeWeight = 4;
-            }
             p.marker = new google.maps.Marker(markerOptions);
             // Stored on `p` (not just closed over here) so focusPoint() -- triggered by clicking
             // the place in the sidebar checklist, not just clicking the marker itself -- can open
-            // the exact same bubble content. Rebuilt via buildInfoContent() (not just set once
-            // here) since the region-outlier QC check only runs after ALL points have geocoded,
-            // and needs to refresh this content for points flagged only at that later point.
+            // the exact same bubble content.
             p.infoContent = buildInfoContent(p);
             p.marker.addListener('click', () => {
               sharedInfoWindow.setContent(p.infoContent);
@@ -1813,6 +1810,7 @@ function geocodeAllPoints() {
           console.warn('Geocode failed for', p.name, status2);
         }
         if (done === POINTS.length) {
+          geocodingComplete = true;
           const failed = POINTS.filter(x => x.geocodeFailed);
           status.textContent = 'מוכן. סמן/הסר נקודות ולחץ על אישור.' + (failed.length ? ` (${failed.length} לא אותרו: ${failed.map(f=>f.name).join(', ')})` : '');
           computeRegionDistances();
