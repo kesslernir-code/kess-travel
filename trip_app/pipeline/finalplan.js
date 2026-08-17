@@ -101,7 +101,11 @@ function parseHourFromTimeString(s) {
 function isLateArrival(t) { const h = parseHourFromTimeString(t); return h === null ? null : h >= 16; }
 function isEarlyDeparture(t) { const h = parseHourFromTimeString(t); return h === null ? null : h <= 12; }
 
-async function buildItinerary(selected, input, enrich, regionDays) {
+// Identifies the "minimize total driving distance" variant (Tab 5's route
+// selector) -- passed through by run.js as buildItinerary's variantHint.
+const MIN_KM_VARIANT_HINT = 'minKm';
+
+async function buildItinerary(selected, input, enrich, regionDays, variantHint) {
   const model = getGeminiClient().getGenerativeModel({
     model: MODEL_NAME,
     systemInstruction: SYSTEM_INSTRUCTIONS,
@@ -145,10 +149,20 @@ async function buildItinerary(selected, input, enrich, regionDays) {
   const timingFlagsNote = (arrivalIsLate !== null || departureIsEarly !== null)
     ? `\n\nסיווג מחושב מראש של שעות הטיסה (עקוב אחריו; אם ערך הוא null, הפעל שיקול דעת לפי הטקסט החופשי למעלה):\n${JSON.stringify({ arrivalIsLate, departureIsEarly })}`
     : '';
-  const prompt = `פרטי הטיול:\n${JSON.stringify(params)}${regionDaysNote}${manualSleepNote}${timingNote}${sleepBaseNote}${timingFlagsNote}\n\nהמקומות שנבחרו (${selected.length}):\n${JSON.stringify(digest(selected))}`;
+  // Tab 5's route-selector: a second full itinerary, optimized differently
+  // from the default. Re-anchors to the existing hard constraints BY RULE
+  // NUMBER -- without that, "minimize driving" is an easy instruction to
+  // over-satisfy by quietly dropping the regionDays allocation or ignoring a
+  // manually-booked sleep point, defeating the point of two comparably VALID
+  // itineraries rather than one correct one and one that silently breaks
+  // constraints to look shorter.
+  const variantNote = variantHint === MIN_KM_VARIANT_HINT
+    ? `\n\nאופטימיזציה מבוקשת עבור גרסה זו של המסלול (כל שאר האילוצים למעלה עדיין מחייבים ולא מבוטלים): מזערו את סך מרחקי הנסיעה בין הנקודות לאורך כל הטיול, בכפוף לחלוקת האזורים לימים (חוק 1), בסיסי הלינה המותרים (חוק 8א), מקומות לינה שנקבעו ידנית (חוק 9) ושעות הטיסה (חוק 10). העדיפו סדר ביקור בתוך כל יום שמצמצם נסיעה, ואם יש כמה חלוקות סבירות של מקומות לימים באותו אזור -- בחרו את זו שמצמצמת נסיעה כוללת, גם אם המשמעות היא פחות מקומות מבוקרים או ימים פחות עמוסים מהגרסה הרגילה.`
+    : '';
+  const prompt = `פרטי הטיול:\n${JSON.stringify(params)}${regionDaysNote}${manualSleepNote}${timingNote}${sleepBaseNote}${timingFlagsNote}${variantNote}\n\nהמקומות שנבחרו (${selected.length}):\n${JSON.stringify(digest(selected))}`;
 
   const result = await callGeminiWithRetry(model, prompt, { timeoutMs: TIMEOUT_MS, timeoutLabel: 'Final-plan call' });
   return JSON.parse(result.response.text());
 }
 
-module.exports = { buildItinerary, MODEL_NAME, PROMPT_VERSION, deriveSleepBaseCandidates, parseHourFromTimeString, isLateArrival, isEarlyDeparture };
+module.exports = { buildItinerary, MODEL_NAME, PROMPT_VERSION, MIN_KM_VARIANT_HINT, deriveSleepBaseCandidates, parseHourFromTimeString, isLateArrival, isEarlyDeparture };

@@ -22,7 +22,7 @@ const { attachImages, attachImagesToPlaces, resolveImageGuaranteed } = require('
 const { renderMasterPlanMd, renderDashboard, renderShowcase, renderSources, renderFinalShowcase, renderChecklist } = require('./render');
 const { renderRouteMap, renderFinalMap } = require('./rendermaps');
 const { suggestSelection } = require('./suggest');
-const { buildItinerary, PROMPT_VERSION } = require('./finalplan');
+const { buildItinerary, PROMPT_VERSION, MIN_KM_VARIANT_HINT } = require('./finalplan');
 const { discoverSources, discoverMoreSources, SOURCE_TYPES } = require('./discover');
 
 const ROOT = path.join(__dirname, '..', '..');
@@ -277,6 +277,33 @@ async function runFinalPlanStage(destination, input, clientPoints, onProgress, o
     writeJson(dir, `${destination}_itinerary.json`, itinerary);
   }
 
+  // Tab 5's route-selector: a second, differently-optimized itinerary for
+  // the same points. Only built when opts.buildAltVariant isn't explicitly
+  // false (the CLI/test-harness call site opts out, so automated runs don't
+  // silently double their own Gemini cost) -- and, symmetric with the
+  // primary above, reused rather than rebuilt whenever the primary itself
+  // was reused, so an ordinary re-confirm that changes nothing doesn't pay
+  // twice. A stale/pre-feature alt file (no _planningInputs, or a mismatched
+  // promptVersion) is never trusted blindly -- rebuilt once instead.
+  let altItinerary = null;
+  if (opts.buildAltVariant !== false) {
+    const altPath = path.join(dir, `${destination}_itinerary_altkm.json`);
+    let reusableAlt = null;
+    if (opts.reuseItinerary && fs.existsSync(altPath)) {
+      const prevAlt = JSON.parse(fs.readFileSync(altPath, 'utf-8'));
+      if (prevAlt._planningInputs && prevAlt._planningInputs.promptVersion === PROMPT_VERSION) reusableAlt = prevAlt;
+    }
+    if (reusableAlt) {
+      altItinerary = reusableAlt;
+      log(`== building alt (min-km) itinerary (reused ${altItinerary.days.length}-day itinerary) ==`);
+    } else {
+      log(`== building alt (min-km) itinerary for ${selected.length} confirmed points ==`);
+      altItinerary = await buildItinerary(selected, input, enrich, opts.regionDays, MIN_KM_VARIANT_HINT);
+      altItinerary._planningInputs = { ...itinerary._planningInputs, promptVersion: PROMPT_VERSION };
+      writeJson(dir, `${destination}_itinerary_altkm.json`, altItinerary);
+    }
+  }
+
   const stillNeedImages = selected.filter((p) => !p.image);
   if (stillNeedImages.length) {
     log(`== images for chosen places (${stillNeedImages.length} still needed) ==`);
@@ -295,7 +322,7 @@ async function runFinalPlanStage(destination, input, clientPoints, onProgress, o
   writeJson(dir, `${destination}_selection.json`, { destination, confirmedAt: nowStamp(), selectedCount: selected.length, selected: savedSelected, regionDays: opts.regionDays || {} });
 
   log('== rendering final plan ==');
-  writeText(dir, `${destination}_Final_Map.html`, renderFinalMap(plan, enrich, input, selection, itinerary));
+  writeText(dir, `${destination}_Final_Map.html`, renderFinalMap(plan, enrich, input, selection, itinerary, altItinerary));
   writeText(dir, `${destination}_Final_Showcase.html`, renderFinalShowcase(input.destination || destination, enrich, itinerary, selection));
   writeText(dir, `${destination}_Checklist.html`, renderChecklist(input.destination || destination, itinerary, selection));
   // Also refresh Tab 4 itself -- a user returning to "update the trip" should
@@ -342,7 +369,11 @@ async function runPipeline(trip, onProgress, opts = {}) {
     const selection = opts.selection || suggestSelection(plan, input);
     log(`selected ${selection.selected.length} points across ${selection.usedRegions.length} regions`);
     const clientPoints = selection.selected.map((p) => ({ name: p.name }));
-    ({ itinerary } = await runFinalPlanStage(destination, input, clientPoints, log, { regionDays: opts.regionDays }));
+    // buildAltVariant:false -- this CLI/test path shouldn't silently double
+    // its own Gemini cost building a Tab-5-only comparison route no one's
+    // looking at; the real server confirm path (server.js) leaves it unset
+    // (defaults to building it).
+    ({ itinerary } = await runFinalPlanStage(destination, input, clientPoints, log, { regionDays: opts.regionDays, buildAltVariant: false }));
   }
 
   log(`done: ${placeCount} places in ${regionCount} regions${itinerary ? `, ${itinerary.days.length}-day itinerary` : ''}`);

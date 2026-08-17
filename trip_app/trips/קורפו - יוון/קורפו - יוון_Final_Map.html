@@ -20,6 +20,10 @@
   .dayTabs { display: flex; gap: 6px; margin-bottom: 14px; }
   .dayTabs button { flex: 1 1 auto; padding: 10px 6px; font-size: 13px; font-weight: 700; border: 1px solid #ccc; background: #fff; border-radius: 6px; cursor: pointer; color: #333; }
   .dayTabs button.active { color: #fff; }
+  #variantToggle { display: none; gap: 6px; margin-bottom: 10px; }
+  .variant-btn { flex: 1 1 auto; padding: 8px; border: 1px solid #ccc; border-radius: 6px; background: #fff; cursor: pointer; font-weight: 700; font-size: 12px; color: #333; }
+  .variant-btn.active { background: #1a1a4e; color: #fff; border-color: #1a1a4e; }
+  .variant-note { font-size: 11.5px; color: #a13d3d; background: #f6e6e2; border-radius: 6px; padding: 8px 10px; margin-bottom: 12px; }
   .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; font-size: 12px; }
   .legend span { display: inline-flex; align-items: center; gap: 4px; }
   .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.3); flex-shrink: 0; }
@@ -65,6 +69,10 @@
   <div id="map"></div>
   <div id="sidebar">
     <h2>מסלול קורפו - יוון — 23.8-27.8</h2>
+    <div id="variantToggle">
+      <button id="variantBtnMaxPlaces" class="variant-btn active" onclick="switchVariant('maxPlaces')">🗺️ מקסימום מקומות</button>
+      <button id="variantBtnMinKm" class="variant-btn" onclick="switchVariant('minKm')">🚗 מינימום נסיעה</button>
+    </div>
     <div class="dayTabs" id="dayTabs"></div>
     <div class="legend">
       <span><span class="dot" style="background:#8e44ad"></span>עיר</span>
@@ -692,13 +700,21 @@ const EXTRA_REGIONS = [
   }
 ];
 
-const DAYS = [
+const DAYS_VARIANT_A = [
   { id:1, label:"יום 1", date:"23.8", color:DAY_COLORS[1], base:"צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)", baseQuery:"צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור), Corfu", sleepPointName:null, isDeparture:false, returnsToBase:true, intro:"ברוכים הבאים לקורפו! 🇬🇷 לאחר הנחיתה בשעות הערב ואיסוף הרכב השכור, תצאו בנסיעה נינוחה לעבר מקום הלינה שלכם בצפון האי להתארגנות ומנוחה לקראת הימים הבאים.", route:[], restaurants:[], note:"נחיתה בשעה 20:00 בערב - הערב מוקדש לנסיעה והתמקמות בלבד ללא פעילויות נוספות." },
   { id:2, label:"יום 2", date:"24.8", color:DAY_COLORS[2], base:"צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)", baseQuery:"צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור), Corfu", sleepPointName:null, isDeparture:false, returnsToBase:true, intro:"יום מרהיב שמוקדש לתצורות הסלע המפורסמות של האי. תבקרו במצוקים דרמטיים, תיהנו משחייה בתעלת האהבה המפורסמת ותסיימו בתצפית שקיעה קסומה מעל הים היוני. 🌅", route:["capedrastis14","canaldamour13","sidari5","7thheavenlogasbeach17"], restaurants:[], note:"מומלץ להגיע לחוף לוגאס לקראת שעות אחה\"צ המאוחרות לתצפית שקיעה מדהימה." },
   { id:3, label:"יום 3", date:"25.8", color:DAY_COLORS[3], base:"צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)", baseQuery:"צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור), Corfu", sleepPointName:null, isDeparture:false, returnsToBase:true, intro:"יום המשלב טבע פראי וחופים בתוליים. תטיילו לעבר התצפית והחוף הכפול המרהיב של פורטו טימוני, ותמשיכו למפרצים רגועים ונעימים המושלמים לרחצה ובילוי משפחתי. 🌊", route:["portotimoni15","arillasagiosstefanos10","agiosgeorgiospagon20"], restaurants:[], note:"ההליכה לפורטו טימוני כוללת ירידה ועלייה בשביל טבעי - מומלץ להצטייד בנעלי הליכה סגורות ומים." },
   { id:4, label:"יום 4", date:"26.8", color:DAY_COLORS[4], base:"צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)", baseQuery:"צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור), Corfu", sleepPointName:null, isDeparture:false, returnsToBase:true, intro:"עולים לפסגה הגבוהה ביותר באי לתצפית פנורמית עוצרת נשימה, ממשיכים לשיטוט בכפר אבן עתיק וציורי, ומסיימים בטיול רגוע בעיירת הדייגים והנמל היפהפייה קסיופי. ⛰️⛵", route:["mountpantokrator16","paleaperithia18","kassiopi6","kalamikaminakinissaki11"], restaurants:[], note:"הנסיעה במעלה ההר כוללת כבישים מפותלים עם נופים מרהיבים, מומלץ לנהוג בנחת." },
   { id:5, label:"יום 5", date:"27.8", color:DAY_COLORS[5], base:"צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)", baseQuery:"צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור), Corfu", sleepPointName:null, isDeparture:true, returnsToBase:false, intro:"סיום מושלם לטיול בסמטאות הציוריות של העיר העתיקה. שיטוט בין מבנים ונציאניים, קפה במתחם הליסטון האלגנטי וארוחת צהריים טעימה על קו המים לפני הנסיעה לנמל התעופה. 🏛️✈️", route:["p0","campiello2","spianada1","liston3","faliraki4"], restaurants:[{"id":"faliraki4","note":"מסעדה/אוכל"}], note:"הטיסה ממריאה בשעה 17:00. יש לצאת לכיוון נמל התעופה ולהחזרת הרכב עד השעה 14:30 לכל המאוחר." }
 ];
+// Tab 5's route-selector (max-places vs min-km) -- rendermaps.js patches
+// these two literals when a second (alt) itinerary was actually built;
+// left as-is (no variant, toggle stays hidden) on a direct/standalone load
+// of this template. DAYS starts pointed at variant A; switchVariant()
+// reassigns it, never these two consts themselves.
+let DAYS_VARIANT_B = null;
+const HAS_ROUTE_VARIANTS = false;
+let DAYS = DAYS_VARIANT_A;
 
 function formatHebrewDuration(totalSeconds) {
   const totalMinutes = Math.round(totalSeconds / 60);
@@ -728,9 +744,14 @@ function clockToMinutes(hhmm) {
 let map, geocoder, directionsService, sharedInfoWindow, focusedId;
 let DistanceLabel;
 let currentView = 'overview'; // 'overview' | 1 | 2
-const dayRenderers = {};   // day.id -> google.maps.DirectionsRenderer
-const dayLabelOverlays = {}; // day.id -> [DistanceLabel,...]
-const dayLegsMinutes = {}; // day.id -> [minutes,...] real walking legs from Directions
+// let, not const -- switchVariant() swaps these to a whole different dict
+// per route variant (each variant's DAYS holds distinct day-id-keyed data,
+// so a dict built while viewing variant A must not leak into variant B).
+let dayRenderers = {};   // day.id -> google.maps.DirectionsRenderer
+let dayLabelOverlays = {}; // day.id -> [DistanceLabel,...]
+let dayLegsMinutes = {}; // day.id -> [minutes,...] real walking legs from Directions
+let currentVariantKey = 'maxPlaces'; // 'maxPlaces' | 'minKm'
+const variantCache = {}; // variantKey -> { dayRenderers, dayLabelOverlays, dayLegsMinutes } from a prior visit -- skips re-fetching Directions on a revisit
 const worthCache = {}; // baseName -> { pointName: distanceText }
 const extraMarkers = {}; // lazy markers for "worth knowing about" points, keyed by name
 
@@ -777,6 +798,7 @@ function initMap() {
   directionsService = new google.maps.DirectionsService();
   sharedInfoWindow = new google.maps.InfoWindow();
 
+  if (HAS_ROUTE_VARIANTS) document.getElementById('variantToggle').style.display = 'flex';
   buildDayTabs();
   geocodeAllPoints();
   geocodeOvernightBases();
@@ -785,6 +807,7 @@ function initMap() {
 
 function buildDayTabs() {
   const wrap = document.getElementById('dayTabs');
+  wrap.innerHTML = ''; // buildDayTabs() now also re-runs on every variant switch, since day count/order can differ between variants
   const allBtn = document.createElement('button');
   allBtn.textContent = 'כל הימים';
   allBtn.className = 'active';
@@ -819,6 +842,42 @@ function selectView(view, btnEl) {
     btnEl.style.background = d.color;
     btnEl.style.color = '#fff';
   }
+  render();
+}
+
+// Tab 5's route-selector toggle. Each variant's DAYS array holds genuinely
+// distinct object instances (built separately in rendermaps.js), so
+// per-day mutations (_directionsResult/_totalMeters/etc, written directly
+// onto the day objects by fetchAllDayRoutes) never collide between variants
+// -- only the day-id-KEYED dicts (dayRenderers/dayLabelOverlays/
+// dayLegsMinutes) risk collision, since both variants' day 1 has id:1.
+// Swapped as a whole unit per variant via variantCache instead.
+function switchVariant(key) {
+  if (key === currentVariantKey) return;
+  if (key === 'minKm' && !DAYS_VARIANT_B) return; // toggle is hidden in this case anyway
+
+  // Hide the outgoing variant's map layers -- render() only ever touches
+  // the CURRENT dayRenderers/dayLabelOverlays dict, so the old variant's
+  // polylines/labels would otherwise stay stuck on the map after swapping.
+  Object.values(dayRenderers).forEach(r => r.setMap(null));
+  Object.values(dayLabelOverlays).forEach(arr => arr.forEach(o => o.setMap(null)));
+  variantCache[currentVariantKey] = { dayRenderers, dayLabelOverlays, dayLegsMinutes };
+
+  currentVariantKey = key;
+  DAYS = key === 'minKm' ? DAYS_VARIANT_B : DAYS_VARIANT_A;
+
+  const cached = variantCache[key];
+  dayRenderers = cached ? cached.dayRenderers : {};
+  dayLabelOverlays = cached ? cached.dayLabelOverlays : {};
+  dayLegsMinutes = cached ? cached.dayLegsMinutes : {};
+
+  document.getElementById('variantBtnMaxPlaces').classList.toggle('active', key === 'maxPlaces');
+  document.getElementById('variantBtnMinKm').classList.toggle('active', key === 'minKm');
+
+  buildDayTabs(); // day count/order can genuinely differ between variants
+  currentView = 'overview';
+
+  if (!cached) fetchAllDayRoutes(); // first visit to this variant this session -- fetch once, cached dicts skip this on a later revisit
   render();
 }
 
@@ -1036,6 +1095,7 @@ function renderOverviewContent() {
   const allIds = DAYS.flatMap(d => d.route);
   const totalSeconds = DAYS.reduce((s, d) => s + (d._totalSeconds || 0), 0);
   let html = `<div class="section-title">כל הימים — סקירה</div>`;
+  if (currentVariantKey !== 'maxPlaces') html += `<div class="variant-note">⚠️ תצוגה זו להשוואה בלבד — הצ'ק-ליסט וההזמנות מבוססים על מסלול מקסימום המקומות</div>`;
   html += `<div class="pie-wrap">${buildPieSVG(categoryCounts(allIds), 90)}
     <div class="pie-legend">
       <div><span class="dot" style="background:${CATEGORY_COLORS.City}"></span>עיר</div>
@@ -1075,6 +1135,11 @@ function renderDayContent(d) {
   const sleepLabel = d.sleepPointName || d.base;
   const distSuffix = d._totalMeters ? ' · 🚗 ' + formatHebrewDistance(d._totalMeters) + ' נסיעה היום' : '';
   let html = `<div class="section-title">${d.label} — ${d.date}</div>`;
+  // Tabs 6/7 (Showcase/Checklist) always reflect the max-places itinerary
+  // regardless of which Tab-5 toggle is active -- flag that here so picking
+  // min-km doesn't leave someone wondering why the Checklist's nightly hotel
+  // list doesn't match what they're looking at.
+  if (currentVariantKey !== 'maxPlaces') html += `<div class="variant-note">⚠️ תצוגה זו להשוואה בלבד — הצ'ק-ליסט וההזמנות מבוססים על מסלול מקסימום המקומות</div>`;
   // "🛏 לינה הלילה" (sleeping tonight) is wrong on the departure day itself --
   // that night you're flying home, not sleeping at the base. The bottom
   // departure-line already says so; the top line should match, not contradict it.

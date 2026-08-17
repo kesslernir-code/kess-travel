@@ -20,6 +20,10 @@
   .dayTabs { display: flex; gap: 6px; margin-bottom: 14px; }
   .dayTabs button { flex: 1 1 auto; padding: 10px 6px; font-size: 13px; font-weight: 700; border: 1px solid #ccc; background: #fff; border-radius: 6px; cursor: pointer; color: #333; }
   .dayTabs button.active { color: #fff; }
+  #variantToggle { display: none; gap: 6px; margin-bottom: 10px; }
+  .variant-btn { flex: 1 1 auto; padding: 8px; border: 1px solid #ccc; border-radius: 6px; background: #fff; cursor: pointer; font-weight: 700; font-size: 12px; color: #333; }
+  .variant-btn.active { background: #1a1a4e; color: #fff; border-color: #1a1a4e; }
+  .variant-note { font-size: 11.5px; color: #a13d3d; background: #f6e6e2; border-radius: 6px; padding: 8px 10px; margin-bottom: 12px; }
   .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; font-size: 12px; }
   .legend span { display: inline-flex; align-items: center; gap: 4px; }
   .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.3); flex-shrink: 0; }
@@ -65,6 +69,10 @@
   <div id="map"></div>
   <div id="sidebar">
     <h2>מסלול רומניה — 5-12.10.2026</h2>
+    <div id="variantToggle">
+      <button id="variantBtnMaxPlaces" class="variant-btn active" onclick="switchVariant('maxPlaces')">🗺️ מקסימום מקומות</button>
+      <button id="variantBtnMinKm" class="variant-btn" onclick="switchVariant('minKm')">🚗 מינימום נסיעה</button>
+    </div>
     <div class="dayTabs" id="dayTabs"></div>
     <div class="legend">
       <span><span class="dot" style="background:#8e44ad"></span>עיר</span>
@@ -1319,7 +1327,7 @@ const POINTS = {
 // (name/category/query/region only) for the "worth knowing about" section.
 const EXTRA_REGIONS = [];
 
-const DAYS = [
+const DAYS_VARIANT_A = [
   { id:1, label:"יום 1", date:"05.10.2026", color:DAY_COLORS[1], base:"בוקרשט", baseQuery:"בוקרשט, Romania", sleepPointName:null, isDeparture:false, returnsToBase:false, intro:"מתחילים את הטיול בבירה הרומנית עם ארכיטקטורה מונומנטלית ושוטטות בסמטאות העיר העתיקה מלאות החיים 🏛️🍷 מסיימים בארוחת ערב מסורתית אותנטית.", route:["palaceofparliament2","caleavictoriei4","revolutionsquare5","bucharestoldtown1","carucubere12"], restaurants:[{"id":"carucubere12","note":"מסעדה/אוכל"}], note:"מומלץ להזמין מראש סיור בארמון הפרלמנט ושולחן למסעדת קארו קו ברה." },
   { id:2, label:"יום 2", date:"06.10.2026", color:DAY_COLORS[2], base:"בראשוב", baseQuery:"בראשוב, Romania", sleepPointName:null, isDeparture:false, returnsToBase:true, intro:"יוצאים צפונה ברכב לעבר רכס הקרפטים הציורי 🌲 מבקרים בארמון הקיץ המלכותי בסינאיה וממשיכים לערב מקסים בכיכר המרכזית של בראשוב.", route:["sinaia44","pelecastle33","braov31","piaasfatului42","blackchurchbisericaneagr34","sergiana51"], restaurants:[{"id":"sergiana51","note":"מסעדה/אוכל"}], note:"נסיעה של כשעתיים וחצי מבוקרשט לסינאיה, מומלץ לצאת מוקדם כדי להקדים את הפקקים בעמק פראחובה." },
   { id:3, label:"יום 3", date:"07.10.2026", color:DAY_COLORS[3], base:"בראשוב", baseQuery:"בראשוב, Romania", sleepPointName:null, isDeparture:false, returnsToBase:false, intro:"יום מרתק המשלב ביקור מרגש במקלט הדובים ביערות זרנשט עם טירת בראן האייקונית 🐻🏰 לקראת שקיעה עולים לתצפית פנורמית מהר טמפה.", route:["libeartybearsanctuary38","rnovfortress35","brancastle32","stradasforii43","mounttmpa41"], restaurants:[], note:"הכניסה למקלט הדובים היא בסיורים מודרכים בלבד ויש להזמין כרטיסים מראש לשעות הבוקר." },
@@ -1329,6 +1337,14 @@ const DAYS = [
   { id:7, label:"יום 7", date:"11.10.2026", color:DAY_COLORS[7], base:"בוקרשט", baseQuery:"בוקרשט, Romania", sleepPointName:null, isDeparture:false, returnsToBase:true, intro:"חוויית נהיגה עוצרת נשימה באחד הכבישים המפורסמים והיפים בעולם 🚗 פיתולים חדים, אגם אלפיני בגובה 2,000 מטרים וחזרה דרומה לעבר בוקרשט.", route:["transfgranlakeblea54","poenarifortress64","curteadeargemonastery65","bucharest0"], restaurants:[], note:"בתחילת אוקטובר ייתכנו תנאי מזג אוויר משתנים או ערפל באגם בלאה; כדאי לבדוק את סטטוס הכביש בבוקר היציאה ולהצטייד בביגוד חם." },
   { id:8, label:"יום 8", date:"12.10.2026", color:DAY_COLORS[8], base:"בוקרשט", baseQuery:"בוקרשט, Romania", sleepPointName:null, isDeparture:true, returnsToBase:false, intro:"מסיימים את המסע ברוגע ובסטייל בצפון בוקרשט 🌴 ביקור באחוזתו המפוארת של צ'אושסקו ומספר שעות של מנוחה מושלמת במרחצאות התרמיים לפני הטיסה.", route:["springpalacepalatulprimv9","lakeherstrukingmihaiipar14","thermebucharest6"], restaurants:[], note:"מתחם תרמה בוקרשט קרוב מאוד לנמל התעופה הבינלאומי אוטופני (OTP), נוח מאוד לסיום הטיול." }
 ];
+// Tab 5's route-selector (max-places vs min-km) -- rendermaps.js patches
+// these two literals when a second (alt) itinerary was actually built;
+// left as-is (no variant, toggle stays hidden) on a direct/standalone load
+// of this template. DAYS starts pointed at variant A; switchVariant()
+// reassigns it, never these two consts themselves.
+let DAYS_VARIANT_B = null;
+const HAS_ROUTE_VARIANTS = false;
+let DAYS = DAYS_VARIANT_A;
 
 function formatHebrewDuration(totalSeconds) {
   const totalMinutes = Math.round(totalSeconds / 60);
@@ -1358,9 +1374,14 @@ function clockToMinutes(hhmm) {
 let map, geocoder, directionsService, sharedInfoWindow, focusedId;
 let DistanceLabel;
 let currentView = 'overview'; // 'overview' | 1 | 2
-const dayRenderers = {};   // day.id -> google.maps.DirectionsRenderer
-const dayLabelOverlays = {}; // day.id -> [DistanceLabel,...]
-const dayLegsMinutes = {}; // day.id -> [minutes,...] real walking legs from Directions
+// let, not const -- switchVariant() swaps these to a whole different dict
+// per route variant (each variant's DAYS holds distinct day-id-keyed data,
+// so a dict built while viewing variant A must not leak into variant B).
+let dayRenderers = {};   // day.id -> google.maps.DirectionsRenderer
+let dayLabelOverlays = {}; // day.id -> [DistanceLabel,...]
+let dayLegsMinutes = {}; // day.id -> [minutes,...] real walking legs from Directions
+let currentVariantKey = 'maxPlaces'; // 'maxPlaces' | 'minKm'
+const variantCache = {}; // variantKey -> { dayRenderers, dayLabelOverlays, dayLegsMinutes } from a prior visit -- skips re-fetching Directions on a revisit
 const worthCache = {}; // baseName -> { pointName: distanceText }
 const extraMarkers = {}; // lazy markers for "worth knowing about" points, keyed by name
 
@@ -1407,6 +1428,7 @@ function initMap() {
   directionsService = new google.maps.DirectionsService();
   sharedInfoWindow = new google.maps.InfoWindow();
 
+  if (HAS_ROUTE_VARIANTS) document.getElementById('variantToggle').style.display = 'flex';
   buildDayTabs();
   geocodeAllPoints();
   geocodeOvernightBases();
@@ -1415,6 +1437,7 @@ function initMap() {
 
 function buildDayTabs() {
   const wrap = document.getElementById('dayTabs');
+  wrap.innerHTML = ''; // buildDayTabs() now also re-runs on every variant switch, since day count/order can differ between variants
   const allBtn = document.createElement('button');
   allBtn.textContent = 'כל הימים';
   allBtn.className = 'active';
@@ -1449,6 +1472,42 @@ function selectView(view, btnEl) {
     btnEl.style.background = d.color;
     btnEl.style.color = '#fff';
   }
+  render();
+}
+
+// Tab 5's route-selector toggle. Each variant's DAYS array holds genuinely
+// distinct object instances (built separately in rendermaps.js), so
+// per-day mutations (_directionsResult/_totalMeters/etc, written directly
+// onto the day objects by fetchAllDayRoutes) never collide between variants
+// -- only the day-id-KEYED dicts (dayRenderers/dayLabelOverlays/
+// dayLegsMinutes) risk collision, since both variants' day 1 has id:1.
+// Swapped as a whole unit per variant via variantCache instead.
+function switchVariant(key) {
+  if (key === currentVariantKey) return;
+  if (key === 'minKm' && !DAYS_VARIANT_B) return; // toggle is hidden in this case anyway
+
+  // Hide the outgoing variant's map layers -- render() only ever touches
+  // the CURRENT dayRenderers/dayLabelOverlays dict, so the old variant's
+  // polylines/labels would otherwise stay stuck on the map after swapping.
+  Object.values(dayRenderers).forEach(r => r.setMap(null));
+  Object.values(dayLabelOverlays).forEach(arr => arr.forEach(o => o.setMap(null)));
+  variantCache[currentVariantKey] = { dayRenderers, dayLabelOverlays, dayLegsMinutes };
+
+  currentVariantKey = key;
+  DAYS = key === 'minKm' ? DAYS_VARIANT_B : DAYS_VARIANT_A;
+
+  const cached = variantCache[key];
+  dayRenderers = cached ? cached.dayRenderers : {};
+  dayLabelOverlays = cached ? cached.dayLabelOverlays : {};
+  dayLegsMinutes = cached ? cached.dayLegsMinutes : {};
+
+  document.getElementById('variantBtnMaxPlaces').classList.toggle('active', key === 'maxPlaces');
+  document.getElementById('variantBtnMinKm').classList.toggle('active', key === 'minKm');
+
+  buildDayTabs(); // day count/order can genuinely differ between variants
+  currentView = 'overview';
+
+  if (!cached) fetchAllDayRoutes(); // first visit to this variant this session -- fetch once, cached dicts skip this on a later revisit
   render();
 }
 
@@ -1666,6 +1725,7 @@ function renderOverviewContent() {
   const allIds = DAYS.flatMap(d => d.route);
   const totalSeconds = DAYS.reduce((s, d) => s + (d._totalSeconds || 0), 0);
   let html = `<div class="section-title">כל הימים — סקירה</div>`;
+  if (currentVariantKey !== 'maxPlaces') html += `<div class="variant-note">⚠️ תצוגה זו להשוואה בלבד — הצ'ק-ליסט וההזמנות מבוססים על מסלול מקסימום המקומות</div>`;
   html += `<div class="pie-wrap">${buildPieSVG(categoryCounts(allIds), 90)}
     <div class="pie-legend">
       <div><span class="dot" style="background:${CATEGORY_COLORS.City}"></span>עיר</div>
@@ -1703,8 +1763,19 @@ function renderDayContent(d) {
   // the town-level d.base still backs the Checklist's "book a hotel in this
   // town" search links, but the day card itself should show the real place.
   const sleepLabel = d.sleepPointName || d.base;
+  const distSuffix = d._totalMeters ? ' · 🚗 ' + formatHebrewDistance(d._totalMeters) + ' נסיעה היום' : '';
   let html = `<div class="section-title">${d.label} — ${d.date}</div>`;
-  if (d.base) html += `<div class="base-line">🛏 לינה הלילה: ${sleepLabel}${d._totalMeters ? ' · 🚗 ' + formatHebrewDistance(d._totalMeters) + ' נסיעה היום' : ''}</div>`;
+  // Tabs 6/7 (Showcase/Checklist) always reflect the max-places itinerary
+  // regardless of which Tab-5 toggle is active -- flag that here so picking
+  // min-km doesn't leave someone wondering why the Checklist's nightly hotel
+  // list doesn't match what they're looking at.
+  if (currentVariantKey !== 'maxPlaces') html += `<div class="variant-note">⚠️ תצוגה זו להשוואה בלבד — הצ'ק-ליסט וההזמנות מבוססים על מסלול מקסימום המקומות</div>`;
+  // "🛏 לינה הלילה" (sleeping tonight) is wrong on the departure day itself --
+  // that night you're flying home, not sleeping at the base. The bottom
+  // departure-line already says so; the top line should match, not contradict it.
+  if (d.base) html += d.isDeparture
+    ? `<div class="base-line">🛫 יום היציאה${distSuffix}</div>`
+    : `<div class="base-line">🛏 לינה הלילה: ${sleepLabel}${distSuffix}</div>`;
   html += `<div class="intro-line">${d.intro}</div>`;
   html += `<div class="pie-wrap">${buildPieSVG(categoryCounts(d.route), 70)}
     <div class="pie-legend">

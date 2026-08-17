@@ -244,7 +244,7 @@ const VISIT_MIN = { Nature: 90, City: 60, Attraction: 60, Food: 45, Sleep: 0 };
 function slugName(name, i) { return slug(name, i); }
 
 // ---- Final_Map (Tab 5): selected points, day-by-day routing -----------------
-function renderFinalMap(plan, enrich, input, selection, itinerary) {
+function renderFinalMap(plan, enrich, input, selection, itinerary, altItinerary) {
   const destination = input.destination;
   const destinationEn = enrich.destinationEn || destination;
   const center = enrich.mapCenter || { lat: 0, lng: 0 };
@@ -282,48 +282,74 @@ function renderFinalMap(plan, enrich, input, selection, itinerary) {
   // different town some nights) -- baseQuery lets the map chain day N+1's
   // route to start from where day N actually ended up sleeping, instead of
   // routing every day from one fixed trip-wide address.
-  const DAY_COLORS = {};
-  const DAYS = (itinerary.days || []).map((d, idx) => {
-    const dayNum = d.day || idx + 1;
-    DAY_COLORS[dayNum] = DAY_PALETTE[(dayNum - 1) % DAY_PALETTE.length];
-    const route = (d.route || []).map((n) => nameToId[n]).filter(Boolean);
-    const restaurants = (d.restaurants || []).map((n) => nameToId[n]).filter(Boolean).map((id) => ({ id, note: 'מסעדה/אוכל' }));
-    const base = d.base || tripStartBase;
-    // A day's real "origin" for driving directions is more precise than its
-    // town: once a specific accommodation was manually designated (Tab 4's
-    // sleep-location field/toggle), finalplan.js echoes its exact name back
-    // as sleepPointName (see finalplan.js rule 9) -- geocoding THAT instead
-    // of "<town>, <country>" starts the day's route from the actual
-    // apartment/hotel, not wherever the town's generic center happens to be.
-    const baseQuery = d.sleepPointName ? `${d.sleepPointName}, ${destinationEn}` : `${base}, ${destinationEn}`;
-    return {
-      id: dayNum, label: `יום ${dayNum}`, date: d.dateLabel || `יום ${dayNum}`,
-      colorKey: dayNum, base, baseQuery, sleepPointName: d.sleepPointName || null,
-      isDeparture: idx === (itinerary.days.length - 1),
-      intro: d.intro || '', route, restaurants, note: d.note || null
-    };
-  });
-  // Second pass (needs every day's baseQuery already resolved): a day whose
-  // base is the SAME as tomorrow's is a day-trip out-and-back from a stable
-  // accommodation (or day 1 traveling in to that first night's base) -- the
-  // map should draw the way back too, not just stop at the last sightseeing
-  // point. A day that relocates to a genuinely different base tomorrow (a
-  // road-trip leg) should NOT get an artificial return leg -- ending near
-  // the new base IS the point of that day. isDeparture days never qualify
-  // either (they end at the airport). Every real trip's last day is always
-  // isDeparture today (see the unconditional idx===length-1 above), so the
-  // "last day, not departure" edge case can't currently occur.
-  DAYS.forEach((d, idx) => {
-    const next = DAYS[idx + 1];
-    d.returnsToBase = !d.isDeparture && !!next && next.baseQuery === d.baseQuery;
-  });
-  // Serialize DAYS with color pulled from DAY_COLORS (template references DAY_COLORS[n]).
-  const daysJs = '[\n' + DAYS.map((d) =>
-    `  { id:${d.id}, label:${JSON.stringify(d.label)}, date:${JSON.stringify(d.date)}, color:DAY_COLORS[${d.colorKey}], base:${JSON.stringify(d.base)}, baseQuery:${JSON.stringify(d.baseQuery)}, sleepPointName:${JSON.stringify(d.sleepPointName)}, isDeparture:${d.isDeparture}, returnsToBase:${d.returnsToBase}, intro:${JSON.stringify(d.intro)}, route:${JSON.stringify(d.route)}, restaurants:${JSON.stringify(d.restaurants)}, note:${JSON.stringify(d.note)} }`
-  ).join(',\n') + '\n]';
+  // Factored out so Tab 5's route-selector (a second, differently-optimized
+  // itinerary for the SAME points) can build a second DAYS array the exact
+  // same way, instead of duplicating this logic.
+  function buildDaysAndColors(itin) {
+    const DAY_COLORS = {};
+    const days = (itin.days || []).map((d, idx) => {
+      const dayNum = d.day || idx + 1;
+      DAY_COLORS[dayNum] = DAY_PALETTE[(dayNum - 1) % DAY_PALETTE.length];
+      const route = (d.route || []).map((n) => nameToId[n]).filter(Boolean);
+      const restaurants = (d.restaurants || []).map((n) => nameToId[n]).filter(Boolean).map((id) => ({ id, note: 'מסעדה/אוכל' }));
+      const base = d.base || tripStartBase;
+      // A day's real "origin" for driving directions is more precise than its
+      // town: once a specific accommodation was manually designated (Tab 4's
+      // sleep-location field/toggle), finalplan.js echoes its exact name back
+      // as sleepPointName (see finalplan.js rule 9) -- geocoding THAT instead
+      // of "<town>, <country>" starts the day's route from the actual
+      // apartment/hotel, not wherever the town's generic center happens to be.
+      const baseQuery = d.sleepPointName ? `${d.sleepPointName}, ${destinationEn}` : `${base}, ${destinationEn}`;
+      return {
+        id: dayNum, label: `יום ${dayNum}`, date: d.dateLabel || `יום ${dayNum}`,
+        colorKey: dayNum, base, baseQuery, sleepPointName: d.sleepPointName || null,
+        isDeparture: idx === (itin.days.length - 1),
+        intro: d.intro || '', route, restaurants, note: d.note || null
+      };
+    });
+    // Second pass (needs every day's baseQuery already resolved): a day whose
+    // base is the SAME as tomorrow's is a day-trip out-and-back from a stable
+    // accommodation (or day 1 traveling in to that first night's base) -- the
+    // map should draw the way back too, not just stop at the last sightseeing
+    // point. A day that relocates to a genuinely different base tomorrow (a
+    // road-trip leg) should NOT get an artificial return leg -- ending near
+    // the new base IS the point of that day. isDeparture days never qualify
+    // either (they end at the airport). Every real trip's last day is always
+    // isDeparture today (see the unconditional idx===length-1 above), so the
+    // "last day, not departure" edge case can't currently occur.
+    days.forEach((d, idx) => {
+      const next = days[idx + 1];
+      d.returnsToBase = !d.isDeparture && !!next && next.baseQuery === d.baseQuery;
+    });
+    return { days, DAY_COLORS };
+  }
+  function serializeDays(days) {
+    return '[\n' + days.map((d) =>
+      `  { id:${d.id}, label:${JSON.stringify(d.label)}, date:${JSON.stringify(d.date)}, color:DAY_COLORS[${d.colorKey}], base:${JSON.stringify(d.base)}, baseQuery:${JSON.stringify(d.baseQuery)}, sleepPointName:${JSON.stringify(d.sleepPointName)}, isDeparture:${d.isDeparture}, returnsToBase:${d.returnsToBase}, intro:${JSON.stringify(d.intro)}, route:${JSON.stringify(d.route)}, restaurants:${JSON.stringify(d.restaurants)}, note:${JSON.stringify(d.note)} }`
+    ).join(',\n') + '\n]';
+  }
+
+  const { days: DAYS, DAY_COLORS: DAY_COLORS_A } = buildDaysAndColors(itinerary);
+  let DAYS_B = null;
+  let DAY_COLORS_B = {};
+  if (altItinerary) ({ days: DAYS_B, DAY_COLORS: DAY_COLORS_B } = buildDaysAndColors(altItinerary));
+  // Colors are deterministic by day NUMBER (DAY_PALETTE[(n-1) % len]), never
+  // by which itinerary produced day n -- a key collision between the two
+  // variants' color maps is guaranteed identical, not a real conflict, so
+  // merging into one shared object is safe.
+  const DAY_COLORS = Object.assign({}, DAY_COLORS_A, DAY_COLORS_B);
+  const daysJsA = serializeDays(DAYS);
+  const daysJsB = DAYS_B ? serializeDays(DAYS_B) : null;
 
   // Unique overnight towns across the whole itinerary, in first-used order --
   // this is what the checklist and the bed-icon map markers key off of.
+  // Deliberately computed from the PRIMARY (max-places) itinerary only, even
+  // when a min-km alt variant exists -- these bed markers are a persistent,
+  // always-visible map layer independent of the day-tab system, and the two
+  // variants could in principle distribute nights across the same allowed
+  // sleep bases differently. Not kept in sync with which Tab-5 toggle is
+  // active; a known, deliberately deferred limitation (secondary display
+  // detail, not a correctness break in the day-by-day view itself).
   const overnightBases = [];
   const nightsByBase = {};
   DAYS.forEach((d) => {
@@ -370,7 +396,9 @@ function renderFinalMap(plan, enrich, input, selection, itinerary) {
     .replace(/const DAY_COLORS = \{[^}]*\};/, `const DAY_COLORS = ${JSON.stringify(DAY_COLORS)};`)
     .replace(/const POINTS = \{[\s\S]*?\n\};/, `const POINTS = ${JSON.stringify(POINTS, null, 2)};`)
     .replace(/const EXTRA_REGIONS = \[[\s\S]*?\n\];/, `const EXTRA_REGIONS = ${JSON.stringify(EXTRA_REGIONS, null, 2)};`)
-    .replace(/const DAYS = \[[\s\S]*?\n\];/, `const DAYS = ${daysJs};`)
+    .replace(/const DAYS_VARIANT_A = \[[\s\S]*?\n\];/, `const DAYS_VARIANT_A = ${daysJsA};`)
+    .replace(/let DAYS_VARIANT_B = null;/, `let DAYS_VARIANT_B = ${daysJsB || 'null'};`)
+    .replace(/const HAS_ROUTE_VARIANTS = false;/, `const HAS_ROUTE_VARIANTS = ${!!daysJsB};`)
     .replace(/center: \{ lat: [\d.\-]+, lng: [\d.\-]+ \}/, `center: { lat: ${center.lat}, lng: ${center.lng} }`)
     .replace(/(maps\.googleapis\.com\/maps\/api\/js\?[^"]*?)&region=[A-Z]{2}/, `$1&region=${countryCode}`)
     .replace(/componentRestrictions: \{ country: '[A-Z]{2}' \}/g, `componentRestrictions: { country: ${JSON.stringify(countryCode)} }`)
@@ -438,6 +466,14 @@ function validateFinalMapLeftovers(html, destinationEn) {
   const problems = [];
   if (!html.includes('const origin = di === 0 ? BASE_ADDRESS : DAYS[di - 1].baseQuery')) problems.push('per-day chained origin is missing from fetchAllDayRoutes');
   if (/origin: BASE_ADDRESS,\s*\n\s*destination/.test(html)) problems.push('a day route still uses the single fixed BASE_ADDRESS as its origin');
+  // HAS_ROUTE_VARIANTS and DAYS_VARIANT_B must always agree on whether a
+  // route variant was actually injected -- if only one of the two regex
+  // patches lands (e.g. a future edit to one literal without the other), the
+  // toggle would show but do nothing, or a real variant B would silently
+  // never appear. Catch that mismatch here instead of shipping it.
+  const hasVariantsFlag = /const HAS_ROUTE_VARIANTS = true;/.test(html);
+  const variantBIsNull = /let DAYS_VARIANT_B = null;/.test(html);
+  if (hasVariantsFlag === variantBIsNull) problems.push('HAS_ROUTE_VARIANTS and DAYS_VARIANT_B disagree about whether a route variant was injected');
   // Same escaped-quote fix as the route map's guard -- a name like Hebrew
   // "ע\"ש" (an abbreviation for "named after") is valid JSON but [^"]* alone
   // truncates at the escaped quote and reads as a false positive.
