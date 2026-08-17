@@ -465,7 +465,8 @@ const REGIONS = [
         "checked": true,
         "isSleep": false
       }
-    ]
+    ],
+    "days": 0
   },
   {
     "region": "צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)",
@@ -662,7 +663,8 @@ const REGIONS = [
         "checked": true,
         "isSleep": false
       }
-    ]
+    ],
+    "days": 1
   },
   {
     "region": "מערב ומרכז קורפו (פליאוקסטריצה, גליפדה ועמק רופה)",
@@ -871,7 +873,8 @@ const REGIONS = [
         "checked": true,
         "isSleep": false
       }
-    ]
+    ],
+    "days": 0
   },
   {
     "region": "דרום קורפו (כולל בניטצ'ס, קאבוס ואגם קוריסיה)",
@@ -1008,7 +1011,8 @@ const REGIONS = [
         "checked": false,
         "isSleep": false
       }
-    ]
+    ],
+    "days": 0
   },
   {
     "region": "טרק שביל קורפו (The Corfu Trail)",
@@ -1037,7 +1041,8 @@ const REGIONS = [
         "checked": false,
         "isSleep": false
       }
-    ]
+    ],
+    "days": 0
   },
   {
     "region": "איים סמוכים וסיורי יום (פאקסוס, דיאפונטיה, לפקדה ואלבניה)",
@@ -1138,7 +1143,8 @@ const REGIONS = [
         "checked": false,
         "isSleep": false
       }
-    ]
+    ],
+    "days": 0
   }
 ];
 // IMPORTANT: keep the same object identity between REGIONS and POINTS (no spread/copy here).
@@ -1432,8 +1438,9 @@ function buildChecklist() {
     } else if (pendingSleepInputText[ri]) {
       sleepInput.value = pendingSleepInputText[ri];
     }
-    rTitle.querySelector('#sleeplocbtn_' + ri).addEventListener('click', () => {
-      setRegionSleepLocation(r, ri, sleepInput.value.trim(), sleepStatus);
+    const sleepBtn = rTitle.querySelector('#sleeplocbtn_' + ri);
+    sleepBtn.addEventListener('click', () => {
+      setRegionSleepLocation(r, ri, sleepInput.value.trim(), sleepStatus, sleepBtn);
     });
     rTitle.querySelector('.region-days-select').addEventListener('change', (e) => {
       // NOT `|| 1` -- 0 is falsy in JS but a legitimate, explicit choice here
@@ -1518,13 +1525,22 @@ function buildChecklist() {
 // that an ordinary mined sleep point already goes through -- see run.js's
 // runFinalPlanStage, which now also accepts a `custom` point that has no
 // match in the mined plan instead of silently dropping it.
-function setRegionSleepLocation(r, ri, text, statusEl) {
+function setRegionSleepLocation(r, ri, text, statusEl, btnEl) {
   if (!text) { statusEl.textContent = '⚠️ הזן שם מקום או כתובת'; return; }
+  // The button itself must visibly change on click -- a status line below it
+  // is easy to miss entirely, and a click that doesn't visibly do anything
+  // reads as "did that even register?". Same spinner-on-the-button pattern
+  // as confirmBtn/suggestBtn elsewhere on this page.
+  const originalLabel = btnEl.textContent;
+  btnEl.disabled = true;
+  btnEl.innerHTML = '<span class="spinner"></span>מאתר...';
   statusEl.innerHTML = '<span class="spinner"></span> מאתר במפה...';
   const query = `${text}, ${r.region}, ${DESTINATION_NAME}`;
   geocoder.geocode({ address: query, componentRestrictions: { country: GEOCODE_COUNTRY } }, (results, status2) => {
     if (status2 !== 'OK' || !results[0]) {
       statusEl.textContent = '⚠️ לא אותר במפה. נסה כתובת/שם מדויקים יותר.';
+      btnEl.disabled = false;
+      btnEl.textContent = originalLabel;
       return;
     }
     const location = results[0].geometry.location;

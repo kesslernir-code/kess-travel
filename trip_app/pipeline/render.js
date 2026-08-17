@@ -113,6 +113,20 @@ function renderDashboard(destination, input, tabState) {
   ).join('\n') + `\n</div>\n` +
     `<a class="edit-trip-link" href="/edit-trip-form?destination=${encodeURIComponent(destination)}">✏️ עריכת פרטי הטיול</a>`;
 
+  // A static "⏳ not produced yet" read as "is anything actually happening?"
+  // with no way to tell -- especially for tabs 5-7, where the background
+  // stage (itinerary -> images -> render) can run for several minutes.
+  // Per-tab text says what's actually running right now, not just that
+  // something hasn't finished; the spinner (same element other buttons in
+  // this app already use) is the "system is thinking" signal itself.
+  const PENDING_TEXT = {
+    2: 'מחפש מקורות מחקר אמיתיים ליעד...',
+    3: 'בונה את עמוד הרקע מהמקורות שנמצאו...',
+    4: 'כורה נקודות עניין מהמקורות ובונה את המפה...',
+    5: 'בונה את המסלול הסופי (סדר הימים, תמונות, צ\'ק-ליסט)... זה יכול לקחת כמה דקות',
+    6: 'בונה את המסלול הסופי (סדר הימים, תמונות, צ\'ק-ליסט)... זה יכול לקחת כמה דקות',
+    7: 'בונה את המסלול הסופי (סדר הימים, תמונות, צ\'ק-ליסט)... זה יכול לקחת כמה דקות'
+  };
   const contentFor = (t) => {
     if (t.n === 1) return tab1;
     const state = tabState && tabState[t.n];
@@ -123,7 +137,7 @@ function renderDashboard(destination, input, tabState) {
     // where the user is actually looking.
     if (state === 'error') return `<div class="pending error"><div class="pending-icon">⚠️</div><div>השלב הזה נכשל -- בדקו את היומן (logs/trip_app_server.log) ונסו שוב</div></div>`;
     if (state && t.file) return `<iframe class="embed" src="${esc(destination)}${t.file}"></iframe>`;
-    return `<div class="pending"><div class="pending-icon">⏳</div><div>שלב זה עדיין לא הופק</div></div>`;
+    return `<div class="pending"><div class="pending-spinner"></div><div>${esc(PENDING_TEXT[t.n] || 'שלב זה עדיין לא הופק')}</div></div>`;
   };
 
   const main = TABS.map((t) => {
@@ -149,6 +163,8 @@ ${contentFor(t)}
   .tab-content.full-bleed { padding:0; max-width:none; margin:0; }
   .pending { text-align:center; padding:100px 6vw; color:var(--muted); }
   .pending .pending-icon { font-size:40px; margin-bottom:16px; opacity:0.5; }
+  .pending .pending-spinner { display:inline-block; width:34px; height:34px; margin-bottom:16px; border:4px solid #e2d8c4; border-top-color:var(--gold); border-radius:50%; animation:pending-spin 0.9s linear infinite; }
+  @keyframes pending-spin { to { transform:rotate(360deg); } }
   .pending.error { color:var(--accent); }
   .pending.error .pending-icon { opacity:0.9; }
   .field-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; margin-top:20px; }

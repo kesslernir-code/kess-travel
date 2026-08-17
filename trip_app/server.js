@@ -278,12 +278,34 @@ const server = http.createServer(async (req, res) => {
     // needs a real rebuild, not a stale itinerary that ignores the change --
     // blindly reusing "because the file exists" would silently ignore
     // exactly the update they came back to make.
+    // Same reasoning applies to anything buildItinerary itself reasons about
+    // beyond the point list -- a REAL case: editing arrivalTime via Tab 1's
+    // edit form, then re-confirming the SAME points on Tab 4, silently reused
+    // the stale pre-edit itinerary because only the point selection was ever
+    // compared. runFinalPlanStage now stamps itinerary._planningInputs with
+    // everything it used; compare that against the CURRENT input too.
     let reuseItinerary = false;
     try {
       const itineraryPath = path.join(dir, `${folderName}_itinerary.json`);
       const prevSelection = JSON.parse(fs.readFileSync(path.join(dir, `${folderName}_selection.json`), 'utf-8'));
       const selectionKey = (pts) => pts.map((p) => `${p.name}|${!!p.isSleep}`).sort().join(',');
-      reuseItinerary = fs.existsSync(itineraryPath) && selectionKey(prevSelection.selected || []) === selectionKey(body.points);
+      const sameSelection = selectionKey(prevSelection.selected || []) === selectionKey(body.points);
+
+      let sameInputs = false;
+      if (fs.existsSync(itineraryPath)) {
+        const prevItinerary = JSON.parse(fs.readFileSync(itineraryPath, 'utf-8'));
+        const prev = prevItinerary._planningInputs || null;
+        if (prev) {
+          const fields = ['arrivalTime', 'departureTime', 'emphases', 'pace', 'transport', 'days', 'participants', 'composition'];
+          sameInputs = fields.every((f) => (prev[f] ?? '') === (input[f] ?? ''))
+            && JSON.stringify(prev.regionDays || {}) === JSON.stringify(body.regionDays || {});
+        }
+        // No snapshot on the existing itinerary.json (it predates this check,
+        // or came from an older code path) -- treat as "unknown, assume it
+        // changed" rather than "assume it matches", so a stale pre-fix
+        // itinerary always gets rebuilt at least once instead of persisting.
+      }
+      reuseItinerary = fs.existsSync(itineraryPath) && sameSelection && sameInputs;
     } catch { /* no prior selection -- nothing to compare, definitely rebuild */ }
 
     sendJson(res, 200, { ok: true, message: 'final plan started' });

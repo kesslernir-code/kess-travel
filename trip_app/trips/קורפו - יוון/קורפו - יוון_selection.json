@@ -1,6 +1,6 @@
 {
   "destination": "קורפו - יוון",
-  "confirmedAt": "2026-08-17T10:06:50.994Z",
+  "confirmedAt": "2026-08-17T13:14:42.254Z",
   "selectedCount": 26,
   "selected": [
     {
@@ -9,7 +9,8 @@
       "category": "Urban",
       "recommended": true,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/The_Old_Fortress_and_the_Old_Town_of_Corfu_-_September_2017.jpg/960px-The_Old_Fortress_and_the_Old_Town_of_Corfu_-_September_2017.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "טיילת וכיכר הספיאנאדה (Spianada)",
@@ -17,7 +18,8 @@
       "category": "Urban",
       "recommended": true,
       "image": "https://commons.wikimedia.org/wiki/Special:FilePath/20140417%20corfu147.JPG?width=800",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "שכונת קמפיילו (Campiello)",
@@ -25,7 +27,8 @@
       "category": "Urban",
       "recommended": true,
       "image": "https://upload.wikimedia.org/wikipedia/commons/7/76/Ermanno_Wolf-Ferrari_1906.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "מתחם הליסטון (Liston)",
@@ -33,7 +36,8 @@
       "category": "Attraction",
       "recommended": true,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "טברנה Faliraki",
@@ -41,7 +45,8 @@
       "category": "Food",
       "recommended": false,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "סידארי (Sidari)",
@@ -49,7 +54,8 @@
       "category": "Urban",
       "recommended": true,
       "image": "https://commons.wikimedia.org/wiki/Special:FilePath/%CE%A3%CE%B9%CE%B4%CE%AC%CF%81%CE%B9.JPG?width=800",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "קסיופי (Kassiopi)",
@@ -57,7 +63,8 @@
       "category": "Urban",
       "recommended": true,
       "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Kassiopi%20Castle.jpg?width=800",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "בארמבטי, איפסוס ופירגי (Barbati, Ipsos & Pyrgi)",
@@ -65,7 +72,8 @@
       "category": "Urban",
       "recommended": true,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "ניו פריתיה (New Perithia)",
@@ -73,7 +81,8 @@
       "category": "Urban",
       "recommended": false,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "אחארבי ורודה (Acharavi & Roda)",
@@ -81,7 +90,8 @@
       "category": "Urban",
       "recommended": false,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "ארילס ואגיוס סטפאנוס (Arillas & Agios Stefanos)",
@@ -89,7 +99,8 @@
       "category": "Urban",
       "recommended": false,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "קאלאמי, קאמינאקי וניסאקי (Kalami, Kaminaki & Nissaki)",
@@ -97,7 +108,8 @@
       "category": "Urban",
       "recommended": false,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "ספרטילאס ו-ולאניו (Spartilas & Valanio)",
@@ -105,7 +117,8 @@
       "category": "Urban",
       "recommended": false,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "תעלת האהבה (Canal d'Amour)",
@@ -113,7 +126,8 @@
       "category": "Nature",
       "recommended": true,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sidari%2C_Corfu%2C_Canal_d%27Amour_%28248847007%29.jpg/960px-Sidari%2C_Corfu%2C_Canal_d%27Amour_%28248847007%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "מצוק דראסטיס (Cape Drastis)",
@@ -121,7 +135,8 @@
       "category": "Nature",
       "recommended": true,
       "image": "https://commons.wikimedia.org/wiki/Special:FilePath/%C5%BD%C3%A1ba%20with%20Cape%20Drastis%20-%20panoramio.jpg?width=800",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "פורטו טימוני (Porto Timoni)",
@@ -129,7 +144,8 @@
       "category": "Nature",
       "recommended": true,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Porto_Timoni_beach_Corfu_%2847081300044%29.jpg/960px-Porto_Timoni_beach_Corfu_%2847081300044%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "הר ומנזר הפנדוקראטור (Mount Pantokrator)",
@@ -137,7 +153,8 @@
       "category": "Nature",
       "recommended": true,
       "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Pantokrator%20from%20AL.jpg?width=800",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "חוף לוגאס וקפה 7th Heaven (Logas Beach)",
@@ -145,7 +162,8 @@
       "category": "Nature",
       "recommended": true,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "הכפר פריתיה העתיקה (Palea Perithia)",
@@ -153,7 +171,8 @@
       "category": "Attraction",
       "recommended": true,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Korfu_%28GR%29%2C_Palea_Peritheia%2C_Agios_Spiridon_--_2018_--_1037.jpg/960px-Korfu_%28GR%29%2C_Palea_Peritheia%2C_Agios_Spiridon_--_2018_--_1037.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "הכפר נימפס ומפלי נימפס (Nymfes Village & Askitario)",
@@ -161,7 +180,8 @@
       "category": "Nature",
       "recommended": false,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "אגיוס גאורגיוס פאגון (Agios Georgios Pagon)",
@@ -169,7 +189,8 @@
       "category": "Nature",
       "recommended": false,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Bay_of_Agios_Georgios_-_San_Giorgio.jpg/960px-Bay_of_Agios_Georgios_-_San_Giorgio.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "פליאוקסטריצה (Paleokastritsa)",
@@ -177,7 +198,8 @@
       "category": "Nature",
       "recommended": true,
       "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Korfu%20(GR)%2C%20Paleokastritsa%2C%20Kloster%20--%202018%20--%201243.jpg?width=800",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "חופי ומערות ליאפאדס (Liapades, Rovinia & Paradise Beach)",
@@ -185,7 +207,8 @@
       "category": "Nature",
       "recommended": true,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "חוף גליפדה (Glifada)",
@@ -193,7 +216,8 @@
       "category": "Nature",
       "recommended": true,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Glyfada_Marina_-_panoramio_%286%29.jpg/960px-Glyfada_Marina_-_panoramio_%286%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "יקב אמבלונס קורפו (Ambelonas Corfu)",
@@ -201,7 +225,8 @@
       "category": "Food",
       "recommended": false,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     },
     {
       "name": "חוף יאליסקארי (Yaliskari Beach Studios)",
@@ -209,7 +234,16 @@
       "category": "Sleep",
       "recommended": false,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-      "isSleep": false
+      "isSleep": false,
+      "custom": false
     }
-  ]
+  ],
+  "regionDays": {
+    "העיר קורפו וסביבתה (קרקירה)": 0,
+    "צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)": 1,
+    "מערב ומרכז קורפו (פליאוקסטריצה, גליפדה ועמק רופה)": 0,
+    "דרום קורפו (כולל בניטצ'ס, קאבוס ואגם קוריסיה)": 0,
+    "טרק שביל קורפו (The Corfu Trail)": 0,
+    "איים סמוכים וסיורי יום (פאקסוס, דיאפונטיה, לפקדה ואלבניה)": 0
+  }
 }

@@ -261,6 +261,18 @@ async function runFinalPlanStage(destination, input, clientPoints, onProgress, o
   } else {
     log(`== building itinerary for ${selected.length} confirmed points ==`);
     itinerary = await buildItinerary(selected, input, enrich, opts.regionDays);
+    // Snapshot of every input field buildItinerary actually reasons about --
+    // server.js's reuseItinerary check compares this against the CURRENT
+    // input.json on the next confirm, so editing e.g. arrivalTime via the
+    // Tab-1 edit form and re-confirming with the SAME points (a real case:
+    // this exact snapshot didn't exist yet the first time it happened) no
+    // longer silently reuses a stale itinerary that never saw the edit.
+    itinerary._planningInputs = {
+      arrivalTime: input.arrivalTime || '', departureTime: input.departureTime || '',
+      emphases: input.emphases || '', pace: input.pace || '', transport: input.transport || '',
+      days: input.days, participants: input.participants || '', composition: input.composition || '',
+      regionDays: opts.regionDays || {}
+    };
     writeJson(dir, `${destination}_itinerary.json`, itinerary);
   }
 
