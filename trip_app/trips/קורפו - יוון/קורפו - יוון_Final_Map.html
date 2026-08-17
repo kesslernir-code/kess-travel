@@ -1073,8 +1073,14 @@ function renderDayContent(d) {
   // the town-level d.base still backs the Checklist's "book a hotel in this
   // town" search links, but the day card itself should show the real place.
   const sleepLabel = d.sleepPointName || d.base;
+  const distSuffix = d._totalMeters ? ' · 🚗 ' + formatHebrewDistance(d._totalMeters) + ' נסיעה היום' : '';
   let html = `<div class="section-title">${d.label} — ${d.date}</div>`;
-  if (d.base) html += `<div class="base-line">🛏 לינה הלילה: ${sleepLabel}${d._totalMeters ? ' · 🚗 ' + formatHebrewDistance(d._totalMeters) + ' נסיעה היום' : ''}</div>`;
+  // "🛏 לינה הלילה" (sleeping tonight) is wrong on the departure day itself --
+  // that night you're flying home, not sleeping at the base. The bottom
+  // departure-line already says so; the top line should match, not contradict it.
+  if (d.base) html += d.isDeparture
+    ? `<div class="base-line">🛫 יום היציאה${distSuffix}</div>`
+    : `<div class="base-line">🛏 לינה הלילה: ${sleepLabel}${distSuffix}</div>`;
   html += `<div class="intro-line">${d.intro}</div>`;
   html += `<div class="pie-wrap">${buildPieSVG(categoryCounts(d.route), 70)}
     <div class="pie-legend">
