@@ -121,6 +121,19 @@
       </div>
     </div>
 
+    <div class="field" style="display:flex; gap:16px;">
+      <div style="flex:1;">
+        <label for="arrivalTime">שעת נחיתה ביום ההגעה</label>
+        <div class="hint">כדי לדעת אם יום ההגעה מתאים לפעילויות או רק לנסיעה ליעד</div>
+        <input type="text" id="arrivalTime" name="arrivalTime" placeholder="לדוגמה: 20:00 בערב">
+      </div>
+      <div style="flex:1;">
+        <label for="departureTime">שעת המראה/עזיבה ביום האחרון</label>
+        <div class="hint">כדי לדעת כמה מהיום האחרון פנוי לפני הנסיעה לשדה</div>
+        <input type="text" id="departureTime" name="departureTime" placeholder="לדוגמה: 17:00">
+      </div>
+    </div>
+
     <div class="field">
       <label for="participants">כמה משתתפים</label>
       <input type="text" id="participants" name="participants" placeholder="לדוגמה: 5">
@@ -177,6 +190,8 @@
       when: form.when.value.trim(),
       days: form.days.value.trim(),
       nights: form.nights.value.trim(),
+      arrivalTime: form.arrivalTime.value.trim(),
+      departureTime: form.departureTime.value.trim(),
       participants: form.participants.value.trim(),
       composition: form.composition.value.trim(),
       car: form.querySelector('input[name="car"]:checked').value,

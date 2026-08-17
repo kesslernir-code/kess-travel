@@ -18,7 +18,8 @@ const SYSTEM_INSTRUCTIONS = `אתה מתכנן מסלול טיול יומי מו
 6. לכל יום: title (שם/נושא היום), intro (2-3 משפטים בעברית שמתארים את חווית היום, אפשר אימוג'י), route (מערך שמות המקומות — בדיוק כפי שהופיעו בקלט), ו-note אופציונלי (אזהרה/טיפ, למשל "יום עם נסיעה ארוכה" או "מתאים לילדים").
 7. מקומות מקטגוריית Food ביום — כלול ב-route וגם ב-restaurants (מערך שמות).
 8. **base לכל יום בנפרד — זו נקודת הלינה של אותו לילה הספציפי, לא בסיס אחיד לכל הטיול.** בטיול שנשאר באותה עיר לאורך כמה ימים, ה-base יחזור על עצמו. בטיול מתגלגל (רכב, כמה ערים) — ה-base של יום N הוא בעיר/אזור שהכי הגיוני ללון בו באותו לילה בהתחשב באיפה נמצאים באותו יום ולאן ממשיכים למחרת; אל תשאיר את כולם על אותה עיר-בסיס אם הטיול בפועל מתקדם גיאוגרפית. base הוא תמיד שם עיר/עיירה אמיתי (מהקלט או ידע כללי על האזור), לא שם של אתר/אטרקציה. אל תמציא מקומות שלא בקלט לגבי ה-route עצמו. dateLabel: תאריך קונקרטי אם ניתן לגזור מהקלט, אחרת "יום N".
-9. **מקום עם isSleep=true הוא לינה רשמית שהמשתמש כבר בחר/הזמין בפועל (למשל מלון קונקרטי) — לא הצעה.** קבע את ה-base של היום שבו המקום הזה מבוקר בדיוק לשם העיר/עיירה של אותו מקום עצמו, ולא לעיר/עיירה חלופית שנראית הגיונית יותר. אם כמה מקומות מסומנים כך, כל אחד קובע את ה-base של הימים המתאימים לו לפי מיקומו הגיאוגרפי ברצף הימים.`;
+9. **מקום עם isSleep=true הוא לינה רשמית שהמשתמש כבר בחר/הזמין בפועל (למשל מלון קונקרטי) — לא הצעה.** קבע את ה-base של היום שבו המקום הזה מבוקר בדיוק לשם העיר/עיירה של אותו מקום עצמו, ולא לעיר/עיירה חלופית שנראית הגיונית יותר. בנוסף, מלא את sleepPointName של אותו יום בדיוק בשם המקום עצמו (למשל "Corfu Palace Hotel", לא רק שם העיר) — כדי שהמפה תוכל למקד את מסלול הנסיעה של אותו יום בכתובת המדויקת של הלינה, לא רק במרכז העיר הכללי. אם כמה מקומות מסומנים כך, כל אחד קובע את ה-base וה-sleepPointName של הימים המתאימים לו לפי מיקומו הגיאוגרפי ברצף הימים. ימים שאין להם מקום לינה שסומן ידנית — sleepPointName יישאר ריק/null.
+10. **שעות טיסה, אם ניתנו, הן אילוץ נוקשה על היום הראשון והאחרון.** נחיתה בשעת אחר-צהריים מאוחרת/ערב/לילה: היום הראשון כולל רק נסיעה מהשדה לנקודת הלינה (וארוחת ערב קרובה אם הזמן מאפשר), בלי סיורים/אטרקציות — route יכול להיות ריק או לכלול לכל היותר מסעדה סמוכה ללינה. המראה/עזיבה בשעה מוקדמת (לפני הצהריים/צהריים): היום האחרון מצומצם בהתאם — לא לתכנן פעילות שלא תסתיים בזמן להגיע לשדה, ולציין ב-note את שעת היציאה הנדרשת.`;
 
 const PLAN_SCHEMA = {
   type: 'object',
@@ -36,6 +37,7 @@ const PLAN_SCHEMA = {
           route: { type: 'array', items: { type: 'string' } },
           restaurants: { type: 'array', items: { type: 'string' } },
           base: { type: 'string' }, // THIS night's actual overnight town -- can differ day to day
+          sleepPointName: { type: 'string', nullable: true }, // exact name of the manually-designated isSleep point covering this night, if any -- lets the map route to that precise address instead of just the town center
           note: { type: 'string', nullable: true }
         },
         required: ['day', 'dateLabel', 'title', 'intro', 'route', 'base']
@@ -61,6 +63,7 @@ async function buildItinerary(selected, input, enrich, regionDays) {
   const params = {
     days: input.days, dates: input.dates, transport: input.transport, pace: input.pace,
     participants: input.participants, composition: input.composition,
+    arrivalTime: input.arrivalTime || null, departureTime: input.departureTime || null,
     baseCity: (enrich && enrich.mainCityName) || input.destination
   };
   // regionDays comes straight from the user's own per-region dropdown on the
@@ -74,9 +77,16 @@ async function buildItinerary(selected, input, enrich, regionDays) {
   // naming it separately makes it much more likely to actually be honored.
   const manualSleepNames = selected.filter((p) => p.isSleep).map((p) => p.name);
   const manualSleepNote = manualSleepNames.length
-    ? `\n\nמקומות שהמשתמש סימן במפורש כלינה רשמית שכבר הוזמנה בפועל (base של היום המתאים חייב להיות העיר/עיירה של המקום הזה עצמו, לא הצעה חלופית):\n${JSON.stringify(manualSleepNames)}`
+    ? `\n\nמקומות שהמשתמש סימן במפורש כלינה רשמית שכבר הוזמנה בפועל (base של היום המתאים חייב להיות העיר/עיירה של המקום הזה עצמו, ו-sleepPointName של אותו יום חייב להיות בדיוק שם המקום עצמו -- לא הצעה חלופית):\n${JSON.stringify(manualSleepNames)}`
     : '';
-  const prompt = `פרטי הטיול:\n${JSON.stringify(params)}${regionDaysNote}${manualSleepNote}\n\nהמקומות שנבחרו (${selected.length}):\n${JSON.stringify(digest(selected))}`;
+  // Same reasoning again: this was previously only buried inside "emphases"
+  // free text (e.g. "מגיעים בערב, ביום האחרון טסים ב-17:00") and got missed --
+  // a real run's day 1 came back with a full sightseeing day despite an
+  // evening arrival. Naming it as its own constraint, not prose to parse.
+  const timingNote = (input.arrivalTime || input.departureTime)
+    ? `\n\nשעות טיסה (ראה חוק 10 -- אילוץ נוקשה, לא המלצה):\n${JSON.stringify({ arrivalTime: input.arrivalTime || null, departureTime: input.departureTime || null })}`
+    : '';
+  const prompt = `פרטי הטיול:\n${JSON.stringify(params)}${regionDaysNote}${manualSleepNote}${timingNote}\n\nהמקומות שנבחרו (${selected.length}):\n${JSON.stringify(digest(selected))}`;
 
   const result = await callGeminiWithRetry(model, prompt, { timeoutMs: TIMEOUT_MS, timeoutLabel: 'Final-plan call' });
   return JSON.parse(result.response.text());

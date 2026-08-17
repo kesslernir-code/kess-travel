@@ -28,6 +28,7 @@ const PORT = 8234;
 const ROOT = path.join(__dirname, '..');
 const TRIPS_DIR = path.join(__dirname, 'trips');
 const FORM_PATH = path.join(ROOT, 'New_Trip_Form.html');
+const EDIT_FORM_PATH = path.join(ROOT, 'Edit_Trip_Form.html');
 const LOG_PATH = path.join(__dirname, '..', 'logs', 'trip_app_server.log');
 
 function log(msg) {
@@ -74,8 +75,24 @@ function formToInput(body) {
     participants: body.participants || '',
     composition: body.composition || '',
     transport: body.car || '',
-    emphases: body.emphases || ''
+    emphases: body.emphases || '',
+    arrivalTime: body.arrivalTime || '',
+    departureTime: body.departureTime || ''
   };
+}
+
+// Editing the trip-details form (dates, times, emphases...) must not reset
+// tabs that already finished back to "pending" -- there's no stage running
+// here to know that, so infer it from which tab files actually exist on disk.
+// An earlier 'error' tab just reads as not-ready again, which is correct:
+// editing details alone doesn't retry that failed stage.
+const TAB_FILE_SUFFIX = { 2: '_Sources.html', 3: '_Showcase.html', 4: '_Route_Map.html', 5: '_Final_Map.html', 6: '_Final_Showcase.html', 7: '_Checklist.html' };
+function currentTabState(dir, folderName) {
+  const state = {};
+  for (const [n, suffix] of Object.entries(TAB_FILE_SUFFIX)) {
+    if (fs.existsSync(path.join(dir, `${folderName}${suffix}`))) state[n] = true;
+  }
+  return state;
 }
 
 // Identity header on every response, and a dedicated health-check route --
@@ -94,6 +111,10 @@ const server = http.createServer(async (req, res) => {
   // ---- Form + trip index ---------------------------------------------
   if (req.method === 'GET' && (urlPath === '/' || urlPath === '/new-trip-form')) {
     serveStaticFile(res, FORM_PATH);
+    return;
+  }
+  if (req.method === 'GET' && urlPath === '/edit-trip-form') {
+    serveStaticFile(res, EDIT_FORM_PATH);
     return;
   }
   if (req.method === 'GET' && urlPath === '/trips') {
@@ -188,6 +209,45 @@ const server = http.createServer(async (req, res) => {
     sendJson(res, 200, { ok: true, message: 'expand started' });
     runExpandSourcesStage(folderName, body.categories, PORT, log)
       .catch((err) => log(`[${folderName}] חיפוש מקורות נוספים נכשל: ${err.message}`));
+    return;
+  }
+
+  // ---- Edit trip details (Tab 1) ---------------------------------------
+  if (req.method === 'GET' && urlPath === '/trip-input') {
+    const q = new URL(req.url, `http://localhost:${PORT}`).searchParams;
+    const folderName = sanitizeFolderName(q.get('destination'));
+    const inputPath = path.join(tripDir(folderName), `${folderName}_input.json`);
+    try {
+      const input = JSON.parse(fs.readFileSync(inputPath, 'utf-8'));
+      sendJson(res, 200, { ok: true, input });
+    } catch {
+      sendJson(res, 404, { ok: false, error: 'trip input not found' });
+    }
+    return;
+  }
+  // Overwrites input.json in place and re-renders Tab 1 only -- this does
+  // NOT re-run mining/itinerary/etc. itself. The existing Tab 4 "confirm"
+  // flow already re-reads input.json fresh on every call (see
+  // /confirm-selection below), so the natural way to make an edited detail
+  // (a new arrival time, an updated emphasis) actually reach the itinerary
+  // is: save here, then go back to Tab 4 and confirm again -- no separate
+  // "re-run everything" pathway needed.
+  if (req.method === 'POST' && urlPath === '/update-trip-input') {
+    let body;
+    try { body = await readJsonBody(req); } catch { sendJson(res, 400, { ok: false, error: 'invalid JSON body' }); return; }
+    const folderName = sanitizeFolderName(body.destination);
+    const dir = tripDir(folderName);
+    const inputPath = path.join(dir, `${folderName}_input.json`);
+    if (!folderName || !fs.existsSync(inputPath)) { sendJson(res, 404, { ok: false, error: 'trip not found' }); return; }
+    const input = formToInput(body);
+    try {
+      fs.writeFileSync(inputPath, JSON.stringify(input, null, 2), 'utf-8');
+      fs.writeFileSync(path.join(dir, `${folderName}_KESSLER_TRIP.html`), renderDashboard(folderName, input, currentTabState(dir, folderName)), 'utf-8');
+      log(`[${folderName}] פרטי הטיול עודכנו`);
+      sendJson(res, 200, { ok: true });
+    } catch (err) {
+      sendJson(res, 500, { ok: false, error: err.message });
+    }
     return;
   }
 

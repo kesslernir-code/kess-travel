@@ -289,9 +289,16 @@ function renderFinalMap(plan, enrich, input, selection, itinerary) {
     const route = (d.route || []).map((n) => nameToId[n]).filter(Boolean);
     const restaurants = (d.restaurants || []).map((n) => nameToId[n]).filter(Boolean).map((id) => ({ id, note: 'מסעדה/אוכל' }));
     const base = d.base || tripStartBase;
+    // A day's real "origin" for driving directions is more precise than its
+    // town: once a specific accommodation was manually designated (Tab 4's
+    // sleep-location field/toggle), finalplan.js echoes its exact name back
+    // as sleepPointName (see finalplan.js rule 9) -- geocoding THAT instead
+    // of "<town>, <country>" starts the day's route from the actual
+    // apartment/hotel, not wherever the town's generic center happens to be.
+    const baseQuery = d.sleepPointName ? `${d.sleepPointName}, ${destinationEn}` : `${base}, ${destinationEn}`;
     return {
       id: dayNum, label: `יום ${dayNum}`, date: d.dateLabel || `יום ${dayNum}`,
-      colorKey: dayNum, base, baseQuery: `${base}, ${destinationEn}`,
+      colorKey: dayNum, base, baseQuery,
       isDeparture: idx === (itinerary.days.length - 1),
       intro: d.intro || '', route, restaurants, note: d.note || null
     };

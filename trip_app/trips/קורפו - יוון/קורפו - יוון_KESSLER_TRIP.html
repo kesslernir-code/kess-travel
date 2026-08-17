@@ -24,6 +24,8 @@
   .pending.error { color:var(--accent); }
   .pending.error .pending-icon { opacity:0.9; }
   .field-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; margin-top:20px; }
+  .edit-trip-link { display:inline-block; margin-top:24px; font-size:14px; font-weight:600; color:var(--accent); text-decoration:none; }
+  .edit-trip-link:hover { text-decoration:underline; }
   .field { background:#fff; border-radius:10px; padding:16px 18px; box-shadow:0 2px 10px rgba(60,45,25,0.06); }
   .field .label { font-size:12.5px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
   .field .value { font-size:17px; }
@@ -50,11 +52,14 @@
 <div class="field-grid">
   <div class="field"><div class="label">לאיפה</div><div class="value">קורפו - יוון</div></div>
   <div class="field"><div class="label">מתי וכמה זמן</div><div class="value">23.8-27.8</div></div>
+  <div class="field"><div class="label">שעת נחיתה</div><div class="value">20:00 בערב</div></div>
+  <div class="field"><div class="label">שעת המראה/עזיבה</div><div class="value">17:00</div></div>
   <div class="field"><div class="label">כמה משתתפים</div><div class="value">5</div></div>
   <div class="field"><div class="label">הרכב המשתתפים</div><div class="value">המשפחה , 19, 17,13 וההורים</div></div>
   <div class="field"><div class="label">התניידות</div><div class="value">עם רכב</div></div>
   <div class="field"><div class="label">דגשים מיוחדים</div><div class="value">חופשה של חופים, טיולים קצרים, טברנות טובות וערבים בכפרים . היום הראשוןם מגיעים בערב ביום האחלרון הולכים לשדה ב 17:00. אוהבים אטרציות ים מכל הסוגים כולל אקסטרים וחופי פרא, מקומות מיוחדים שפחות נגישים גםאיזה טיול יפה של חצי יום מתאים</div></div>
 </div>
+<a class="edit-trip-link" href="/edit-trip-form?destination=%D7%A7%D7%95%D7%A8%D7%A4%D7%95%20-%20%D7%99%D7%95%D7%95%D7%9F">✏️ עריכת פרטי הטיול</a>
 <!-- TAB1:END -->
     </div>
 

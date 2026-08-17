@@ -96,6 +96,8 @@ function renderDashboard(destination, input, tabState) {
   const fields = [
     ['לאיפה', input.destination],
     ['מתי וכמה זמן', input.dates],
+    ['שעת נחיתה', input.arrivalTime],
+    ['שעת המראה/עזיבה', input.departureTime],
     ['כמה משתתפים', input.participants],
     ['הרכב המשתתפים', input.composition],
     ['התניידות', input.transport],
@@ -108,7 +110,8 @@ function renderDashboard(destination, input, tabState) {
 
   const tab1 = `<div class="field-grid">\n` + fields.map(([label, val]) =>
     `  <div class="field"><div class="label">${esc(label)}</div><div class="value">${esc(val)}</div></div>`
-  ).join('\n') + `\n</div>`;
+  ).join('\n') + `\n</div>\n` +
+    `<a class="edit-trip-link" href="/edit-trip-form?destination=${encodeURIComponent(destination)}">✏️ עריכת פרטי הטיול</a>`;
 
   const contentFor = (t) => {
     if (t.n === 1) return tab1;
@@ -149,6 +152,8 @@ ${contentFor(t)}
   .pending.error { color:var(--accent); }
   .pending.error .pending-icon { opacity:0.9; }
   .field-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; margin-top:20px; }
+  .edit-trip-link { display:inline-block; margin-top:24px; font-size:14px; font-weight:600; color:var(--accent); text-decoration:none; }
+  .edit-trip-link:hover { text-decoration:underline; }
   .field { background:#fff; border-radius:10px; padding:16px 18px; box-shadow:0 2px 10px rgba(60,45,25,0.06); }
   .field .label { font-size:12.5px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
   .field .value { font-size:17px; }
