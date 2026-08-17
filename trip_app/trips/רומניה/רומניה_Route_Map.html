@@ -34,9 +34,15 @@
   .poi-row .dot { flex: 0 0 auto; cursor: pointer; }
   .poi-row .poi-name { flex: 1 1 auto; cursor: pointer; }
   .sleep-tag { font-size: 10px; background: #1a1a4e; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
-  .sleep-toggle { flex: 0 0 auto; font-size: 13px; padding: 1px 5px; border-radius: 4px; border: 1.5px solid #ccc; background: #fff; cursor: pointer; opacity: 0.45; line-height: 1.4; }
-  .sleep-toggle.active { opacity: 1; border-color: #1a1a4e; background: #eef0fa; }
-  .sleep-toggle:hover { opacity: 0.8; }
+  /* Invisible by default -- at 0.45 opacity it still read as "every point has
+     a bed icon" at a glance, since the toggle itself is always present. Now
+     only a hovered row reveals it faintly, and only an actually-marked point
+     shows it for real (full opacity, regardless of hover), so a glance at
+     the list only shows a bed on what's actually designated. */
+  .sleep-toggle { flex: 0 0 auto; font-size: 13px; padding: 1px 5px; border-radius: 4px; border: 1.5px solid #ccc; background: #fff; cursor: pointer; opacity: 0; line-height: 1.4; transition: opacity .15s; }
+  .poi-row:hover .sleep-toggle { opacity: 0.35; }
+  .sleep-toggle:hover { opacity: 0.8 !important; }
+  .sleep-toggle.active { opacity: 1 !important; border-color: #1a1a4e; background: #eef0fa; }
   .rec-tag { font-size: 10px; background: #b8860b; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
   .rec-star { font-size: 12px; margin-inline-start: 4px; flex-shrink: 0; }
   #confirmBtn { width: 100%; margin-top: 16px; padding: 12px; font-size: 15px; font-weight: bold; background: #1a7a3c; color: white; border: none; border-radius: 6px; cursor: pointer; position: sticky; bottom: 0; }
@@ -45,6 +51,8 @@
   #routeSummary { margin-top: 16px; font-size: 13px; }
   #routeSummary .leg { padding: 8px; margin-bottom: 6px; background: white; border-inline-start: 4px solid #1a7a3c; border-radius: 4px; }
   #status { font-size: 12px; color: #888; margin-top: 10px; }
+  .spinner { display: inline-block; width: 11px; height: 11px; border: 2px solid rgba(0,0,0,0.15); border-top-color: #1a7a3c; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: -1px; margin-inline-end: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
   .hidden { display: none !important; }
   .info-desc { font-size: 12px; max-width: 260px; line-height: 1.5; }
   .info-source { font-size: 11px; margin-top: 6px; }
@@ -1865,10 +1873,11 @@ function convexHullLatLng(points) {
 // the ENTIRE island, spilling into the sea and across into Albania. The cap
 // must scale with how big the destination actually is: see regionRadiusCap().
 const MAX_REGION_RADIUS_M = 70000; // absolute ceiling, for country-scale trips
-const MIN_REGION_RADIUS_M = 15000; // floor -- roughly a 30min drive, for small/dense destinations (an island)
+const MIN_REGION_RADIUS_M = 25000; // floor -- roughly up to a 60min drive, for small/dense destinations (an island)
 let regionOverlay;
 let allRegionOverlays = [];
 let mainAreaCircle; // the persistent "main city area" circle -- see geocodeAllPoints()'s completion handler
+let geocodingComplete = false; // guards regionRadiusCap() against judging destination size off a partial sample
 function clearAllRegionOverlays() {
   allRegionOverlays.forEach(o => o.setMap(null));
   allRegionOverlays = [];
@@ -1918,7 +1927,16 @@ function destinationSpanM() {
 // core span, so a country-scale trip still gets the full 70km ceiling
 // (unchanged from before) while a small, dense destination like an island
 // gets a cap closer to a real "how far would you actually drive" distance.
+// MUST NOT run on a partial geocoded set -- a real repeat of this exact bug
+// happened when a region was clicked before geocoding finished: with only a
+// handful of points resolved so far, destinationSpanM()'s 75th-percentile
+// read as a much bigger number than the true destination size (the same
+// class of skew a single outlier caused before, just from incompleteness
+// instead), producing an oversized circle again. Before geocoding fully
+// completes, there simply isn't enough data to judge the destination's real
+// size yet -- fall back to the safe small floor rather than guess wrong.
 function regionRadiusCap() {
+  if (!geocodingComplete) return MIN_REGION_RADIUS_M;
   return Math.min(MAX_REGION_RADIUS_M, Math.max(MIN_REGION_RADIUS_M, destinationSpanM() * 0.6));
 }
 
@@ -2009,6 +2027,68 @@ function focusRegion(regionPoints, regionName) {
   map.fitBounds(overlayBounds);
 }
 
+function buildInfoContent(p) {
+  return `<div dir="rtl" style="text-align:right; font-family:-apple-system,Segoe UI,Arial,sans-serif;">
+      <b>${p.name}</b> <span style="color:${CATEGORY_COLORS[p.category]}">● ${CATEGORY_LABELS_HE[p.category]}</span>
+      ${p.rec ? '<div class="info-rec">⭐ מומלץ — מקורות מציינים כחובה לראות</div>' : ''}
+      <div class="info-desc">${p.desc}</div>
+      <div class="info-source">מקור: ${p.source}${p.url ? ` — <a href="${p.url}" target="_blank" rel="noopener">קישור</a>` : ''}</div>
+    </div>`;
+}
+
+// QC layer: geocoding a place name is not the same as verifying the result
+// actually makes sense. componentRestrictions biases results toward the
+// right country but doesn't guarantee it, and nothing checks whether a
+// "Beach" point's resolved location is genuinely coastal. A suspicious point
+// is unchecked and hidden outright (not left in the plan with a warning) --
+// still reversible from its sidebar checkbox if the user disagrees, just not
+// included by default. Logged to the console for whoever wants to check why,
+// no remark shown in the UI itself.
+function isSuspicious(p, geocodeResult) {
+  const countryComp = (geocodeResult.address_components || []).find((c) => c.types.includes('country'));
+  if (countryComp && countryComp.short_name !== GEOCODE_COUNTRY) {
+    console.warn('QC excluded (wrong country: ' + countryComp.long_name + '):', p.name);
+    return true;
+  }
+  if (p.category === 'Beach') {
+    const types = geocodeResult.types || [];
+    const looksSpecific = types.some((t) => ['natural_feature', 'point_of_interest', 'establishment', 'premise'].includes(t));
+    if (!looksSpecific) {
+      console.warn('QC excluded (beach resolved to a generic city/region, not a specific coastal feature):', p.name);
+      return true;
+    }
+  }
+  return false;
+}
+
+function autoReject(p) {
+  p.checked = false;
+  const chk = document.getElementById('chk_' + p.id);
+  if (chk) chk.checked = false;
+  updateMarkerForPoint(p);
+}
+
+// Runs once ALL points have geocoded (needs every region's full point set to
+// judge what's "far from the rest") -- same median-based, outlier-robust
+// center as computeRegionCircle.
+function runGeoQcSummary() {
+  REGIONS.forEach((r) => {
+    const locs = r.points.filter((p) => p.location);
+    if (locs.length < 3) return;
+    const lats = locs.map((p) => p.location.lat()).sort((a, b) => a - b);
+    const lngs = locs.map((p) => p.location.lng()).sort((a, b) => a - b);
+    const mid = Math.floor(locs.length / 2);
+    const roughCenter = new google.maps.LatLng(lats[mid], lngs[mid]);
+    locs.forEach((p) => {
+      const dist = google.maps.geometry.spherical.computeDistanceBetween(roughCenter, p.location);
+      if (dist > 150000) {
+        console.warn('QC excluded (~' + Math.round(dist / 1000) + 'km from the rest of region "' + r.region + '"):', p.name);
+        autoReject(p);
+      }
+    });
+  });
+}
+
 function geocodeAllPoints() {
   const status = document.getElementById('status');
   let done = 0;
@@ -2028,6 +2108,11 @@ function geocodeAllPoints() {
         if (status2 === 'OK' && results[0]) {
           try {
             p.location = results[0].geometry.location;
+            if (isSuspicious(p, results[0])) {
+              p.checked = false;
+              const chk = document.getElementById('chk_' + p.id);
+              if (chk) chk.checked = false;
+            }
             const markerOptions = {
               position: p.location,
               map: pointVisible(p) ? map : null,
@@ -2052,12 +2137,7 @@ function geocodeAllPoints() {
             // Stored on `p` (not just closed over here) so focusPoint() -- triggered by clicking
             // the place in the sidebar checklist, not just clicking the marker itself -- can open
             // the exact same bubble content.
-            p.infoContent = `<div dir="rtl" style="text-align:right; font-family:-apple-system,Segoe UI,Arial,sans-serif;">
-                <b>${p.name}</b> <span style="color:${CATEGORY_COLORS[p.category]}">● ${CATEGORY_LABELS_HE[p.category]}</span>
-                ${p.rec ? '<div class="info-rec">⭐ מומלץ — מקורות מציינים כחובה לראות</div>' : ''}
-                <div class="info-desc">${p.desc}</div>
-                <div class="info-source">מקור: ${p.source}${p.url ? ` — <a href="${p.url}" target="_blank" rel="noopener">קישור</a>` : ''}</div>
-              </div>`;
+            p.infoContent = buildInfoContent(p);
             p.marker.addListener('click', () => {
               sharedInfoWindow.setContent(p.infoContent);
               sharedInfoWindow.open(map, p.marker);
@@ -2071,6 +2151,7 @@ function geocodeAllPoints() {
           console.warn('Geocode failed for', p.name, status2);
         }
         if (done === POINTS.length) {
+          geocodingComplete = true;
           const failed = POINTS.filter(x => x.geocodeFailed);
           status.textContent = 'מוכן. סמן/הסר נקודות ולחץ על אישור.' + (failed.length ? ` (${failed.length} לא אותרו: ${failed.map(f=>f.name).join(', ')})` : '');
           computeRegionDistances();
@@ -2081,6 +2162,7 @@ function geocodeAllPoints() {
           // this matters: the un-scaled circle was hugely oversized for a
           // small island).
           if (mainAreaCircle) mainAreaCircle.setRadius(regionRadiusCap());
+          runGeoQcSummary();
         }
       });
     }, i * 150);
@@ -2198,6 +2280,8 @@ function sendSelectionToLocalServer(checked) {
   const regionDays = {};
   REGIONS.forEach(r => { regionDays[r.region] = r.days || 1; });
 
+  statusEl.innerHTML = '<span class="spinner"></span>שולח בחירה לשרת...';
+
   fetch(LOCAL_SERVER_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -2206,13 +2290,18 @@ function sendSelectionToLocalServer(checked) {
     .then(res => res.json())
     .then(data => {
       if (data.ok) {
-        statusEl.textContent = `✅ הבחירה נשלחה ונשמרה אוטומטית (${data.count} נקודות). אפשר לחזור לצ'אט ולומר "תמשיך" — אין צורך לתאר את הבחירה.`;
+        // The dashboard already auto-refreshes itself once tabs 5-7 are
+        // ready (see render.js's renderDashboard) -- opening it now instead
+        // of waiting here means that polling, not this page, is what tells
+        // the user when the final plan actually finishes.
+        statusEl.innerHTML = '<span class="spinner"></span>בונה את המסלול הסופי... פותח את הדשבורד';
+        setTimeout(() => { window.location.href = `/${encodeURIComponent(DESTINATION_NAME)}/${encodeURIComponent(DESTINATION_NAME)}_KESSLER_TRIP.html`; }, 900);
       } else {
-        statusEl.textContent = '⚠️ השרת המקומי הגיב עם שגיאה: ' + (data.error || 'שגיאה לא ידועה') + '. הרשימה למעלה עדיין תקפה -- אפשר לדווח עליה בצ\'אט כרגיל.';
+        statusEl.textContent = '⚠️ השרת הגיב עם שגיאה: ' + (data.error || 'שגיאה לא ידועה') + '. הרשימה למעלה עדיין תקפה -- אפשר לנסות שוב.';
       }
     })
     .catch(() => {
-      statusEl.textContent = '⚠️ לא הצלחתי להתחבר לשרת המקומי (ודאו ש-start_local_server.bat פועל). הרשימה למעלה עדיין תקפה -- אפשר לדווח עליה בצ\'אט כרגיל.';
+      statusEl.textContent = '⚠️ לא הצלחתי להתחבר לשרת. ודאו שהשרת פועל (הפעילו את האייקון בשולחן העבודה). הרשימה למעלה עדיין תקפה -- אפשר לנסות שוב.';
     });
 }
 
