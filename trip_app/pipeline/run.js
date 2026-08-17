@@ -22,7 +22,7 @@ const { attachImages, attachImagesToPlaces, resolveImageGuaranteed } = require('
 const { renderMasterPlanMd, renderDashboard, renderShowcase, renderSources, renderFinalShowcase, renderChecklist } = require('./render');
 const { renderRouteMap, renderFinalMap } = require('./rendermaps');
 const { suggestSelection } = require('./suggest');
-const { buildItinerary } = require('./finalplan');
+const { buildItinerary, PROMPT_VERSION } = require('./finalplan');
 const { discoverSources, discoverMoreSources, SOURCE_TYPES } = require('./discover');
 
 const ROOT = path.join(__dirname, '..', '..');
@@ -268,6 +268,7 @@ async function runFinalPlanStage(destination, input, clientPoints, onProgress, o
     // this exact snapshot didn't exist yet the first time it happened) no
     // longer silently reuses a stale itinerary that never saw the edit.
     itinerary._planningInputs = {
+      promptVersion: PROMPT_VERSION,
       arrivalTime: input.arrivalTime || '', departureTime: input.departureTime || '',
       emphases: input.emphases || '', pace: input.pace || '', transport: input.transport || '',
       days: input.days, participants: input.participants || '', composition: input.composition || '',

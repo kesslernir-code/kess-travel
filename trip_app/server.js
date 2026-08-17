@@ -17,6 +17,7 @@ const {
 const { renderDashboard } = require('./pipeline/render');
 const { serveStaticFile, renderTripIndexHtml, isPathSafe } = require('./lib/staticServe');
 const { publishTrips, collectTripCards } = require('./pipeline/publish');
+const { PROMPT_VERSION } = require('./pipeline/finalplan');
 
 // 8090 turned out to collide with an unrelated background service already
 // running on this machine (Wondershare's WsToastNotification.exe) -- after
@@ -297,7 +298,13 @@ const server = http.createServer(async (req, res) => {
         const prev = prevItinerary._planningInputs || null;
         if (prev) {
           const fields = ['arrivalTime', 'departureTime', 'emphases', 'pace', 'transport', 'days', 'participants', 'composition'];
-          sameInputs = fields.every((f) => (prev[f] ?? '') === (input[f] ?? ''))
+          // promptVersion catches the other real case: identical input DATA,
+          // but the prompt/logic that reasons about it changed (e.g. this
+          // session's sleep-base-derivation fix) -- a re-confirm right after
+          // that landed silently reused the pre-fix itinerary because
+          // nothing here compared code version, only data.
+          sameInputs = prev.promptVersion === PROMPT_VERSION
+            && fields.every((f) => (prev[f] ?? '') === (input[f] ?? ''))
             && JSON.stringify(prev.regionDays || {}) === JSON.stringify(body.regionDays || {});
         }
         // No snapshot on the existing itinerary.json (it predates this check,

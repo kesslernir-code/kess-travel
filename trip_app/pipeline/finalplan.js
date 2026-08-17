@@ -51,6 +51,14 @@ const PLAN_SCHEMA = {
 
 const MODEL_NAME = 'gemini-flash-latest';
 const TIMEOUT_MS = 120000;
+// Bump whenever SYSTEM_INSTRUCTIONS or the prompt-building logic changes
+// meaningfully. server.js's reuse check only ever compared INPUT data (same
+// points, same regionDays, same times) -- a real case: re-confirming with
+// identical data right after this file's sleep-base-derivation fix landed
+// silently reused the pre-fix itinerary, because nothing told the reuse
+// check the underlying logic itself had changed. Included in that
+// comparison now.
+const PROMPT_VERSION = 2;
 
 function digest(selected) {
   return selected.map((p) => ({ name: p.name, region: p.regionName, category: p.category, recommended: !!p.recommended, isSleep: !!p.isSleep }));
@@ -143,4 +151,4 @@ async function buildItinerary(selected, input, enrich, regionDays) {
   return JSON.parse(result.response.text());
 }
 
-module.exports = { buildItinerary, MODEL_NAME, deriveSleepBaseCandidates, parseHourFromTimeString, isLateArrival, isEarlyDeparture };
+module.exports = { buildItinerary, MODEL_NAME, PROMPT_VERSION, deriveSleepBaseCandidates, parseHourFromTimeString, isLateArrival, isEarlyDeparture };
