@@ -1,6 +1,6 @@
 {
   "destination": "קורפו - יוון",
-  "confirmedAt": "2026-08-17T14:38:26.634Z",
+  "confirmedAt": "2026-08-17T14:43:57.635Z",
   "selectedCount": 26,
   "selected": [
     {
@@ -35,7 +35,7 @@
       "region": "העיר קורפו וסביבתה (קרקירה)",
       "category": "Attraction",
       "recommended": true,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/2018-06-17%20Corfu%20(Kerkira)%20town%20street%2003.jpg?width=800",
       "isSleep": false,
       "custom": false
     },
@@ -71,7 +71,7 @@
       "region": "צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)",
       "category": "Urban",
       "recommended": true,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/%CE%A0%CE%B1%CF%81%CE%B1%CE%BB%CE%AF%CE%B1_%CE%9C%CF%80%CE%B1%CF%81%CE%BC%CF%80%CE%AC%CF%84%CE%B9_-_panoramio.jpg/960px-%CE%A0%CE%B1%CF%81%CE%B1%CE%BB%CE%AF%CE%B1_%CE%9C%CF%80%CE%B1%CF%81%CE%BC%CF%80%CE%AC%CF%84%CE%B9_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "isSleep": false,
       "custom": false
     },
@@ -80,7 +80,7 @@
       "region": "צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)",
       "category": "Urban",
       "recommended": false,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Korfu_%28GR%29%2C_Palea_Peritheia_--_2018_--_1027.jpg/960px-Korfu_%28GR%29%2C_Palea_Peritheia_--_2018_--_1027.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "isSleep": false,
       "custom": false
     },
@@ -89,7 +89,7 @@
       "region": "צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)",
       "category": "Urban",
       "recommended": false,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/RodaCorfuJuly102022_02.jpg/960px-RodaCorfuJuly102022_02.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
       "isSleep": false,
       "custom": false
     },
@@ -107,7 +107,7 @@
       "region": "צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)",
       "category": "Urban",
       "recommended": false,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Kalami%2C_Corfu%2C_July_1985_%2801%29.jpg/960px-Kalami%2C_Corfu%2C_July_1985_%2801%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "isSleep": false,
       "custom": false
     },
@@ -179,7 +179,7 @@
       "region": "צפון קורפו (כולל סידארי, קסיופי והר פנטוקראטור)",
       "category": "Nature",
       "recommended": false,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pontikonisi.jpg/960px-Pontikonisi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/NymfesCorfuJuly132022.jpg/960px-NymfesCorfuJuly132022.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
       "isSleep": false,
       "custom": false
     },

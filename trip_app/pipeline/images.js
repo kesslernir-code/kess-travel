@@ -170,8 +170,24 @@ function cleanQuery(q) {
   return s.replace(/\([^)]*\)/g, '').replace(/\s+/g, ' ').trim();
 }
 
+// Extraction/organize often groups several small villages/beaches a source
+// described together into ONE selectable point (e.g. "Barbati, Ipsos &
+// Pyrgi" or "Kalami, Kaminaki & Nissaki") -- a real Corfu run showed these
+// compound cluster names are exactly the ones that never match any single
+// Wikipedia/Commons article (no page is titled "Barbati, Ipsos & Pyrgi"),
+// so they ALL fell through to the one shared destination-wide fallback --
+// 12 of 26 places ended up showing the identical photo. The first name in
+// the cluster is usually a real, individually-photographable place; trying
+// it before giving up entirely gives each cluster its own distinct (if
+// partial) picture instead of the generic shared one.
+function firstSubname(clean) {
+  const first = String(clean).split(/,|&|\band\b/i)[0].trim();
+  return first && first !== clean ? first : null;
+}
+
 async function fetchImageFor(query, destination) {
   const clean = cleanQuery(query);
+  const sub = firstSubname(clean);
   // Destination-qualified search FIRST, not as a fallback -- a real run
   // showed "Revolution Square" (a generic name that exists in many cities)
   // matching Paris's Place de la Concorde on the bare query alone, before the
@@ -186,6 +202,9 @@ async function fetchImageFor(query, destination) {
     (await fromWikipedia(clean, clean)) ||
     (await fromCommons(destination ? `${clean} ${destination}` : clean)) ||
     (await fromCommons(clean)) ||
+    (sub && destination ? await fromWikipedia(`${sub} ${destination}`, sub) : null) ||
+    (sub ? await fromWikipedia(sub, sub) : null) ||
+    (sub ? await fromCommons(destination ? `${sub} ${destination}` : sub) : null) ||
     null
   );
 }
