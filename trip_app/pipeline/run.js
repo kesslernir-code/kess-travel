@@ -324,7 +324,7 @@ async function runFinalPlanStage(destination, input, clientPoints, onProgress, o
   log('== rendering final plan ==');
   writeText(dir, `${destination}_Final_Map.html`, renderFinalMap(plan, enrich, input, selection, itinerary, altItinerary));
   writeText(dir, `${destination}_Final_Showcase.html`, renderFinalShowcase(input.destination || destination, enrich, itinerary, selection));
-  writeText(dir, `${destination}_Checklist.html`, renderChecklist(input.destination || destination, itinerary, selection));
+  writeText(dir, `${destination}_Checklist.html`, renderChecklist(input.destination || destination, itinerary, selection, input));
   // Also refresh Tab 4 itself -- a user returning to "update the trip" should
   // see their actual last confirmed selection (and sleep designations)
   // reflected, not a reset-to-blank "everything checked" master list.

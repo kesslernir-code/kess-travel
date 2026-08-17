@@ -13,6 +13,18 @@ const TEMPLATES_DIR = path.join(__dirname, '..', 'templates');
 // Gemini's 6 extraction categories -> the map's legend categories.
 const CAT_MAP = { Urban: 'City', Attraction: 'Attraction', Nature: 'Nature', Food: 'Food', Sleep: 'Sleep', Other: 'Attraction' };
 
+// Shared with render.js's renderChecklist -- a real bug happened from NOT
+// sharing this: the checklist independently decided "needs a rental car"
+// from baseNights.size > 1 (multiple overnight towns) instead of from what
+// the user actually said in the trip form, so a single-base trip doing real
+// car day-trips (e.g. Corfu: one base in the north, day trips around the
+// island by car) showed "עם רכב" on Tab 1 but never listed a rental car on
+// the checklist.
+function hasCarTransport(transport) {
+  const t = String(transport || '');
+  return /רכב|car/i.test(t) && !/בלי\s*רכב|ללא\s*רכב|אין\s*רכב|no\s*car/i.test(t);
+}
+
 function slug(s, i) {
   const base = String(s).toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 24);
   return base ? `${base}${i}` : `p${i}`;
@@ -366,8 +378,7 @@ function renderFinalMap(plan, enrich, input, selection, itinerary, altItinerary)
   // Travel mode between points: driving for a trip with a car (region-scale, the
   // Milan template's WALKING gives absurd hour totals over 100km+ legs), walking
   // for a car-free city trip.
-  const transport = String(input.transport || '');
-  const hasCar = /רכב|car/i.test(transport) && !/בלי\s*רכב|ללא\s*רכב|אין\s*רכב|no\s*car/i.test(transport);
+  const hasCar = hasCarTransport(input.transport);
   const travelMode = hasCar ? 'DRIVING' : 'WALKING';
   const travelVerb = hasCar ? 'נסיעה' : 'הליכה';
   const travelIcon = hasCar ? '🚗' : '🚶';
@@ -483,4 +494,4 @@ function validateFinalMapLeftovers(html, destinationEn) {
   return html;
 }
 
-module.exports = { renderRouteMap, renderFinalMap, toRegions, CAT_MAP };
+module.exports = { renderRouteMap, renderFinalMap, toRegions, CAT_MAP, hasCarTransport };

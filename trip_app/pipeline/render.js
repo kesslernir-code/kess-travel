@@ -8,6 +8,8 @@
 // half-succeed. Reuses the existing artifacts' exact design system
 // (cream/gold/accent) so the output is visually identical to the old pipeline.
 
+const { hasCarTransport } = require('./rendermaps');
+
 const SHARED_VARS = `--ink:#241f1a;--paper:#faf6ef;--muted:#6b6157;--gold:#c8a24a;--accent:#a13d3d;`;
 
 function esc(s) {
@@ -608,7 +610,7 @@ ${daysHtml}
 function googleUrl(q) { return `https://www.google.com/search?q=${encodeURIComponent(q)}`; }
 function bookingUrl(q) { return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(q)}`; }
 
-function renderChecklist(destination, itinerary, selection) {
+function renderChecklist(destination, itinerary, selection, input) {
   // Accommodation is keyed off the itinerary's actual per-night overnight
   // towns (day.base), not off a "Sleep"-category place happening to have been
   // mined -- most destinations never turn up a named hotel from extraction,
@@ -653,16 +655,20 @@ ${lis}
     </section>`;
   })();
 
-  // Basics: flights always apply (this app only plans international trips); a
-  // rental car only when the route actually moves between towns -- a
-  // single-base trip has no inter-city legs to drive, so "if you need to
-  // rent" resolves to "no" and the line is skipped.
-  const needsCar = baseNights.size > 1;
+  // Basics: flights always apply (this app only plans international trips).
+  // Rental car follows what the user actually said in the trip form -- NOT
+  // whether the route happens to relocate between towns. A real bug: a
+  // single-base trip doing real car day-trips around the island (e.g.
+  // Corfu: one base up north, day trips by car to the rest of the island)
+  // was previously judged "no car needed" purely because baseNights.size
+  // was 1, silently dropping the rental-car item despite Tab 1 showing
+  // "עם רכב" the whole time.
+  const needsCar = hasCarTransport(input && input.transport);
   const basicsSection = `    <section class="cl-section">
       <h2>✈️ בסיס — לפני הכל</h2>
       <ul>
         <li><label><input type="checkbox"> טיסות הלוך ושוב</label> <a class="book-link" href="${esc(googleUrl(`טיסות ל${destination}`))}" target="_blank" rel="noopener">🔗 חיפוש טיסות</a></li>
-${needsCar ? `        <li><label><input type="checkbox"> רכב שכור (המסלול עובר בין כמה ערים)</label> <a class="book-link" href="${esc(googleUrl(`השכרת רכב ${destination}`))}" target="_blank" rel="noopener">🔗 חיפוש השכרת רכב</a></li>\n` : ''}      </ul>
+${needsCar ? `        <li><label><input type="checkbox"> רכב שכור</label> <a class="book-link" href="${esc(googleUrl(`השכרת רכב ${destination}`))}" target="_blank" rel="noopener">🔗 חיפוש השכרת רכב</a></li>\n` : ''}      </ul>
     </section>`;
 
   const extraCss = `  body { margin:0; background:var(--paper); color:var(--ink); font-family:'Segoe UI',Arial,sans-serif; direction:rtl; text-align:right; line-height:1.7; }
