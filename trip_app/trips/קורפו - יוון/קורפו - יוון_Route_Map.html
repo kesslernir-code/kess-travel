@@ -34,6 +34,11 @@
   .poi-row .dot { flex: 0 0 auto; cursor: pointer; }
   .poi-row .poi-name { flex: 1 1 auto; cursor: pointer; }
   .sleep-tag { font-size: 10px; background: #1a1a4e; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
+  .sleep-toggle { flex: 0 0 auto; font-size: 13px; padding: 1px 5px; border-radius: 4px; border: 1.5px solid #ccc; background: #fff; cursor: pointer; opacity: 0.45; line-height: 1.4; }
+  .sleep-toggle.active { opacity: 1; border-color: #1a1a4e; background: #eef0fa; }
+  .sleep-toggle:hover { opacity: 0.8; }
+  .qc-flag { flex-shrink: 0; cursor: help; font-size: 12px; }
+  .info-qc { margin-top: 6px; font-size: 11.5px; color: #a13d3d; background: #fdf0f1; border-radius: 4px; padding: 4px 6px; }
   .rec-tag { font-size: 10px; background: #b8860b; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
   .rec-star { font-size: 12px; margin-inline-start: 4px; flex-shrink: 0; }
   #confirmBtn { width: 100%; margin-top: 16px; padding: 12px; font-size: 15px; font-weight: bold; background: #1a7a3c; color: white; border: none; border-radius: 6px; cursor: pointer; position: sticky; bottom: 0; }
@@ -133,7 +138,9 @@ const REGIONS = [
         "rec": true,
         "desc": "עיר הבירה של קורפו, שהוכרזה כאתר מורשת עולמית של אונסק\"ו, מתאפיינת באווירה מיוחדת עם השפעות ונציאניות, בריטיות וצרפתיות הניכרות במבנים, בבתי האחוזה, בכיכרות ובסמטאות הצרות (קנטוניה). בעיר פועלים מוזיאונים מרתקים, כנסיות היסטוריות, פאבים ומסעדות.",
         "source": "masa.co.il / lonelyplanet.com / ricksteves.com / wikiloc.com / nomadicmatt.com / tzatchickie.gr / discovergreece.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "spianada2",
@@ -143,7 +150,9 @@ const REGIONS = [
         "rec": true,
         "desc": "הכיכר הציבורית הגדולה ביותר ביוון וטיילת יפהפייה שלאורכה נטועים גנים ירוקים ומטופחים. הכיכר שוכנת לרגלי המצודה העתיקה וכוללת אכסדרת עמודים מרשימה ומגרש קריקט, ומהווה מוקד מרכזי לטיול רגלי בעיר.",
         "source": "masa.co.il / gotravel.co.il / lonelyplanet.com / nomadicmatt.com / discovergreece.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "liston3",
@@ -153,7 +162,9 @@ const REGIONS = [
         "rec": true,
         "desc": "ארקדת מבנים מקושתים מפוארת שנבנתה בתקופת הכיבוש הצרפתי בהשראת רחוב ריבולי בפריז. המקום שוכן בכיכר הספיאנאדה ומאכלס את בתי הקפה האלגנטיים ביותר באי לצד חנויות ומסעדות.",
         "source": "masa.co.il / lonelyplanet.com / wikiloc.com / nomadicmatt.com / tzatchickie.gr / discovergreece.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "oldfortresspalaiofrourio4",
@@ -163,7 +174,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מבצר ונציאני מרשים שנבנה במאה ה-15 על חצי אי סלעי במקום שבו שכנה הבירה הביזנטית. המבצר כולל תערוכות היסטוריות ומציע תצפית פנורמית מרהיבה על העיר קורפו והים.",
         "source": "masa.co.il / gotravel.co.il / lonelyplanet.com / ricksteves.com / nomadicmatt.com / tzatchickie.gr / discovergreece.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "newfortressneofrourio5",
@@ -173,7 +186,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מבצר ונציאני מהמאה ה-16 המוקף חומות אבן ומגדלים, המתנשא מעל העיר העתיקה והנמל ומציע נקודת תצפית יפהפייה על קורפו וקו החוף.",
         "source": "masa.co.il / gotravel.co.il / ricksteves.com / wikiloc.com / nomadicmatt.com / discovergreece.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "agiosspyridon6",
@@ -183,7 +198,9 @@ const REGIONS = [
         "rec": true,
         "desc": "כנסייה יוונית-אורתודוקסית מהמאה ה-16 עם מגדל פעמונים בולט. בכנסייה שמור ארון כסף ובו גופתו החנוטה של הקדוש ספירידון, פטרון האי שנודע כמחולל ניסים, לצד אוסף פריטי כסף וציורי קיר מרהיבים.",
         "source": "masa.co.il / atlasobscura.com / nomadicmatt.com / tzatchickie.gr",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "monrepos7",
@@ -193,7 +210,9 @@ const REGIONS = [
         "rec": true,
         "desc": "ארמון היסטורי שבו נולד הנסיך פיליפ, השוכן בתוך פארק ירוק ומטופח מול שרידי פליאופוליס. במקום פועל מוזיאון המציג ממצאים ארכיאולוגיים עתיקים ושבילי הליכה נעימים.",
         "source": "masa.co.il / wikiloc.com / nomadicmatt.com / tzatchickie.gr",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "p8",
@@ -203,7 +222,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מוזיאון ייחודי השוכן בארמון ניאו-קלאסי מפואר בעיר קורפו, המוקדש לאמנות ותרבות ממדינות אסיה וכולל שריונים, פרגודים ויצירות אמנות אותנטיות.",
         "source": "masa.co.il / atlasobscura.com / discovergreece.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "p9",
@@ -213,7 +234,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מוזיאון המציג אוסף עשיר של עתיקות שנמצאו ברחבי האי, ביניהן גמלון האבן העתיק של מקדש ארטמיס עם דמות הגורגונה מדוזה ופסל אריה האבן של מנקראטס.",
         "source": "masa.co.il / nomadicmatt.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "kanonipontikonisi10",
@@ -223,7 +246,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אזור תצפית מפורסם הצופה אל מסלול הנחיתה של שדה התעופה בלגונה, מנזר ולאכרנה הלבן הניצב על המים, ואי העכבר (פונטיקוניסי) הירוק אליו ניתן לשוט בסירה קצרה.",
         "source": "gotravel.co.il / wikiloc.com / nomadicmatt.com / tzatchickie.gr",
-        "url": "https://gotravel.co.il"
+        "url": "https://gotravel.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "cafekanoni11",
@@ -233,7 +258,9 @@ const REGIONS = [
         "rec": false,
         "desc": "בית קפה ברובע קאנוני המציע טרסה עם תצפית מרהיבה על מסלול ההמראה והנחיתה של שדה התעופה ועל אי העכבר.",
         "source": "gotravel.co.il",
-        "url": "https://gotravel.co.il"
+        "url": "https://gotravel.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "banknotemuseum12",
@@ -243,7 +270,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מוזיאון השוכן במבנה היסטורי משנת 1839 בכיכר הגיבורים, המציג שטרות, מטבעות ומסמכים בנקאיים מ-1822 ועד עידן האירו, כולל שטר נדיר של 100 מיליארד דרכמות.",
         "source": "atlasobscura.com / nomadicmatt.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "casaparlante13",
@@ -253,7 +282,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מוזיאון חי והיסטורי בעיר קורפו המציג המחשה מוחשית לאורח חייה של משפחת אצולה מקומית במהלך המאה ה-19.",
         "source": "nomadicmatt.com",
-        "url": "https://nomadicmatt.com"
+        "url": "https://nomadicmatt.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "campiello14",
@@ -263,7 +294,9 @@ const REGIONS = [
         "rec": true,
         "desc": "הרובע העתיק והציורי ביותר בעיר קורפו, המתאפיין באווירה ונציאנית ייחודית, סמטאות מרוצפות אבן צרות ומבנים היסטוריים.",
         "source": "ricksteves.com / discovergreece.com",
-        "url": "https://ricksteves.com"
+        "url": "https://ricksteves.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "centralmarket15",
@@ -273,7 +306,9 @@ const REGIONS = [
         "rec": true,
         "desc": "שוק עירוני תוסס ליד המבצר החדש, המציע דגה טרייה, פירות, ירקות, דבש מקומי, ליקרים וממתקי קומקוואט.",
         "source": "ricksteves.com / discovergreece.com",
-        "url": "https://ricksteves.com"
+        "url": "https://ricksteves.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "patounissoapfactory16",
@@ -283,7 +318,9 @@ const REGIONS = [
         "rec": false,
         "desc": "יצרן הסבון המסורתי היחיד מהמאה ה-19 שעדיין פועל בקורפו ומייצר סבונים טבעיים משמן זית מקומי בשיטות מסורתיות.",
         "source": "discovergreece.com",
-        "url": "https://discovergreece.com"
+        "url": "https://discovergreece.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "alexisperiklisdairyshop17",
@@ -293,7 +330,9 @@ const REGIONS = [
         "rec": true,
         "desc": "חנות חלב ומעדנייה הפועלת מאז 1935, המפורסמת בחמאה מיוחדת, יוגורט וקינוח גלקטובורקו מסורתי.",
         "source": "discovergreece.com",
-        "url": "https://discovergreece.com"
+        "url": "https://discovergreece.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "corfubritishcemetery18",
@@ -303,7 +342,9 @@ const REGIONS = [
         "rec": false,
         "desc": "בית קברות היסטורי ושליו בעיר קורפו המשמש עדות למורשת ולתקופת השלטון הבריטי באי.",
         "source": "atlasobscura.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "p19",
@@ -313,7 +354,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אתרי מורשת ותרבות בעיר קורפו הכוללים תצוגות של היסטוריה ביזנטית ואתרי פולחן היסטוריים.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "p20",
@@ -323,7 +366,9 @@ const REGIONS = [
         "rec": false,
         "desc": "כנסייה היסטורית בעיר קורפו המהווה את אחד ממוקדי העניין הדתיים בבירת האי.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "p21",
@@ -333,7 +378,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מוזיאון בעיר קורפו המוקדש לקורות חייו ופועלו של יואניס קפודיסטריאס.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "vidosisland22",
@@ -343,7 +390,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אי ירוק ושקט השוכן במרחק הפלגה קצר מול העיר קורפו, ומציע שבילי הליכה קלים וטבע שליו.",
         "source": "wikiloc.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "mantouki23",
@@ -353,7 +402,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אזור פרברי סמוך לעיר קורפו הנכלל במסלולי טיול והליכה רגליים.",
         "source": "wikiloc.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "bellavenezia24",
@@ -363,7 +414,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מלון בוטיק יוקרתי השוכן בתוך וילה ניאו-קלאסית ברחוב שליו במרכז העיר קורפו, עם טרסת גן מטופחת.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "hippodromeapokalypsisdna25",
@@ -373,7 +426,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מתחם מועדוני הלילה המרכזי של קורפו סמוך לנמל החדש, המציע מסיבות וחיי לילה תוססים.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "hoponhopoff26",
@@ -383,7 +438,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אוטובוס תיירים דו-קומתי המאפשר סיור פנורמי וגישה נוחה בין אתריה המרכזיים של העיר.",
         "source": "ricksteves.com",
-        "url": "https://ricksteves.com"
+        "url": "https://ricksteves.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "faliraki27",
@@ -393,7 +450,9 @@ const REGIONS = [
         "rec": false,
         "desc": "טברנה מסורתית השוכנת למרגלות המבצר העתיק ומשקיפה ישירות על הים.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       }
     ]
   },
@@ -408,7 +467,9 @@ const REGIONS = [
         "rec": true,
         "desc": "תצורת סלע טבעית מרהיבה מאבן חול עם תעלות ומפרצי רחצה בסידארי. על פי האגדה המקומית, זוגות ששוחים יחד בתעלה יישארו מאוהבים לנצח.",
         "source": "masa.co.il / lonelyplanet.com / tzatchickie.gr",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "sidari29",
@@ -418,7 +479,9 @@ const REGIONS = [
         "rec": true,
         "desc": "עיירת נופש בצפון האי המציעה חופים חוליים רחבים, טברנות, בתי קפה, פעילויות ספורט מים והפלגות לאורך המפרצים.",
         "source": "masa.co.il / lonelyplanet.com / nomadicmatt.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "capedrastis30",
@@ -428,17 +491,21 @@ const REGIONS = [
         "rec": true,
         "desc": "תצורות סלע לבנות ומרשימות המזדקרות אל תוך מי תכלת צלולים בקצה הצפוני של קורפו, המהוות מוקד מרהיב לתצפית שקיעה ולשחייה.",
         "source": "masa.co.il / tzatchickie.gr",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "7thheavenlogasbeach31",
         "name": "חוף לוגאס וקפה 7th Heaven (Logas Beach)",
         "query": "חוף לוגאס וקפה 7th Heaven (Logas Beach), Corfu",
-        "category": "Nature",
+        "category": "Beach",
         "rec": true,
         "desc": "חוף עוצר נשימה מתחת לצוקי אבן חול תלולים בכפר פרולאדס, עם בר-קפה הצופה לנופי שקיעה מרהיבים מעל הים.",
         "source": "tzatchickie.gr",
-        "url": "https://tzatchickie.gr"
+        "url": "https://tzatchickie.gr",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "portotimoni32",
@@ -448,7 +515,9 @@ const REGIONS = [
         "rec": true,
         "desc": "תופעת טבע ייחודית של שני חופים מרהיבים גב-אל-גב עם מי טורקיז, אליהם מגיעים במסלול הליכה מהכפר אפיאונס או בסירה.",
         "source": "lonelyplanet.com / tzatchickie.gr",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "mountpantokrator33",
@@ -458,7 +527,9 @@ const REGIONS = [
         "rec": true,
         "desc": "ההר הגבוה ביותר בקורפו (906 מטרים). בפסגתו שוכנים מנזר היסטורי ובית קפה, והוא מציע תצפית פנורמית של 360 מעלות על האי כולו, חופי אלבניה ואיטליה.",
         "source": "masa.co.il / atlasobscura.com / tzatchickie.gr",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "paleaperithia34",
@@ -468,7 +539,9 @@ const REGIONS = [
         "rec": true,
         "desc": "כפר ביזנטי עתיק מהמאה ה-14 על מדרונות הר פנטוקראטור. הכפר כולל שרידי בתי אבן היסטוריים (כמו אחוזת סקורדיליס), שבילי טיול וטברנות מסורתיות.",
         "source": "atlasobscura.com / wikiloc.com / discovergreece.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "newperithia35",
@@ -478,7 +551,9 @@ const REGIONS = [
         "rec": false,
         "desc": "כפר יווני מסורתי בקרבת כביש החוף הצפוני, הכולל טברנות, בית בד וחנויות מקומיות.",
         "source": "atlasobscura.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "kassiopi36",
@@ -488,7 +563,9 @@ const REGIONS = [
         "rec": true,
         "desc": "כפר דייגים ציורי בצפון-מזרח קורפו עם נמל מסורתי, שרידי טירה ביזנטית, חופי חלוקים יפהפיים, מסעדות דגים וטברנות מול המים.",
         "source": "masa.co.il / lonelyplanet.com / nomadicmatt.com / tzatchickie.gr",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "nymfesvillageaskitario37",
@@ -498,7 +575,9 @@ const REGIONS = [
         "rec": false,
         "desc": "כפר פסטורלי המוקף מטעי זיתים ומפלי מים שבהם לפי המיתולוגיה רחצו נימפות, לצד שרידי מנזר ההתבודדות אסקיטריו מהמאה ה-5.",
         "source": "nomadicmatt.com",
-        "url": "https://nomadicmatt.com"
+        "url": "https://nomadicmatt.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "agiosgeorgiospagon38",
@@ -508,7 +587,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מפרץ חוף רחב ומוכר בצפון-מערב האי המתאים לרחצה ולפעילויות ספורט מים.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "acharaviroda39",
@@ -518,7 +599,9 @@ const REGIONS = [
         "rec": false,
         "desc": "יישובי נופש פופולריים בחוף הצפוני של קורפו המציעים רצועות חוף ארוכות, טברנות ומגוון שירותי תיירות.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "arillasagiosstefanos40",
@@ -528,7 +611,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אתרי נופש חופיים ורגועים בצפון-מערב קורפו עם מפרצים יפים ושקיעות מרשימות.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "kalamikaminakinissaki41",
@@ -538,7 +623,9 @@ const REGIONS = [
         "rec": false,
         "desc": "כפרי חוף ומפרצונים ציוריים בחוף הצפון-מזרחי של האי, המאופיינים במי ים צלולים וטברנות מסורתיות.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "barbatiipsospyrgi42",
@@ -548,7 +635,9 @@ const REGIONS = [
         "rec": true,
         "desc": "רצועת חופי נופש לאורך החוף המזרחי למרגלות הר פנטוקראטור, המציעה ספורט מים, ברים ומסעדות.",
         "source": "masa.co.il / lonelyplanet.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "spartilasvalanio43",
@@ -558,7 +647,9 @@ const REGIONS = [
         "rec": false,
         "desc": "כפרים הרריים מסורתיים בצפון האי המשמשים כנקודות מעבר ותצפית לאורך מסלולי הטיול.",
         "source": "wikiloc.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       }
     ]
   },
@@ -573,7 +664,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מפרץ ציורי מהיפים באי, המוקף גבעות מיוערות, צוקים ומי טורקיז. המקום מציע חופים מרהיבים, מערות ימיות, טברנות דגים והשכרת סירות.",
         "source": "masa.co.il / lonelyplanet.com / nomadicmatt.com / tzatchickie.gr",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "theotokosmonastery45",
@@ -583,7 +676,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מנזר היסטורי מהמאה ה-13 השוכן על צוק מעל מפרץ פליאוקסטריצה, ובו גנים מטופחים, מוזיאון קטן ותצפית מרהיבה על הים.",
         "source": "masa.co.il / nomadicmatt.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "angelokastrocastle46",
@@ -593,17 +688,21 @@ const REGIONS = [
         "rec": true,
         "desc": "מבצר ביזנטי מרשים מהמאה ה-13 הניצב על צוק תלול מעל הים בסמוך לפליאוקסטריצה ומציע נופים פנורמיים עוצרי נשימה.",
         "source": "masa.co.il / nomadicmatt.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "liapadesroviniaparadiseb47",
         "name": "חופי ומערות ליאפאדס (Liapades, Rovinia & Paradise Beach)",
         "query": "חופי ומערות ליאפאדס (Liapades, Rovinia & Paradise Beach), Corfu",
-        "category": "Nature",
+        "category": "Beach",
         "rec": true,
         "desc": "אזור חופי בתולי ומפרצים נסתרים הסמוכים לליאפאדס, בהם חוף רוביניה, חוף פרדייז, חוף סטלארי ומערת ליניודורוס, הנגישים בעיקר בסירות.",
         "source": "tzatchickie.gr",
-        "url": "https://tzatchickie.gr"
+        "url": "https://tzatchickie.gr",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "lagrotta48",
@@ -613,7 +712,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מפרץ סלעי ייחודי ובר חוף מפורסם בתוך נקרת סלע בפליאוקסטריצה, המציע מים צלולים וקפיצה למים.",
         "source": "tzatchickie.gr",
-        "url": "https://tzatchickie.gr"
+        "url": "https://tzatchickie.gr",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "corfuaquarium49",
@@ -623,17 +724,21 @@ const REGIONS = [
         "rec": false,
         "desc": "אקווריום בפליאוקסטריצה המציג מיני דגים, זוחלים ובעלי חיים ימיים האופייניים לים היוני.",
         "source": "nomadicmatt.com",
-        "url": "https://nomadicmatt.com"
+        "url": "https://nomadicmatt.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "glifada50",
         "name": "חוף גליפדה (Glifada)",
         "query": "חוף גליפדה (Glifada), Corfu",
-        "category": "Nature",
+        "category": "Beach",
         "rec": true,
         "desc": "אחד החופים החוליים היפים והפופולריים ביותר באי, המוקף צוקים דרמטיים ומציע מגוון פעילויות ספורט מים וטברנות.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "agiosgordios51",
@@ -643,7 +748,9 @@ const REGIONS = [
         "rec": true,
         "desc": "עיירת חוף נעימה עם רצועת חוף חולית רחבה המוקפת הרים ירוקים, מסעדות ומלונות למול הים.",
         "source": "masa.co.il / tzatchickie.gr",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "pelekaskaisersthrone52",
@@ -653,7 +760,9 @@ const REGIONS = [
         "rec": true,
         "desc": "כפר הררי ציורי שבראשו תצפית שבנה קיסר גרמניה וילהלם השני, המציעה פנורמה מרהיבה על כל מרחבי האי והשקיעה.",
         "source": "masa.co.il / tzatchickie.gr",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "aqualandcorfu53",
@@ -663,7 +772,9 @@ const REGIONS = [
         "rec": true,
         "desc": "פארק מים גדול במרכז האי הכולל עשרות מגלשות, בריכות גלים ומתקני מים לכל הגילאים.",
         "source": "gotravel.co.il / nomadicmatt.com / tzatchickie.gr",
-        "url": "https://gotravel.co.il"
+        "url": "https://gotravel.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "theotokyestate54",
@@ -673,7 +784,9 @@ const REGIONS = [
         "rec": false,
         "desc": "יקב היסטורי ואחוזה חקלאית בעמק רופה המציעה סיורים בכרמים, טעימות יין ומוזיאון יין קטן.",
         "source": "discovergreece.com",
-        "url": "https://discovergreece.com"
+        "url": "https://discovergreece.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "ambelonascorfu55",
@@ -683,7 +796,9 @@ const REGIONS = [
         "rec": false,
         "desc": "יקב ומסעדה כפרית המציגים זני ענבים מקומיים, מורשת חקלאית וטעימות יין מקומיות.",
         "source": "discovergreece.com",
-        "url": "https://discovergreece.com"
+        "url": "https://discovergreece.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "gouviakontokalidassia56",
@@ -693,7 +808,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אתרי נופש ומרינה מרכזית ליאכטות מצפון לעיר קורפו, הכוללים חופים, שפע מסעדות, מלונות וחיי לילה.",
         "source": "masa.co.il / wikiloc.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "akrotiribeachagiatriada57",
@@ -703,7 +820,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מלון נופש השוכן על חצי אי במערב קורפו לצד חוף ומפרץ אגיה טריאדה השליו.",
         "source": "gotravel.co.il",
-        "url": "https://gotravel.co.il"
+        "url": "https://gotravel.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "thepinkpalace58",
@@ -713,7 +832,9 @@ const REGIONS = [
         "rec": false,
         "desc": "הוסטל מסיבות מפורסם בחוף המערבי של קורפו, הפופולרי בקרב צעירים ותרמילאים.",
         "source": "nomadicmatt.com",
-        "url": "https://nomadicmatt.com"
+        "url": "https://nomadicmatt.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "kalistoresorts59",
@@ -723,7 +844,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מתחם וילות ודירות אירוח השוכן מעל הכפר פלאקאס ומציע נופים פנורמיים ירוקים.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "yaliskaribeachstudios60",
@@ -733,7 +856,9 @@ const REGIONS = [
         "rec": false,
         "desc": "חוף קטן ואינטימי בחוף המערבי שלצידו פועל מתחם אירוח וטברנה כפרית.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       }
     ]
   },
@@ -748,7 +873,9 @@ const REGIONS = [
         "rec": true,
         "desc": "ארמון קיץ מפואר שהוקם בשנת 1890 עבור אליזבת קיסרית אוסטריה (סיסי) ושימש בהמשך את הקייזר וילהלם השני. הארמון מציע גנים מרהיבים, פסלי מיתולוגיה יוונית ותצפית פנורמית.",
         "source": "masa.co.il / lonelyplanet.com / nomadicmatt.com / tzatchickie.gr",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "benitses62",
@@ -758,27 +885,33 @@ const REGIONS = [
         "rec": true,
         "desc": "כפר דייגים שהפך לעיירת נופש שוקקת עם טברנות, חופים נעימים, ומסלולי הליכה בטבע של 'עמק האזמרגד'.",
         "source": "masa.co.il / lonelyplanet.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "lakekorissiaissosbeach63",
         "name": "אגם קוריסיה, חוף חליקורנאס וחוף איסוס (Lake Korissia & Issos Beach)",
         "query": "אגם קוריסיה, חוף חליקורנאס וחוף איסוס (Lake Korissia & Issos Beach), Corfu",
-        "category": "Nature",
+        "category": "Beach",
         "rec": true,
         "desc": "שמורת טבע בדרום קורפו הכוללת אגם עשיר בעופות מים (כולל פלמינגו), דיונות חול פראיות ורצועות חוף חוליות ורחבות.",
         "source": "masa.co.il / tzatchickie.gr",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "gardenobeach64",
         "name": "חוף גרדנו (Gardeno Beach)",
         "query": "חוף גרדנו (Gardeno Beach), Corfu",
-        "category": "Nature",
+        "category": "Beach",
         "rec": true,
         "desc": "חוף חולי ושקט בדרום קורפו המגובה בצוקים מרשימים ומציע מפלט שקט ופחות מתויר.",
         "source": "tzatchickie.gr",
-        "url": "https://tzatchickie.gr"
+        "url": "https://tzatchickie.gr",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "agiosgeorgiossouth65",
@@ -788,7 +921,9 @@ const REGIONS = [
         "rec": true,
         "desc": "רצועת חוף ארוכה בדרום קורפו הנחשבת לאזור מומלץ לצלילה ולנופש רגוע.",
         "source": "masa.co.il / nomadicmatt.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "kavos66",
@@ -798,7 +933,9 @@ const REGIONS = [
         "rec": true,
         "desc": "עיירת נופש בקצה הדרומי של קורפו, הידועה בחיי לילה תוססים ובסמיכות לנקודת ההתחלה של שביל קורפו.",
         "source": "masa.co.il / wikiloc.com",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "thegovernor67",
@@ -808,7 +945,9 @@ const REGIONS = [
         "rec": false,
         "desc": "בית בד ומפיק שמן זית עטור פרסים באזור הר אגיוס מתאוס, המציע סיורים וטעימות שמן זית מסורתי.",
         "source": "discovergreece.com",
-        "url": "https://discovergreece.com"
+        "url": "https://discovergreece.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "donatospaipetisolivemuse68",
@@ -818,7 +957,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מוזיאון בכפר קינופיאסטס המשמר את מסורת גידול עצי הזית והפקת שמן הזית ההיסטורית של קורפו.",
         "source": "discovergreece.com",
-        "url": "https://discovergreece.com"
+        "url": "https://discovergreece.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "alykessaltwetland69",
@@ -828,7 +969,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אתר טבע ומלחה היסטורית בדרום האי המהווה מוקד משיכה לחובבי טבע וצפרות.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "angsanacorfuresortspa70",
@@ -838,7 +981,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אתר נופש יוקרתי על צלע הר מדרום לבירת קורפו הכולל וילות, בריכת אינפיניטי וספא מפואר.",
         "source": "gotravel.co.il",
-        "url": "https://gotravel.co.il"
+        "url": "https://gotravel.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "lomous71",
@@ -848,7 +993,9 @@ const REGIONS = [
         "rec": false,
         "desc": "נקודת עניין נופית בדרום האי קורפו.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       }
     ]
   },
@@ -863,7 +1010,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מסלול הליכה מרהיב לאורך יותר מ-150-200 ק\"מ החוצה את קורפו מקאבוס בדרום ועד צפון האי. השביל עובר בכפרים נידחים, חופים, חורשות זיתים ורכסי הרים.",
         "source": "lonelyplanet.com / wikiloc.com / nomadicmatt.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "mejanishausbasilikapensi73",
@@ -873,7 +1022,9 @@ const REGIONS = [
         "rec": false,
         "desc": "פנסיונים ובתי הארחה כפריים המשמשים כנקודות לינה לצועדים במקטעים השונים של טרק שביל קורפו.",
         "source": "wikiloc.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       }
     ]
   },
@@ -888,7 +1039,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אי שליו מדרום לקורפו המפורסם במצוקי גיר מרשימים, נקרות ים כחולות, מטעי זיתים ועיירת נמל ציורית.",
         "source": "masa.co.il / gotravel.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "antipaxos75",
@@ -898,7 +1051,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אי זעיר ופסטורלי דרומית לפאקסוס הידוע בחופים עם חול בהיר ומי טורקיז צלולים במיוחד.",
         "source": "gotravel.co.il",
-        "url": "https://gotravel.co.il"
+        "url": "https://gotravel.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "diapontiaislandsothonier76",
@@ -908,7 +1063,9 @@ const REGIONS = [
         "rec": true,
         "desc": "שלושה איים נידחים ושלווים מצפון-מערב לקורפו, המציעים חופים שקטים, כפרים אותנטיים ומפלט מההמונים.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "butrintalbania77",
@@ -918,7 +1075,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אתר עתיקות היסטורי ופארק לאומי באלבניה, השוכן מול חופי קורפו ונגיש בשיט קצר מהאי.",
         "source": "atlasobscura.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "lefkada78",
@@ -928,7 +1087,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אי יוני סמוך הכולל את העיר לפקדה, מפרץ מיקרוס גיאלוס, עיירת הנמל נידרי, חוף פורטו קציקי המפורסם ועיירת הגלישה ואסיליקי.",
         "source": "gotravel.co.il",
-        "url": "https://gotravel.co.il"
+        "url": "https://gotravel.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "skorpios79",
@@ -938,7 +1099,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אי פרטי מול נידרי בלפקדה שהיה בבעלות משפחת אונאסיס ובו קבורים בני המשפחה.",
         "source": "gotravel.co.il",
-        "url": "https://gotravel.co.il"
+        "url": "https://gotravel.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "tartaruga80",
@@ -948,7 +1111,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אתר קמפינג על מצוקי האי זקינתוס בים היוני המשקיף על חוף ומים צלולים.",
         "source": "masa.co.il",
-        "url": "https://masa.co.il"
+        "url": "https://masa.co.il",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "naxostown81",
@@ -958,7 +1123,9 @@ const REGIONS = [
         "rec": false,
         "desc": "עיירת הנמל המרכזית באי נקוס בארכיפלג הקיקלאדיים שביוון.",
         "source": "ricksteves.com",
-        "url": "https://ricksteves.com"
+        "url": "https://ricksteves.com",
+        "checked": true,
+        "isSleep": false
       }
     ]
   }
@@ -1256,10 +1423,11 @@ function buildChecklist() {
       row.dataset.category = p.category;
       row.innerHTML = `
         <span class="dot" style="background:${CATEGORY_COLORS[p.category]}"></span>
-        <input type="checkbox" id="chk_${p.id}" checked>
+        <input type="checkbox" id="chk_${p.id}"${p.checked === false ? '' : ' checked'}>
         <span class="poi-name" dir="rtl" title="לחץ כדי למקד את המפה על המקום הזה">${p.name}</span>
         ${p.rec ? '<span class="rec-star" title="מומלץ">⭐</span>' : ''}
-        ${p.isSleep ? '<span class="sleep-tag">לינה</span>' : ''}
+        <span class="sleep-tag" style="display:${p.isSleep ? 'inline-block' : 'none'}">לינה</span>
+        <button type="button" class="sleep-toggle${p.isSleep ? ' active' : ''}" title="סמן/בטל כמקום לינה רשמי">🛏</button>
         ${p.rec ? '<span class="rec-tag">מומלץ</span>' : ''}
       `;
       container.appendChild(row);
@@ -1270,6 +1438,18 @@ function buildChecklist() {
       });
       row.querySelector('.poi-name').addEventListener('click', () => focusPoint(p));
       row.querySelector('.dot').addEventListener('click', () => focusPoint(p));
+      // Manually designate a point as an official overnight base -- sent to
+      // the server as isSleep, which buildItinerary now treats as a real
+      // constraint (place it as that night's base) rather than letting the
+      // AI pick freely, so a returning user can lock in the hotel they
+      // actually booked instead of hoping the itinerary agrees.
+      row.querySelector('.sleep-toggle').addEventListener('click', (e) => {
+        e.stopPropagation();
+        p.isSleep = !p.isSleep;
+        e.target.classList.toggle('active', p.isSleep);
+        row.querySelector('.sleep-tag').style.display = p.isSleep ? 'inline-block' : 'none';
+        if (p.marker) p.marker.setLabel(p.isSleep ? { text: '🛏', fontSize: '11px' } : null);
+      });
     });
   });
 }
@@ -1490,11 +1670,91 @@ function focusRegion(regionPoints, regionName) {
   map.fitBounds(overlayBounds);
 }
 
+function buildInfoContent(p) {
+  return `<div dir="rtl" style="text-align:right; font-family:-apple-system,Segoe UI,Arial,sans-serif;">
+      <b>${p.name}</b> <span style="color:${CATEGORY_COLORS[p.category]}">● ${CATEGORY_LABELS_HE[p.category]}</span>
+      ${p.rec ? '<div class="info-rec">⭐ מומלץ — מקורות מציינים כחובה לראות</div>' : ''}
+      <div class="info-desc">${p.desc}</div>
+      <div class="info-source">מקור: ${p.source}${p.url ? ` — <a href="${p.url}" target="_blank" rel="noopener">קישור</a>` : ''}</div>
+      ${(p.qcFlags && p.qcFlags.length) ? `<div class="info-qc">⚠️ ${p.qcFlags.join('<br>⚠️ ')}</div>` : ''}
+    </div>`;
+}
+
+// QC layer: geocoding a place name is not the same as verifying the result
+// actually makes sense. componentRestrictions biases results toward the
+// right country but doesn't guarantee it (a forced match can still land on
+// a real place in the wrong country), and nothing at all checks whether a
+// "Beach" point's resolved location is genuinely coastal rather than a
+// generic city-center fallback. These are heuristics, not certainties --
+// flagged for the user to glance at and confirm, never silently removed.
+function computeQcFlags(p, geocodeResult) {
+  const flags = [];
+  const countryComp = (geocodeResult.address_components || []).find(c => c.types.includes('country'));
+  if (countryComp && countryComp.short_name !== GEOCODE_COUNTRY) {
+    flags.push(`המיקום שנמצא הוא ב-${countryComp.long_name}, לא ב-${DESTINATION_NAME} -- ייתכן חילוץ שגוי`);
+  }
+  if (p.category === 'Beach') {
+    const types = geocodeResult.types || [];
+    const looksSpecific = types.some((t) => ['natural_feature', 'point_of_interest', 'establishment', 'premise'].includes(t));
+    if (!looksSpecific) {
+      flags.push('מסומן כחוף אך המיקום שהתקבל הוא כללי (עיר/אזור), לא נקודת חוף ספציפית -- ייתכן שהמיקום בפועל לא צמוד לים');
+    }
+  }
+  return flags;
+}
+
+// Runs once ALL points have geocoded (needs every region's full point set to
+// judge what's "far from the rest") -- same median-based, outlier-robust
+// center as computeRegionCircle, but here to FLAG a suspicious point for
+// review rather than just exclude it from a radius calculation.
+function runGeoQcSummary() {
+  REGIONS.forEach((r) => {
+    const locs = r.points.filter((p) => p.location);
+    if (locs.length < 3) return;
+    const lats = locs.map((p) => p.location.lat()).sort((a, b) => a - b);
+    const lngs = locs.map((p) => p.location.lng()).sort((a, b) => a - b);
+    const mid = Math.floor(locs.length / 2);
+    const roughCenter = new google.maps.LatLng(lats[mid], lngs[mid]);
+    locs.forEach((p) => {
+      const dist = google.maps.geometry.spherical.computeDistanceBetween(roughCenter, p.location);
+      if (dist > 150000) {
+        p.qcFlags = p.qcFlags || [];
+        p.qcFlags.push(`מרוחק כ-${Math.round(dist / 1000)} ק"מ משאר הנקודות באזור "${r.region}" -- ייתכן שיוך שגוי לאזור, שם עמום שגרם לחילוץ מיקום שגוי, או שזו באמת יעד רחוק (טיול יום)`);
+        p.infoContent = buildInfoContent(p);
+        if (p.marker) {
+          const icon = p.marker.getIcon();
+          p.marker.setIcon({ ...icon, strokeColor: '#e74c3c', strokeWeight: 4 });
+        }
+      }
+    });
+  });
+  const flagged = POINTS.filter((p) => p.qcFlags && p.qcFlags.length);
+  document.querySelectorAll('.poi-row').forEach((row) => {
+    const chk = row.querySelector('input[type="checkbox"]');
+    if (!chk) return;
+    const id = chk.id.replace(/^chk_/, '');
+    const p = POINTS.find((x) => x.id === id);
+    if (p && p.qcFlags && p.qcFlags.length && !row.querySelector('.qc-flag')) {
+      const badge = document.createElement('span');
+      badge.className = 'qc-flag';
+      badge.textContent = '⚠️';
+      badge.title = p.qcFlags.join(' | ');
+      row.appendChild(badge);
+    }
+  });
+  if (flagged.length) {
+    document.getElementById('status').textContent += ` | ⚠️ ${flagged.length} נקודות מסומנות לבדיקה (ראו סימון אדום במפה וברשימה)`;
+  }
+}
+
 function geocodeAllPoints() {
   const status = document.getElementById('status');
   let done = 0;
   POINTS.forEach((p, i) => {
-    p.checked = true;
+    // A returning visit to this tab (a trip that already has a final plan)
+    // injects real checked/isSleep values reflecting the LAST confirmed
+    // selection -- don't stomp that back to "everything checked" here.
+    if (p.checked === undefined) p.checked = true;
     // Stagger requests slightly to stay well under geocoding rate limits
     setTimeout(() => {
       // componentRestrictions locks results to Italy the country (ISO "IT") -- without this,
@@ -1506,6 +1766,7 @@ function geocodeAllPoints() {
         if (status2 === 'OK' && results[0]) {
           try {
             p.location = results[0].geometry.location;
+            p.qcFlags = computeQcFlags(p, results[0]);
             const markerOptions = {
               position: p.location,
               map: pointVisible(p) ? map : null,
@@ -1526,16 +1787,17 @@ function geocodeAllPoints() {
             if (p.isSleep) {
               markerOptions.label = { text: '🛏', fontSize: '11px' };
             }
+            if (p.qcFlags && p.qcFlags.length) {
+              markerOptions.icon.strokeColor = '#e74c3c';
+              markerOptions.icon.strokeWeight = 4;
+            }
             p.marker = new google.maps.Marker(markerOptions);
             // Stored on `p` (not just closed over here) so focusPoint() -- triggered by clicking
             // the place in the sidebar checklist, not just clicking the marker itself -- can open
-            // the exact same bubble content.
-            p.infoContent = `<div dir="rtl" style="text-align:right; font-family:-apple-system,Segoe UI,Arial,sans-serif;">
-                <b>${p.name}</b> <span style="color:${CATEGORY_COLORS[p.category]}">● ${CATEGORY_LABELS_HE[p.category]}</span>
-                ${p.rec ? '<div class="info-rec">⭐ מומלץ — מקורות מציינים כחובה לראות</div>' : ''}
-                <div class="info-desc">${p.desc}</div>
-                <div class="info-source">מקור: ${p.source}${p.url ? ` — <a href="${p.url}" target="_blank" rel="noopener">קישור</a>` : ''}</div>
-              </div>`;
+            // the exact same bubble content. Rebuilt via buildInfoContent() (not just set once
+            // here) since the region-outlier QC check only runs after ALL points have geocoded,
+            // and needs to refresh this content for points flagged only at that later point.
+            p.infoContent = buildInfoContent(p);
             p.marker.addListener('click', () => {
               sharedInfoWindow.setContent(p.infoContent);
               sharedInfoWindow.open(map, p.marker);
@@ -1559,6 +1821,7 @@ function geocodeAllPoints() {
           // this matters: the un-scaled circle was hugely oversized for a
           // small island).
           if (mainAreaCircle) mainAreaCircle.setRadius(regionRadiusCap());
+          runGeoQcSummary();
         }
       });
     }, i * 150);

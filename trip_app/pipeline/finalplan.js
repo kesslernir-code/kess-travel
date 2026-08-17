@@ -17,7 +17,8 @@ const SYSTEM_INSTRUCTIONS = `אתה מתכנן מסלול טיול יומי מו
 5. סדר את המקומות בתוך כל יום בסדר הגיוני לביקור (לפי קרבה/רצף).
 6. לכל יום: title (שם/נושא היום), intro (2-3 משפטים בעברית שמתארים את חווית היום, אפשר אימוג'י), route (מערך שמות המקומות — בדיוק כפי שהופיעו בקלט), ו-note אופציונלי (אזהרה/טיפ, למשל "יום עם נסיעה ארוכה" או "מתאים לילדים").
 7. מקומות מקטגוריית Food ביום — כלול ב-route וגם ב-restaurants (מערך שמות).
-8. **base לכל יום בנפרד — זו נקודת הלינה של אותו לילה הספציפי, לא בסיס אחיד לכל הטיול.** בטיול שנשאר באותה עיר לאורך כמה ימים, ה-base יחזור על עצמו. בטיול מתגלגל (רכב, כמה ערים) — ה-base של יום N הוא בעיר/אזור שהכי הגיוני ללון בו באותו לילה בהתחשב באיפה נמצאים באותו יום ולאן ממשיכים למחרת; אל תשאיר את כולם על אותה עיר-בסיס אם הטיול בפועל מתקדם גיאוגרפית. base הוא תמיד שם עיר/עיירה אמיתי (מהקלט או ידע כללי על האזור), לא שם של אתר/אטרקציה. אל תמציא מקומות שלא בקלט לגבי ה-route עצמו. dateLabel: תאריך קונקרטי אם ניתן לגזור מהקלט, אחרת "יום N".`;
+8. **base לכל יום בנפרד — זו נקודת הלינה של אותו לילה הספציפי, לא בסיס אחיד לכל הטיול.** בטיול שנשאר באותה עיר לאורך כמה ימים, ה-base יחזור על עצמו. בטיול מתגלגל (רכב, כמה ערים) — ה-base של יום N הוא בעיר/אזור שהכי הגיוני ללון בו באותו לילה בהתחשב באיפה נמצאים באותו יום ולאן ממשיכים למחרת; אל תשאיר את כולם על אותה עיר-בסיס אם הטיול בפועל מתקדם גיאוגרפית. base הוא תמיד שם עיר/עיירה אמיתי (מהקלט או ידע כללי על האזור), לא שם של אתר/אטרקציה. אל תמציא מקומות שלא בקלט לגבי ה-route עצמו. dateLabel: תאריך קונקרטי אם ניתן לגזור מהקלט, אחרת "יום N".
+9. **מקום עם isSleep=true הוא לינה רשמית שהמשתמש כבר בחר/הזמין בפועל (למשל מלון קונקרטי) — לא הצעה.** קבע את ה-base של היום שבו המקום הזה מבוקר בדיוק לשם העיר/עיירה של אותו מקום עצמו, ולא לעיר/עיירה חלופית שנראית הגיונית יותר. אם כמה מקומות מסומנים כך, כל אחד קובע את ה-base של הימים המתאימים לו לפי מיקומו הגיאוגרפי ברצף הימים.`;
 
 const PLAN_SCHEMA = {
   type: 'object',
@@ -48,7 +49,7 @@ const MODEL_NAME = 'gemini-flash-latest';
 const TIMEOUT_MS = 120000;
 
 function digest(selected) {
-  return selected.map((p) => ({ name: p.name, region: p.regionName, category: p.category, recommended: !!p.recommended }));
+  return selected.map((p) => ({ name: p.name, region: p.regionName, category: p.category, recommended: !!p.recommended, isSleep: !!p.isSleep }));
 }
 
 async function buildItinerary(selected, input, enrich, regionDays) {
@@ -68,7 +69,14 @@ async function buildItinerary(selected, input, enrich, regionDays) {
   const regionDaysNote = regionDays && Object.keys(regionDays).length
     ? `\n\nמספר ימים שנקבע ידנית לכל אזור (חובה לכבד במדויק -- סך הימים בכל האזורים אמור להתאים למספר הימים הכולל של הטיול):\n${JSON.stringify(regionDays)}`
     : '';
-  const prompt = `פרטי הטיול:\n${JSON.stringify(params)}${regionDaysNote}\n\nהמקומות שנבחרו (${selected.length}):\n${JSON.stringify(digest(selected))}`;
+  // Explicit call-out, same reasoning as regionDaysNote above: a constraint
+  // embedded only as one field per place in a long list is easy to miss --
+  // naming it separately makes it much more likely to actually be honored.
+  const manualSleepNames = selected.filter((p) => p.isSleep).map((p) => p.name);
+  const manualSleepNote = manualSleepNames.length
+    ? `\n\nמקומות שהמשתמש סימן במפורש כלינה רשמית שכבר הוזמנה בפועל (base של היום המתאים חייב להיות העיר/עיירה של המקום הזה עצמו, לא הצעה חלופית):\n${JSON.stringify(manualSleepNames)}`
+    : '';
+  const prompt = `פרטי הטיול:\n${JSON.stringify(params)}${regionDaysNote}${manualSleepNote}\n\nהמקומות שנבחרו (${selected.length}):\n${JSON.stringify(digest(selected))}`;
 
   const result = await callGeminiWithRetry(model, prompt, { timeoutMs: TIMEOUT_MS, timeoutLabel: 'Final-plan call' });
   return JSON.parse(result.response.text());

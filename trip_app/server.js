@@ -188,15 +188,29 @@ const server = http.createServer(async (req, res) => {
     let input;
     try { input = JSON.parse(fs.readFileSync(inputPath, 'utf-8')); } catch { sendJson(res, 404, { ok: false, error: 'trip input not found' }); return; }
 
-    // Reuse a prior itinerary/image pass if one's already on disk -- a retry
-    // of this request would otherwise silently re-pay for the itinerary
-    // Gemini call and redo the 25-30 min sequential image-fetch pass, even
-    // though runFinalPlanStage already knows how to skip both when reused.
-    const reuseItinerary = fs.existsSync(path.join(dir, `${folderName}_itinerary.json`));
+    // Images: always reuse whatever's already resolved by name -- redoing
+    // the 25-30 min sequential image pass for places that already have a
+    // photo would be pure waste regardless of why this request fired.
     const reuseImages = fs.existsSync(path.join(dir, `${folderName}_selection.json`));
 
+    // Itinerary: only reuse if the confirmed selection is IDENTICAL to what
+    // was confirmed last time (same points, same isSleep designations) --
+    // that's a genuine retry (dropped response, resubmission) and re-paying
+    // for the same Gemini call would be pure waste. But a user intentionally
+    // returning to Tab 4 to add a point or lock in a real sleep location
+    // needs a real rebuild, not a stale itinerary that ignores the change --
+    // blindly reusing "because the file exists" would silently ignore
+    // exactly the update they came back to make.
+    let reuseItinerary = false;
+    try {
+      const itineraryPath = path.join(dir, `${folderName}_itinerary.json`);
+      const prevSelection = JSON.parse(fs.readFileSync(path.join(dir, `${folderName}_selection.json`), 'utf-8'));
+      const selectionKey = (pts) => pts.map((p) => `${p.name}|${!!p.isSleep}`).sort().join(',');
+      reuseItinerary = fs.existsSync(itineraryPath) && selectionKey(prevSelection.selected || []) === selectionKey(body.points);
+    } catch { /* no prior selection -- nothing to compare, definitely rebuild */ }
+
     sendJson(res, 200, { ok: true, message: 'final plan started' });
-    runFinalPlanStage(folderName, input, body.points, log, { regionDays: body.regionDays || {}, reuseItinerary, reuseImages })
+    runFinalPlanStage(folderName, input, body.points, log, { regionDays: body.regionDays || {}, reuseItinerary, reuseImages, serverPort: PORT })
       .then(() => {
         // Auto-publish: once a plan is actually finished, push the updated
         // static viewer live so the phone/other-device copy reflects it

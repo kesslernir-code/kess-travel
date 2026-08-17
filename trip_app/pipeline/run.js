@@ -194,9 +194,14 @@ async function runFinalPlanStage(destination, input, clientPoints, onProgress, o
 
   // Look up each clicked point's full place object by name (the map's `name`
   // field is copied verbatim from the plan, so this is an exact match).
+  // isSleep is a client-only concept (the user manually toggled it) that
+  // doesn't exist on the mined place object, so it's attached here rather
+  // than looked up.
   const byName = {};
   for (const r of plan.regions) for (const p of r.places) byName[p.name] = { ...p, regionName: r.name };
-  let selected = clientPoints.map((cp) => byName[cp.name]).filter(Boolean);
+  let selected = clientPoints
+    .map((cp) => (byName[cp.name] ? { ...byName[cp.name], isSleep: !!cp.isSleep } : null))
+    .filter(Boolean);
   if (!selected.length) throw new Error('None of the confirmed points matched a place in the master plan.');
 
   // Re-attach previously-resolved images by name, if reusing and available --
@@ -233,14 +238,21 @@ async function runFinalPlanStage(destination, input, clientPoints, onProgress, o
   const fallbackImg = enrich._fallbackImg || ((enrich.highlights || []).find((h) => h.image) || {}).image || null;
   selected.forEach((p) => { if (!p.image) p.image = fallbackImg; });
 
-  // Persist images alongside the selection now, so a future render-only retry
-  // (opts.reuseImages) never has to redo this pass again.
-  writeJson(dir, `${destination}_selection.json`, { destination, confirmedAt: nowStamp(), selectedCount: selected.length, selected: selected.map((p) => ({ name: p.name, region: p.regionName, category: p.category, recommended: !!p.recommended, image: p.image || null })) });
+  // Persist images (and isSleep) alongside the selection now, so a future
+  // render-only retry (opts.reuseImages) never has to redo the image pass
+  // again, and a returning visit to Tab 4 can show which points were
+  // marked as official sleep bases last time.
+  const savedSelected = selected.map((p) => ({ name: p.name, region: p.regionName, category: p.category, recommended: !!p.recommended, image: p.image || null, isSleep: !!p.isSleep }));
+  writeJson(dir, `${destination}_selection.json`, { destination, confirmedAt: nowStamp(), selectedCount: selected.length, selected: savedSelected });
 
   log('== rendering final plan ==');
   writeText(dir, `${destination}_Final_Map.html`, renderFinalMap(plan, enrich, input, selection, itinerary));
   writeText(dir, `${destination}_Final_Showcase.html`, renderFinalShowcase(input.destination || destination, enrich, itinerary, selection));
   writeText(dir, `${destination}_Checklist.html`, renderChecklist(input.destination || destination, itinerary, selection));
+  // Also refresh Tab 4 itself -- a user returning to "update the trip" should
+  // see their actual last confirmed selection (and sleep designations)
+  // reflected, not a reset-to-blank "everything checked" master list.
+  writeText(dir, `${destination}_Route_Map.html`, renderRouteMap(plan, enrich, input, opts.serverPort || 8234, savedSelected));
   writeText(dir, `${destination}_KESSLER_TRIP.html`, renderDashboard(destination, input, { 2: true, 3: true, 4: true, 5: true, 6: true, 7: true }));
 
   log(`final plan done: ${itinerary.days.length}-day itinerary`);

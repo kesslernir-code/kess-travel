@@ -34,6 +34,9 @@
   .poi-row .dot { flex: 0 0 auto; cursor: pointer; }
   .poi-row .poi-name { flex: 1 1 auto; cursor: pointer; }
   .sleep-tag { font-size: 10px; background: #1a1a4e; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
+  .sleep-toggle { flex: 0 0 auto; font-size: 13px; padding: 1px 5px; border-radius: 4px; border: 1.5px solid #ccc; background: #fff; cursor: pointer; opacity: 0.45; line-height: 1.4; }
+  .sleep-toggle.active { opacity: 1; border-color: #1a1a4e; background: #eef0fa; }
+  .sleep-toggle:hover { opacity: 0.8; }
   .rec-tag { font-size: 10px; background: #b8860b; color: #fff; border-radius: 4px; padding: 1px 5px; margin-inline-start: 4px; flex-shrink: 0; }
   .rec-star { font-size: 12px; margin-inline-start: 4px; flex-shrink: 0; }
   #confirmBtn { width: 100%; margin-top: 16px; padding: 12px; font-size: 15px; font-weight: bold; background: #1a7a3c; color: white; border: none; border-radius: 6px; cursor: pointer; position: sticky; bottom: 0; }
@@ -133,7 +136,9 @@ const REGIONS = [
         "rec": true,
         "desc": "בירת רומניה, המרכז הכלכלי והתרבותי הגדול במדינה. העיר משלבת בין סגנונות בל אפוק וניאו-קלאסי ('פריז של המזרח') לבין שדרות ומונומנטים מתקופת הרודנות הקומוניסטית, וכוללת עיר עתיקה שוקקת חיים, בתי קפה מעולים ומוזיאונים מרכזיים.",
         "source": "lonelyplanet.com / nomadicmatt.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "bucharestoldtown2",
@@ -143,7 +148,9 @@ const REGIONS = [
         "rec": true,
         "desc": "הרובע ההיסטורי המרוצף באבן ששימש כרובע הסוחרים הימי-ביניימי של הבירה. האזור שופץ ומהווה את הלב הפועם של חיי הלילה, מלא בסמטאות להולכי רגל, מסעדות שף, בתי קפה ומבנים היסטוריים.",
         "source": "lonelyplanet.com / ricksteves.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "palaceofparliament3",
@@ -153,7 +160,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מבנה ענק שהוקם בעלות של מיליארדי דולרים כמונומנט לפולחן האישיות של הרודן ניקולאה צ'אושסקו. נחשב לאחד המבנים המנהליים הגדולים בעולם וכולל מעל אלף חדרים מפוארים, אולמות נשפים ואת הפרלמנט הרומני.",
         "source": "lonelyplanet.com / ricksteves.com / atlasobscura.com / nomadicmatt.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "romanianathenaeum4",
@@ -163,7 +172,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אולם קונצרטים ומבנה נאו-קלאסי מפואר שנחנך בשנת 1888 בתכנון האדריכל אלברט גלרון. המבנה כולל עמודי שיש דוריים, פרסקו היסטורי באורך 70 מטרים ומשמש משכנה של התזמורת הפילהרמונית ג'ורג'ה אנסקו.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "caleavictoriei5",
@@ -173,7 +184,9 @@ const REGIONS = [
         "rec": false,
         "desc": "שדרה מרכזית ואלגנטית המדגימה את תקופת הבל אפוק של בוקרשט, שלאורכה ארמונות, מוזיאונים, מלונות יוקרה ומבנים בסגנון אדריכלות צרפתית.",
         "source": "ricksteves.com",
-        "url": "https://ricksteves.com"
+        "url": "https://ricksteves.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "revolutionsquare6",
@@ -183,7 +196,9 @@ const REGIONS = [
         "rec": true,
         "desc": "הכיכר המרכזית שבה התחוללה המהפכה העממית בסוף 1989 שהביאה להפלת שלטונו של צ'אושסקו. במקום ניצבת אנדרטת הלידה מחדש להנצחת הנספים במאבק.",
         "source": "ricksteves.com / atlasobscura.com / nomadicmatt.com",
-        "url": "https://ricksteves.com"
+        "url": "https://ricksteves.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "thermebucharest7",
@@ -193,7 +208,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מתחם בריכות וספא מקורה ענק ומתקדם, הכולל בריכות מים תרמיים, מגלשות, סאונות ייחודיות ומיטות מים לעיסוי והרפיה.",
         "source": "purewander.com",
-        "url": "https://purewander.com"
+        "url": "https://purewander.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "curteavechechurch8",
@@ -203,7 +220,9 @@ const REGIONS = [
         "rec": true,
         "desc": "שרידי חצר הנסיכות הישנה מימי הביניים שהוקמה על ידי ולאד המשפד (דרקולה), לצד כנסיית סנט אנטון העתיקה.",
         "source": "atlasobscura.com / wikiloc.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "arculdetriumf9",
@@ -213,7 +232,9 @@ const REGIONS = [
         "rec": false,
         "desc": "שער ניצחון מונומנטלי המוקדש לניצחון חיילי רומניה במלחמת העולם הראשונה, המציע תצפית רחבה על שדרות העיר.",
         "source": "atlasobscura.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "springpalacepalatulprimv10",
@@ -223,7 +244,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אחוזת המגורים המפוארת של הרודן ניקולאה צ'אושסקו ברובע פרימוורי, המציגה את אורח החיים הראוותני של המשפחה השלטת.",
         "source": "lonelyplanet.com / nomadicmatt.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "dimitriegustinationalvil11",
@@ -233,7 +256,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מוזיאון פתוח אתנוגרפי על שפת אגם הראסטראו, המציג מאות בתי עץ אותנטיים, כנסיות ומשקי חווה מכל רחבי רומניה.",
         "source": "nomadicmatt.com",
-        "url": "https://nomadicmatt.com"
+        "url": "https://nomadicmatt.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "crtureticarusel12",
@@ -243,7 +268,9 @@ const REGIONS = [
         "rec": false,
         "desc": "חנות ספרים מרהיבה בת שש קומות השוכנת במבנה מהמאה ה-19 בעיר העתיקה, בעלת מרפסות עקלקלות לבנות ועיצוב פנים מרשים.",
         "source": "atlasobscura.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "carucubere13",
@@ -253,7 +280,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מבשלת בירה ומסעדה היסטורית מהמפורסמות ברומניה, השוכנת במבנה נאו-גותי מרשים ומגישה אוכל רומני מסורתי.",
         "source": "lonelyplanet.com / atlasobscura.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "cimigiugarden14",
@@ -263,7 +292,9 @@ const REGIONS = [
         "rec": false,
         "desc": "הפארק הציבורי העתיק ביותר בבוקרשט, הכולל אגם מלאכותי, פינות ישיבה מוצלות וגשרים רומנטיים בלב העיר.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "lakeherstrukingmihaiipar15",
@@ -273,7 +304,9 @@ const REGIONS = [
         "rec": false,
         "desc": "פארק רחב ידיים ואגם בצפון העיר המוקף וילות יוקרתיות, מסעדות ומוזיאונים מרכזיים.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "vcretinaturepark16",
@@ -283,7 +316,9 @@ const REGIONS = [
         "rec": false,
         "desc": "שמורת טבע ודלתה עירונית ייחודית שנוצרה באופן טבעי בתוך שטח מאגר מים נטוש בלב בוקרשט.",
         "source": "atlasobscura.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "museumoftheromanianpeasa17",
@@ -293,7 +328,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מוזיאון אתנוגרפי עטור פרסים המציג את ההיסטוריה, הפולקלור, התלבושות והאמנות הכפרית של רומניה.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "mnac18",
@@ -303,7 +340,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מוזיאון לאמנות עכשווית הממוקם בחלק ממבנה ארמון הפרלמנט העצום ומציג תערוכות מתחלפות.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "ceccecbankpalace19",
@@ -313,7 +352,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מבנה מונומנטלי מרשים בסגנון בוז-אר עם כיפת זכוכית ומתכת על שדרת קאליה ויקטוריי.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "nationalhistorymuseum20",
@@ -323,7 +364,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מוזיאון היסטורי מרכזי המציג ממצאים מתקופת דאקיה והאימפריה הרומית, כולל שחזור מדויק של עמוד טראיאנוס.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "mogooaiapalace21",
@@ -333,7 +376,9 @@ const REGIONS = [
         "rec": false,
         "desc": "ארמון היסטורי מהמאה ה-17 בסגנון ברנקובניאני ייחודי, הממוקם על שפת אגם צפונית לבוקרשט ומוקף גנים מטופחים.",
         "source": "atlasobscura.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "snagovmonastery22",
@@ -343,7 +388,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מנזר מבודד השוכן על אי בלב אגם סנאגוב מצפון לבוקרשט, המזוהה לפי המסורת כמקום קבורתו של ולאד המשפד.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "kaiamo23",
@@ -353,7 +400,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מסעדת קונספט קולינרית מודרנית בבוקרשט המציעה פרשנות חדשנית למטבח הרומני בגישת Farm-to-table.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "noua24",
@@ -363,7 +412,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מסעדת שף מובילה בבירה המציעה מטבח רומני עכשווי המבוסס על חומרי גלם מקומיים מובחרים.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "kan25",
@@ -373,7 +424,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מסעדת פיין דיינינג המציגה תפריטי טעימות מודרניים של מטבח רומני יצירתי.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "pasajulmaccavillacrosse26",
@@ -383,7 +436,9 @@ const REGIONS = [
         "rec": false,
         "desc": "ארקדה מקורה ומרשימה בבוקרשט המעוטרת בחלונות ויטראז' צהובים וכוללת בתי קפה וברים נעימים.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "stavropoleoschurch27",
@@ -393,7 +448,9 @@ const REGIONS = [
         "rec": false,
         "desc": "כנסייה אורתודוקסית מהמאה ה-18 בסגנון ברנקובניאני, הידועה בחצר פנימית שלווה עם קשתות מגולפות באבן.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "romanianpatriarchalcathe28",
@@ -403,7 +460,9 @@ const REGIONS = [
         "rec": false,
         "desc": "קתדרלה שנבנתה במאה ה-17 על גבעת המיטרופוליה ומשמשת כמרכז הכנסייה האורתודוקסית הרומנית.",
         "source": "nomadicmatt.com",
-        "url": "https://nomadicmatt.com"
+        "url": "https://nomadicmatt.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "bellucemetery29",
@@ -413,7 +472,9 @@ const REGIONS = [
         "rec": false,
         "desc": "בית קברות היסטורי ומונומנטלי המשמש כפנתיאון הלאומי של רומניה, שבו קבורים סופרים, אמנים ומנהיגים.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "laculmorii30",
@@ -423,7 +484,9 @@ const REGIONS = [
         "rec": true,
         "desc": "האגם הגדול ביותר בבוקרשט המציע שבילי הליכה וריצה פתוחים וטיילת שקיעה נעימה.",
         "source": "wikiloc.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "comanapark31",
@@ -433,7 +496,9 @@ const REGIONS = [
         "rec": false,
         "desc": "שמורת טבע ויער מדרום לבוקרשט המציעה שבילי רכיבה על אופניים, שיט בביצות ופעילויות בטבע.",
         "source": "wikiloc.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       }
     ]
   },
@@ -448,7 +513,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אחת הערים השמורות והמתוירות ביותר ברומניה, השוכנת למרגלות הרי הקרפטים. העיר כוללת מרכז סקסוני ימי-ביניימי מוקף חומות, כיכר שוק ציורית, מסעדות מעולות ושער יציאה מעולה לטירות ומסלולי טבע.",
         "source": "lonelyplanet.com / ricksteves.com / nomadicmatt.com / balkantrails.com / purewander.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "brancastle33",
@@ -458,7 +525,9 @@ const REGIONS = [
         "rec": true,
         "desc": "המבצר הימי-ביניימי הניצב על צוק סלעי בבראן, הידוע בעולם כמקור ההשראה לטירת דרקולה של בראם סטוקר. הטירה כוללת חדרים תקופתיים, מעברים סודיים ותערוכות על בית המלוכה הרומני.",
         "source": "lonelyplanet.com / ricksteves.com / atlasobscura.com / timeout.com / nomadicmatt.com / wikiloc.com / romanianfriend.com / balkantrails.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "pelecastle34",
@@ -468,7 +537,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מעון הקיץ המלכותי המפואר של המלך קרול הראשון בסינאיה. נחשבת לאחת הטירות היפות והמרשימות באירופה, עם אדריכלות נאו-רנסאנסית, חדר נשק עשיר, גנים מטופחים ועיטורי עץ יוקרתיים.",
         "source": "lonelyplanet.com / ricksteves.com / atlasobscura.com / nomadicmatt.com / balkantrails.com / purewander.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "blackchurchbisericaneagr35",
@@ -478,7 +549,9 @@ const REGIONS = [
         "rec": true,
         "desc": "הכנסייה הגותית הגדולה ביותר ברומניה, שנבנתה במאה ה-14 בבראשוב. שמה ניתן לה לאחר שקירותיה הושחרו בשריפה הגדולה של 1689. היא מכילה עוגב ענק מהמאה ה-19 ואוסף נדיר של שטיחים אנטוליים.",
         "source": "lonelyplanet.com / atlasobscura.com / nomadicmatt.com / romanianfriend.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "rnovfortress36",
@@ -488,7 +561,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מבצר צלבני-טבטוני מהמאה ה-13 השוכן על ראש גבעה סלעית מעל העיירה רשנוב. המתחם תיפקד כעיר מקלט קהילתית מבוצרת ומציע תצפית פנורמית על הרי בוצ'ג'י.",
         "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "piatracraiuluinationalpa37",
@@ -498,7 +573,9 @@ const REGIONS = [
         "rec": true,
         "desc": "פארק לאומי דרמטי המתאפיין ברכס אבן גיר צר ומשונן באורך 25 ק\"מ. האזור מציע טרקים אלפיניים מאתגרים, קניונים עמוקים, יערות עשירים בדובי בר ובקתות הרים ציוריות.",
         "source": "lonelyplanet.com / romanianfriend.com / balkantrails.com / purewander.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "zrnetigorgesprpstiilezrn38",
@@ -508,7 +585,9 @@ const REGIONS = [
         "rec": true,
         "desc": "קניון סלעי צר ומרהיב המוקף מצוקי גיר אנכיים גבוהים, המהווה את אחד ממסלולי ההליכה הפופולריים ביותר בפיאטרה קראיולוי.",
         "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "libeartybearsanctuary39",
@@ -518,7 +597,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מקלט הדובים החומים הגדול בעולם הממוקם ביערות זרנשט, המשמש בית מוגן למעל 100 דובים שניצלו מתנאי שבי קשים.",
         "source": "balkantrails.com",
-        "url": "https://balkantrails.com"
+        "url": "https://balkantrails.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "sevenladderscanyon40",
@@ -528,7 +609,9 @@ const REGIONS = [
         "rec": true,
         "desc": "קניון צר ברכס פיאטרה מארה ליד בראשוב, המאפשר טיפוס חווייתי לצד מפלים שוצפים באמצעות סדרת סולמות וגשרוני מתכת.",
         "source": "wikiloc.com / romanianfriend.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "bucegimountainssphinxbab41",
@@ -538,7 +621,9 @@ const REGIONS = [
         "rec": true,
         "desc": "רכס הרים פראי בעמק פראחובה הנגיש ברכבל מסינאיה או בושטני. על הרמה הגבוהה ניצבות תצורות סלע מפורסמות שפוסלו על ידי הרוח והטבע, וכן שבילים לפסגת אומו.",
         "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com / balkantrails.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "mounttmpa42",
@@ -548,7 +633,9 @@ const REGIONS = [
         "rec": true,
         "desc": "הר המתנשא ישירות מעל העיר בראשוב ומציע תצפית פנורמית מרהיבה על העיר העתיקה לצד השלט המפורסם 'Brașov'. העלייה אפשרית ברגל או ברכבל.",
         "source": "nomadicmatt.com / wikiloc.com / balkantrails.com",
-        "url": "https://nomadicmatt.com"
+        "url": "https://nomadicmatt.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "piaasfatului43",
@@ -558,7 +645,9 @@ const REGIONS = [
         "rec": true,
         "desc": "הכיכר המרכזית בלב העיר העתיקה של בראשוב, המוקפת מבנים סקסוניים צבעוניים ובמרכזה בית המועצה ההיסטורי.",
         "source": "lonelyplanet.com / nomadicmatt.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "stradasforii44",
@@ -568,7 +657,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אחת הסמטאות הצרות ביותר באירופה, שרוחבה נע בין 111 ל-135 ס\"מ, ששימשה במקור כמעבר חירום לכבאים בבראשוב.",
         "source": "atlasobscura.com / nomadicmatt.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "sinaia45",
@@ -578,7 +669,9 @@ const REGIONS = [
         "rec": true,
         "desc": "עיירת נופש הררית יוקרתית בעמק פראחובה, ששימשה כעיירת הקיץ של משפחת המלוכה הרומנית ומשמשת מרכז לסקי ולטיולים.",
         "source": "lonelyplanet.com / balkantrails.com / purewander.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "poianabraov46",
@@ -588,7 +681,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אתר הסקי והנופש ההררי הפופולרי ביותר ברומניה, השוכן 12 ק\"מ מעל העיר בראשוב ומציע מסלולי סקי, רכיבת אופניים ומלונות נופש.",
         "source": "wikiloc.com / balkantrails.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "mgura47",
@@ -598,7 +693,9 @@ const REGIONS = [
         "rec": true,
         "desc": "כפר הררי פסטורלי ושליו בתוך הפארק הלאומי פיאטרה קראיולוי, המציע נופי מרעה ירוקים, בקתות מסורתיות ושקט כפרי מוחלט.",
         "source": "wikiloc.com / purewander.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "cabanacurmtura48",
@@ -608,7 +705,9 @@ const REGIONS = [
         "rec": true,
         "desc": "בקתת הרים מסורתית ואהובה ברכס פיאטרה קראיולוי, המהווה צומת שבילים מרכזי למטיילים ומציעה ארוחות חמות ולינה.",
         "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "cantacuzinocastle49",
@@ -618,7 +717,9 @@ const REGIONS = [
         "rec": false,
         "desc": "טירה מרשימה בסגנון נאו-רומני בעיירה בושטני, המוקפת גנים ומזרקות עם נוף ישיר למצוקי הרי בוצ'ג'י.",
         "source": "romanianfriend.com",
-        "url": "https://romanianfriend.com"
+        "url": "https://romanianfriend.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "ciucamountains50",
@@ -628,7 +729,9 @@ const REGIONS = [
         "rec": true,
         "desc": "רכס הרים פוטוגני ליד בראשוב הידוע בתצורות סלע קרסטיות מרהיבות, עמקים ירוקים ומסלולי הליכה נוחים.",
         "source": "romanianfriend.com",
-        "url": "https://romanianfriend.com"
+        "url": "https://romanianfriend.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "prejmerfortifiedchurch51",
@@ -638,7 +741,9 @@ const REGIONS = [
         "rec": false,
         "desc": "כנסייה סקסונית מבוצרת במיוחד שהוכרזה כאתר מורשת עולמית של אונסק\"ו, בעלת חומות מגן עבות ומאות תאי מגורים לתושבי הכפר בעת מצור.",
         "source": "romanianfriend.com",
-        "url": "https://romanianfriend.com"
+        "url": "https://romanianfriend.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "sergiana52",
@@ -648,7 +753,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מסעדה מסורתית מובילה בבראשוב השוכנת במרתף לבנים עתיק ומגישה מאכלים טרנסילבניים, רומניים והונגריים עשירים.",
         "source": "purewander.com",
-        "url": "https://purewander.com"
+        "url": "https://purewander.com",
+        "checked": true,
+        "isSleep": false
       }
     ]
   },
@@ -663,7 +770,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אחת הערים היפות ברומניה ובירת התרבות האירופית לשעבר. מרכזה ההיסטורי מאופיין בסמטאות אבן, כיכרות מרשימות, חומות ימי-ביניימיות וגגות בעלי חלונות ייחודיים הידועים כ'עיניים של סיביו'.",
         "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com / balkantrails.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "sighioara54",
@@ -673,7 +782,9 @@ const REGIONS = [
         "rec": true,
         "desc": "עיר מצודה ימי-ביניימית שמורה במלואה שהוכרזה כאתר מורשת עולמית של אונסק\"ו. העיר מתאפיינת ברחובות מרוצפי אבן, בתים צבועים בגוני פסטל, מגדלי שמירה ומגדל שעון מפורסם, ומוכרת כמקום הולדתו של ולאד המשפד.",
         "source": "lonelyplanet.com / ricksteves.com / nomadicmatt.com / winetravelguides.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "transfgranlakeblea55",
@@ -683,7 +794,9 @@ const REGIONS = [
         "rec": true,
         "desc": "כביש נופי מפותל והרפתקני החוצה את הרי פגראש בגובה מעל 2,000 מטר, ומגיע אל אגם בלאה הקרחוני. נחשב לאחד מנתיבי הנסיעה היפים בעולם (פתוח בקיץ ובסתיו).",
         "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com / balkantrails.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "corvincastlecastelulcorv56",
@@ -693,7 +806,9 @@ const REGIONS = [
         "rec": true,
         "desc": "טירה גותית-רנסנסית מונומנטלית בחונדוארה, הנחשבת למבצר הימי-ביניימי המרשים ביותר ברומניה, עם גשר מתרומם, צריחים נישאים ואולמות אבירים.",
         "source": "lonelyplanet.com / atlasobscura.com / romanianfriend.com / balkantrails.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "fgramountainsmoldoveanup57",
@@ -703,7 +818,9 @@ const REGIONS = [
         "rec": true,
         "desc": "הרכס הגבוה ביותר ברומניה הכולל את הפסגה הגבוהה במדינה (מולדובאנו, 2,544 מ') ואגמים קרחוניים מרהיבים, המהווים גן עדן לטרקים ומטפסי הרים.",
         "source": "nomadicmatt.com / wikiloc.com / romanianfriend.com",
-        "url": "https://nomadicmatt.com"
+        "url": "https://nomadicmatt.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "astranationalmuseumcompl58",
@@ -713,7 +830,9 @@ const REGIONS = [
         "rec": true,
         "desc": "המוזיאון הפתוח הגדול באירופה, המשתרע על פני עשרות דונמים ביער מדרום לסיביו ומציג מאות טחנות רוח ומים, בתי חווה ובתי מלאכה מסורתיים.",
         "source": "lonelyplanet.com / nomadicmatt.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "biertanfortifiedchurch59",
@@ -723,7 +842,9 @@ const REGIONS = [
         "rec": true,
         "desc": "כנסייה גותית מבוצרת ומוקפת שלוש חומות הגנה בכפר בירטאן, אתר מורשת עולמית של אונסק\"ו המייצג את המורשת הסקסונית של טרנסילבניה.",
         "source": "lonelyplanet.com / romanianfriend.com / balkantrails.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "viscri60",
@@ -733,7 +854,9 @@ const REGIONS = [
         "rec": true,
         "desc": "כפר סקסוני אותנטי ומשומר בעל כנסייה מבוצרת של אונסק\"ו, בתי חווה מסורתיים ופרויקטים לשימור מורשת הנתמכים על ידי המלך צ'ארלס השלישי.",
         "source": "lonelyplanet.com / wikiloc.com / romanianfriend.com / balkantrails.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "brukenthalnationalmuseum61",
@@ -743,7 +866,9 @@ const REGIONS = [
         "rec": true,
         "desc": "המוזיאון הוותיק ביותר ברומניה, השוכן בארמון בארוקי בכיכר פיאצה מארה בסיביו ומציג אוספי אמנות אירופית ורומנית יקרי ערך.",
         "source": "nomadicmatt.com / balkantrails.com",
-        "url": "https://nomadicmatt.com"
+        "url": "https://nomadicmatt.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "bridgeoflies62",
@@ -753,7 +878,9 @@ const REGIONS = [
         "rec": true,
         "desc": "גשר הברזל היצוק הראשון ברומניה, הממוקם בעיר העתיקה של סיביו וקשור באגדות מקומיות לפיהן הגשר יקרוס אם ייאמר עליו שקר.",
         "source": "atlasobscura.com / nomadicmatt.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "clocktower63",
@@ -763,7 +890,9 @@ const REGIONS = [
         "rec": true,
         "desc": "סמלה של מצודת סיגישוארה מהמאה ה-14, הכולל גג רעפים צבעוני, מנגנון בובות עץ מכני ותצפית פנורמית על העיר.",
         "source": "lonelyplanet.com / atlasobscura.com / romanianfriend.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "albaiuliacitadel64",
@@ -773,7 +902,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מצודת כוכב ענקית ושמורה היטב בסגנון וובאן, שבה הוכרז איחוד רומניה ב-1918, הכוללת שערים מונומנטליים, קתדרלות וטקסי חילופי משמר.",
         "source": "romanianfriend.com / winetravelguides.com",
-        "url": "https://romanianfriend.com"
+        "url": "https://romanianfriend.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "poenarifortress65",
@@ -783,7 +914,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מבצר הררי תלול על ראש צוק מעל עמק ארג'ש, ששימש כמעוזו ההיסטורי האותנטי של ולאד המשפד ודורש טיפוס של 1,480 מדרגות.",
         "source": "atlasobscura.com / romanianfriend.com / balkantrails.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "curteadeargemonastery66",
@@ -793,7 +926,9 @@ const REGIONS = [
         "rec": false,
         "desc": "קתדרלה מהמאה ה-16 בעלת אדריכלות ייחודית וצריחים מפותלים, המשמשת כמקום קבורתם של מלכי רומניה.",
         "source": "atlasobscura.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "mrginimeasibiului67",
@@ -803,7 +938,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אזור כפרים ציוריים למרגלות הרי קינדרל ליד סיביו, הידוע בשימור מסורות רועים, גבינות מקומיות משובחות ואירוח כפרי.",
         "source": "romanianfriend.com",
-        "url": "https://romanianfriend.com"
+        "url": "https://romanianfriend.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "casteljidvei68",
@@ -813,7 +950,9 @@ const REGIONS = [
         "rec": true,
         "desc": "טירה מהמאה ה-16 ואחוזת יין בולטת באזור נהר טארנאבה, המפורסמת ביינות לבנים איכותיים ובסיורי טעימות במרתפיה ההיסטוריים.",
         "source": "winetravelguides.com",
-        "url": "https://winetravelguides.com"
+        "url": "https://winetravelguides.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "devacitadel69",
@@ -823,7 +962,9 @@ const REGIONS = [
         "rec": true,
         "desc": "שרידי מבצר היסטורי הניצב בראש הר געש כבוי מעל העיר דווה, אליו ניתן להעפיל ברכבל תלול.",
         "source": "lonelyplanet.com / atlasobscura.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "sarmizegetusaregia70",
@@ -833,7 +974,9 @@ const REGIONS = [
         "rec": true,
         "desc": "הבירה הצבאית, הדתית והפוליטית של ממלכת דאקיה הקדומה לפני הכיבוש הרומי, השוכנת בהרי אורשטיה ומוכרזת כאתר אונסק\"ו.",
         "source": "atlasobscura.com / romanianfriend.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       }
     ]
   },
@@ -848,7 +991,9 @@ const REGIONS = [
         "rec": true,
         "desc": "העיר הגדולה והחשובה ביותר בטרנסילבניה, מרכז תרבותי, אקדמי וטכנולוגי תוסס המציע אדריכלות היסטורית, בתי קפה מעולים וחיי לילה עשירים.",
         "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com / balkantrails.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "salinaturda72",
@@ -858,7 +1003,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מכרה מלח עתיק ועצום שהוסב לפארק שעשועים ומרכז בריאות תת-קרקעי עתידני, הכולל אגם עם סירות משוטים, גלגל ענק ומתקני ספורט בתוך אולמות מלח מוארים.",
         "source": "atlasobscura.com / nomadicmatt.com / romanianfriend.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "oradea73",
@@ -868,7 +1015,9 @@ const REGIONS = [
         "rec": true,
         "desc": "פנינה אדריכלית סמוך לגבול הונגריה, המפורסמת באוסף המבנים המרהיב שלה בסגנון ארט נובו וזצסיון וינאי שעברו שחזור קפדני.",
         "source": "lonelyplanet.com / wikiloc.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "apuseninaturalpark74",
@@ -878,7 +1027,9 @@ const REGIONS = [
         "rec": true,
         "desc": "פארק טבע מרהיב במערב הקרפטים המתאפיין בכפרי עץ מסורתיים, עמקי קרסט ומאות מערות נטיפים וקרח תת-קרקעיות.",
         "source": "romanianfriend.com",
-        "url": "https://romanianfriend.com"
+        "url": "https://romanianfriend.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "scrioaraicecave75",
@@ -888,7 +1039,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מערה טבעית בהרי אפוסני המכילה את אחד מקרחוני הקרסט התת-קרקעיים הגדולים בעולם, אליה יורדים במדרגות עץ אל עולם קפוא.",
         "source": "romanianfriend.com",
-        "url": "https://romanianfriend.com"
+        "url": "https://romanianfriend.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "peteraurilor76",
@@ -898,7 +1051,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מערת נטיפים שמורה להפליא שבה התגלו שלדים ומאובנים של מאות דובי מערות שחיו באזור בתקופת הקרח.",
         "source": "romanianfriend.com",
-        "url": "https://romanianfriend.com"
+        "url": "https://romanianfriend.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "cheileturzii77",
@@ -908,7 +1063,9 @@ const REGIONS = [
         "rec": true,
         "desc": "שמורת טבע מרשימה של קניון צר בעל מצוקי גיר תלולים המתנשאים לגובה מאות מטרים מעל נחל האשדאט, עם שבילי הליכה וגשרים תלויים.",
         "source": "wikiloc.com / romanianfriend.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "hoiabaciuforest78",
@@ -918,7 +1075,9 @@ const REGIONS = [
         "rec": true,
         "desc": "יער מסתורי סמוך לקלוז'-נאפוקה הידוע בעציו המפותלים בצורה מוזרה ובסיפורי פולקלור על תופעות על-טבעיות.",
         "source": "atlasobscura.com / nomadicmatt.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "blackeaglepalace79",
@@ -928,7 +1087,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מתחם ארכיטקטוני מרהיב בסגנון ארט נובו בכיכר אונירי שבאוראדיה, הכולל גלריית זכוכית מעוטרת בוויטראז'ים.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "alexandruborzabotanicalg80",
@@ -938,7 +1099,9 @@ const REGIONS = [
         "rec": false,
         "desc": "גן בוטני רחב ידיים שנוסד במאה ה-19, הכולל אלפי מיני צמחים, גן יפני אותנטי וחממות טרופיות.",
         "source": "nomadicmatt.com",
-        "url": "https://nomadicmatt.com"
+        "url": "https://nomadicmatt.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "untoldfestival81",
@@ -948,7 +1111,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אחד מפסטיבלי המוזיקה האלקטרונית הגדולים והמובילים באירופה, הנערך מדי קיץ במרכז קלוז'-נאפוקה.",
         "source": "lonelyplanet.com / romanianfriend.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "bilefelix82",
@@ -958,7 +1123,9 @@ const REGIONS = [
         "rec": false,
         "desc": "אתר נופש וספא תרמי מפורסם סמוך לאוראדיה המציע בריכות מים גיאותרמיים הפתוחות לאורך כל השנה.",
         "source": "romanianfriend.com",
-        "url": "https://romanianfriend.com"
+        "url": "https://romanianfriend.com",
+        "checked": true,
+        "isSleep": false
       }
     ]
   },
@@ -973,7 +1140,9 @@ const REGIONS = [
         "rec": true,
         "desc": "קבוצת מנזרים מבוצרים שהוכרזו כאתר מורשת עולמית של אונסק\"ו (כולל סוצ'ביצה, וורונץ, מולדובוצה והומור), המפורסמים בציורי קיר חיצוניים מרהיבים מהמאות ה-15 וה-16.",
         "source": "lonelyplanet.com / nomadicmatt.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "maramure84",
@@ -983,7 +1152,9 @@ const REGIONS = [
         "rec": true,
         "desc": "חבל ארץ צפוני וכפרי המשמר אורח חיים מסורתי וייחודי ברומניה, הידוע בשערי עץ מגולפים, לבוש מסורתי עממי, עמקים פסטורליים וכנסיות עץ מרשימות.",
         "source": "lonelyplanet.com / nomadicmatt.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "merrycemetery85",
@@ -993,7 +1164,9 @@ const REGIONS = [
         "rec": true,
         "desc": "בית קברות ייחודי בכפר ספנצה שבמרמורש, שבו מאות צלבי עץ צבועים בכחול עז מעוטרים בציורים נאיביים ובשירים הומוריסטיים המתארים את חיי הנפטרים.",
         "source": "ricksteves.com / romanianfriend.com",
-        "url": "https://ricksteves.com"
+        "url": "https://ricksteves.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "woodenchurchesofmaramure86",
@@ -1003,7 +1176,9 @@ const REGIONS = [
         "rec": true,
         "desc": "עשרות כנסיות עץ גותיות-אורתודוקסיות בעלות צריחים גבוהים ומחודדים וגגות רעפי עץ, שחלקן הוכרזו כאתרי מורשת עולמית של אונסק\"ו.",
         "source": "lonelyplanet.com / ricksteves.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "mocniasteamtrain87",
@@ -1013,7 +1188,9 @@ const REGIONS = [
         "rec": false,
         "desc": "נסיעה חווייתית ברכבת קיטור עתיקה הנוסעת על מסילה צרה לאורך עמק נהר הוואסר בהרי מרמורש הפראיים.",
         "source": "romanianfriend.com",
-        "url": "https://romanianfriend.com"
+        "url": "https://romanianfriend.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "sighetmemorialmuseum88",
@@ -1023,7 +1200,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מוזיאון הנצחה עוצמתי השוכן במבנה כלא פוליטי לשעבר בעיר סיגטו מרמאציאי, המוקדש לקורבנות המשטר הקומוניסטי וההתנגדות ברומניה.",
         "source": "atlasobscura.com / nomadicmatt.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "rodnamountains89",
@@ -1033,7 +1212,9 @@ const REGIONS = [
         "rec": true,
         "desc": "הפארק הלאומי והרכס האלפיני הגבוה והפראי ביותר בצפון הקרפטים הרומניים, המציע אגמים קרחוניים ופסגות נישאות מעל 2,300 מטר.",
         "source": "wikiloc.com / romanianfriend.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "ceahlumountainsredlake90",
@@ -1043,7 +1224,9 @@ const REGIONS = [
         "rec": true,
         "desc": "מסיב הררי דרמטי במזרח הקרפטים המאופיין בצוקים בולטים, מפלים שוצפים וקרבה לאגם האדום (Lacul Roșu) וקניון ביקאז.",
         "source": "wikiloc.com / romanianfriend.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "iai91",
@@ -1053,7 +1236,9 @@ const REGIONS = [
         "rec": false,
         "desc": "הבירה ההיסטורית של חבל מולדובה, עיר אלגנטית ותרבותית המציעה ארמונות מרשימים, כנסיות עתיקות ואוניברסיטאות מובילות.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "cotnariwineregion92",
@@ -1063,7 +1248,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אזור כרמים עתיק בגבעות מולדובה המפורסם מאז המאה ה-15 ביינות הקינוח הלבנים המסורתיים שלו ובסיורי יקבים היסטוריים.",
         "source": "winetravelguides.com",
-        "url": "https://winetravelguides.com"
+        "url": "https://winetravelguides.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "breb93",
@@ -1073,7 +1260,9 @@ const REGIONS = [
         "rec": false,
         "desc": "כפר מסורתי וציורי בעמק מארה שבמרמורש, המהווה מוקד למלאכות יד מסורתיות, נגרות עץ ואירוח כפרי אותנטי.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       }
     ]
   },
@@ -1088,7 +1277,9 @@ const REGIONS = [
         "rec": true,
         "desc": "שמורת הביוספרה ודלתת הנהר הגדולה והשמורה ביותר באירופה. גן עדן לצפרות ולטבע פראי הכולל מבוך תעלות, אגמים, איים צפים ומושבות שקנאים הגדולות באירופה.",
         "source": "lonelyplanet.com / nomadicmatt.com / romanianfriend.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "constana95",
@@ -1098,7 +1289,9 @@ const REGIONS = [
         "rec": true,
         "desc": "עיר הנמל והחוף הראשית של רומניה לחוף הים השחור, שנוסדה בעת העתיקה ומציעה מוזיאונים היסטוריים, טיילת חוף ומבנים ארכיטקטוניים מרשימים.",
         "source": "lonelyplanet.com / nomadicmatt.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "constanacasino96",
@@ -1108,7 +1301,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מבנה אר נובו איקוני ומפואר הניצב על שפת הים השחור בטיילת של קונסטנצה, שנחשב לאחד המונומנטים המפורסמים ברומניה.",
         "source": "atlasobscura.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "tulcea97",
@@ -1118,7 +1313,9 @@ const REGIONS = [
         "rec": false,
         "desc": "עיר נמל על גדות הדנובה המשמשת כשער הכניסה הראשי לסיורי שיט ולחקר שמורת דלתת הדנובה.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "leteaforest98",
@@ -1128,7 +1325,9 @@ const REGIONS = [
         "rec": false,
         "desc": "יער קדום ייחודי בדלתת הדנובה הגדל על דיונות חול, המפורסם בסוסי הבר החופשיים המשוטטים בו ובצמחייה הסובטרופית שבו.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "enisalafortresshistria99",
@@ -1138,7 +1337,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אתרים ארכיאולוגיים מרשימים בדוברוג'ה, הכוללים מצודה ימי-ביניימית של בני גנואה המשקיפה על הלגונות ושרידי עיר נמל יוונית-רומית עתיקה.",
         "source": "lonelyplanet.com / atlasobscura.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "guraportieivamaveche100",
@@ -1148,7 +1349,9 @@ const REGIONS = [
         "rec": false,
         "desc": "חופי רחצה בולטים על הים השחור – החל מרצועת חול שקטה ובתולית בין הלגונה לים בגורה פורטיציי ועד לחוף הבוהמי והתוסס בואמה וקה.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "sulinasfntugheorghe101",
@@ -1158,7 +1361,9 @@ const REGIONS = [
         "rec": false,
         "desc": "כפרי דייגים ועיירות חוף מבודדות בקצות ערוצי הדנובה, אליהם ניתן להגיע בשיט בלבד, המציעים חופי ים בתוליים ואווירה שלווה.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       }
     ]
   },
@@ -1173,7 +1378,9 @@ const REGIONS = [
         "rec": false,
         "desc": "קניון נהר הדנובה הדרמטי בגבול רומניה וסרביה, שבו נחצב בסלע צוק ענק בדמותו של המלך הדאקי דצ'באל, לצד מערות ומסלולי שיט במעוק הנהר.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "retezatnationalpark103",
@@ -1183,7 +1390,9 @@ const REGIONS = [
         "rec": true,
         "desc": "פארק לאומי אלפיני פראי בקרפטים הדרומיים, הכולל עשרות אגמים קרחוניים צלולים, יערות עתיקים ופסגות תלולות מעל 2,500 מטר.",
         "source": "wikiloc.com / romanianfriend.com",
-        "url": "https://wikiloc.com"
+        "url": "https://wikiloc.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "timioara104",
@@ -1193,7 +1402,9 @@ const REGIONS = [
         "rec": true,
         "desc": "העיר המרכזית בחבל באנאט, עיר בעלת היסטוריה עשירה וכיכרות רחבות ידיים, שהייתה מוקד פרוץ המהפכה הרומנית בשנת 1989.",
         "source": "lonelyplanet.com / winetravelguides.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "endlesscolumn105",
@@ -1203,7 +1414,9 @@ const REGIONS = [
         "rec": false,
         "desc": "פסל מונומנטלי מפורסם מעשה ידי הפסל קונסטנטין ברנקושי בעיר טרגו ז'יו, המהווה יצירת מופת של האמנות המודרנית להנצחת גיבורי רומניה.",
         "source": "lonelyplanet.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "transalpinadn67c106",
@@ -1213,7 +1426,9 @@ const REGIONS = [
         "rec": true,
         "desc": "כביש הנסיעה ההררי הסלול הגבוה ביותר ברומניה, החוצה את הרי פארנג בגובה שיא של 2,145 מטר ומציע נופים הרריים עוצרי נשימה.",
         "source": "lonelyplanet.com / romanianfriend.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "dealumarewineregion107",
@@ -1223,7 +1438,9 @@ const REGIONS = [
         "rec": true,
         "desc": "אזור כרמים וייצור יין מוביל במורדות הדרומיים של הקרפטים, המפורסם ביינות האדומים האיכותיים שלו (בעיקר פטסקה נגרה) ודרך היין של פראחובה.",
         "source": "lonelyplanet.com / winetravelguides.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "viatransilvanica108",
@@ -1233,7 +1450,9 @@ const REGIONS = [
         "rec": true,
         "desc": "שביל מסעות והליכה לאומי באורך 1,400 ק\"מ החוצה את רומניה מצפון לדרום (מפוטנה עד דרובטה-טורנו סברין) ועובר דרך קהילות כפריות ואתרי אונסק\"ו.",
         "source": "lonelyplanet.com / timeout.com / wikiloc.com",
-        "url": "https://lonelyplanet.com"
+        "url": "https://lonelyplanet.com",
+        "checked": true,
+        "isSleep": false
       },
       {
         "id": "bigrwaterfall109",
@@ -1243,7 +1462,9 @@ const REGIONS = [
         "rec": false,
         "desc": "מפל מים ייחודי בעמק מיניש הזורם על גבי סלע חרוטי המכוסה באזוב ירוק עשיר.",
         "source": "atlasobscura.com",
-        "url": "https://atlasobscura.com"
+        "url": "https://atlasobscura.com",
+        "checked": true,
+        "isSleep": false
       }
     ]
   }
@@ -1327,7 +1548,7 @@ function initMap() {
   directionsService = new google.maps.DirectionsService();
   // Single shared InfoWindow so opening a new bubble always closes any other open one.
   sharedInfoWindow = new google.maps.InfoWindow();
-  new google.maps.Circle({
+  mainAreaCircle = new google.maps.Circle({
     center: MAIN_CITY_LATLNG, radius: ONE_HOUR_DRIVE_M,
     strokeColor: '#c8a24a', strokeOpacity: 0.9, strokeWeight: 2,
     fillColor: '#c8a24a', fillOpacity: 0.06, map: map, clickable: false, zIndex: 1
@@ -1541,10 +1762,11 @@ function buildChecklist() {
       row.dataset.category = p.category;
       row.innerHTML = `
         <span class="dot" style="background:${CATEGORY_COLORS[p.category]}"></span>
-        <input type="checkbox" id="chk_${p.id}" checked>
+        <input type="checkbox" id="chk_${p.id}"${p.checked === false ? '' : ' checked'}>
         <span class="poi-name" dir="rtl" title="לחץ כדי למקד את המפה על המקום הזה">${p.name}</span>
         ${p.rec ? '<span class="rec-star" title="מומלץ">⭐</span>' : ''}
-        ${p.isSleep ? '<span class="sleep-tag">לינה</span>' : ''}
+        <span class="sleep-tag" style="display:${p.isSleep ? 'inline-block' : 'none'}">לינה</span>
+        <button type="button" class="sleep-toggle${p.isSleep ? ' active' : ''}" title="סמן/בטל כמקום לינה רשמי">🛏</button>
         ${p.rec ? '<span class="rec-tag">מומלץ</span>' : ''}
       `;
       container.appendChild(row);
@@ -1555,6 +1777,18 @@ function buildChecklist() {
       });
       row.querySelector('.poi-name').addEventListener('click', () => focusPoint(p));
       row.querySelector('.dot').addEventListener('click', () => focusPoint(p));
+      // Manually designate a point as an official overnight base -- sent to
+      // the server as isSleep, which buildItinerary now treats as a real
+      // constraint (place it as that night's base) rather than letting the
+      // AI pick freely, so a returning user can lock in the hotel they
+      // actually booked instead of hoping the itinerary agrees.
+      row.querySelector('.sleep-toggle').addEventListener('click', (e) => {
+        e.stopPropagation();
+        p.isSleep = !p.isSleep;
+        e.target.classList.toggle('active', p.isSleep);
+        row.querySelector('.sleep-tag').style.display = p.isSleep ? 'inline-block' : 'none';
+        if (p.marker) p.marker.setLabel(p.isSleep ? { text: '🛏', fontSize: '11px' } : null);
+      });
     });
   });
 }
@@ -1625,11 +1859,16 @@ function convexHullLatLng(points) {
 // A region circle must read as "a reasonable area to base yourself in", not a
 // shape that happens to enclose whatever's in that region -- a region with
 // far-flung points (e.g. Cluj-Napoca to Baia Mare) would otherwise draw a
-// circle spanning a huge chunk of the country. Capped at roughly a 1.5hr
-// driving radius regardless of how spread the region's actual points are.
-const MAX_REGION_RADIUS_M = 70000;
+// circle spanning a huge chunk of the country. A single flat cap doesn't
+// work across destination sizes though -- a real Corfu run showed a
+// 70km-radius circle (fine for a country-scale trip like Romania) dwarfing
+// the ENTIRE island, spilling into the sea and across into Albania. The cap
+// must scale with how big the destination actually is: see regionRadiusCap().
+const MAX_REGION_RADIUS_M = 70000; // absolute ceiling, for country-scale trips
+const MIN_REGION_RADIUS_M = 15000; // floor -- roughly a 30min drive, for small/dense destinations (an island)
 let regionOverlay;
 let allRegionOverlays = [];
+let mainAreaCircle; // the persistent "main city area" circle -- see geocodeAllPoints()'s completion handler
 function clearAllRegionOverlays() {
   allRegionOverlays.forEach(o => o.setMap(null));
   allRegionOverlays = [];
@@ -1640,13 +1879,66 @@ function clearAllRegionOverlays() {
 // around the farthest point, capped at MAX_REGION_RADIUS_M so a region with
 // far-flung points can't draw a circle spanning a huge chunk of the
 // country), one place to tune it instead of two independently-typed copies.
+// A "nearby islands / day trips" region can genuinely include a place that's
+// actually hundreds of km away (a real case: an extracted region for a Corfu
+// trip included a Greek island in a completely different sea as a "day
+// trip") -- averaging every point's location into one bounding box lets that
+// ONE outlier drag the whole region's circle into empty space between the
+// real cluster and the outlier, while the real nearby points end up sitting
+// outside the circle entirely. Reject points far from the rough (median,
+// not mean -- robust to a single wild value) center before computing the
+// real circle; fall back to all points if that would reject everything.
+// How big IS this whole destination, robustly? Using the farthest point
+// would be wrecked by the same kind of day-trip outlier computeRegionCircle
+// already guards against (a few distant-but-real islands don't make Corfu a
+// "large" destination) -- the 75th-percentile distance from the overall
+// center is dominated by the bulk of ordinary points and barely moves for a
+// minority of far-flung ones. Recomputed fresh each call (cheap, ~100s of
+// points) rather than cached, since geocoding finishes progressively and a
+// cached early result from a handful of geocoded points would be wrong.
+function destinationSpanM() {
+  const allLocs = REGIONS.flatMap(r => r.points.filter(p => p.location).map(p => p.location));
+  if (allLocs.length < 2) return MAX_REGION_RADIUS_M;
+  // Median lat/lng, NOT a bounding-box center -- a bounding box is wrecked by
+  // even one extreme outlier the same way computeRegionCircle's per-region
+  // box was. A real check on this fixed destination still showed genuinely
+  // local north-Corfu beaches (Sidari, Canal d'Amour) computed as ~280km
+  // from "center", because the raw bounds included one ~300km-away outlier
+  // (Naxos) and a bounding box's center shifts toward whatever it contains,
+  // one point or ten.
+  const lats = allLocs.map(l => l.lat()).sort((a, b) => a - b);
+  const lngs = allLocs.map(l => l.lng()).sort((a, b) => a - b);
+  const mid = Math.floor(allLocs.length / 2);
+  const center = new google.maps.LatLng(lats[mid], lngs[mid]);
+  const dists = allLocs.map(l => google.maps.geometry.spherical.computeDistanceBetween(center, l)).sort((a, b) => a - b);
+  return dists[Math.floor(dists.length * 0.75)];
+}
+
+// Scale the per-region cap to that: roughly 60% of the destination's own
+// core span, so a country-scale trip still gets the full 70km ceiling
+// (unchanged from before) while a small, dense destination like an island
+// gets a cap closer to a real "how far would you actually drive" distance.
+function regionRadiusCap() {
+  return Math.min(MAX_REGION_RADIUS_M, Math.max(MIN_REGION_RADIUS_M, destinationSpanM() * 0.6));
+}
+
 function computeRegionCircle(locs) {
+  let finalLocs = locs;
+  if (locs.length > 2) {
+    const lats = locs.map(l => l.lat()).sort((a, b) => a - b);
+    const lngs = locs.map(l => l.lng()).sort((a, b) => a - b);
+    const mid = Math.floor(locs.length / 2);
+    const roughCenter = new google.maps.LatLng(lats[mid], lngs[mid]);
+    const OUTLIER_LIMIT_M = 150000; // ~a reasonable day-trip radius
+    const kept = locs.filter(l => google.maps.geometry.spherical.computeDistanceBetween(roughCenter, l) <= OUTLIER_LIMIT_M);
+    if (kept.length) finalLocs = kept;
+  }
   const bounds = new google.maps.LatLngBounds();
-  locs.forEach(l => bounds.extend(l));
+  finalLocs.forEach(l => bounds.extend(l));
   const center = bounds.getCenter();
   let radius = 4000;
-  locs.forEach(l => { radius = Math.max(radius, google.maps.geometry.spherical.computeDistanceBetween(center, l) * 1.15); });
-  radius = Math.min(radius, MAX_REGION_RADIUS_M);
+  finalLocs.forEach(l => { radius = Math.max(radius, google.maps.geometry.spherical.computeDistanceBetween(center, l) * 1.15); });
+  radius = Math.min(radius, regionRadiusCap());
   return { center, radius };
 }
 
@@ -1684,13 +1976,14 @@ function showAllRegions() {
 function focusRegion(regionPoints, regionName) {
   if (regionName === MAIN_CITY_REGION) {
     if (regionOverlay) { regionOverlay.setMap(null); regionOverlay = null; }
+    const _mainRadius = regionRadiusCap();
     regionOverlay = new google.maps.Circle({
-      center: MAIN_CITY_LATLNG, radius: ONE_HOUR_DRIVE_M,
+      center: MAIN_CITY_LATLNG, radius: _mainRadius,
       strokeColor: '#1a5fb4', strokeOpacity: 0.85, strokeWeight: 2,
       fillColor: '#1a5fb4', fillOpacity: 0.12, map: map
     });
     map.fitBounds(regionOverlay.getBounds());
-    document.getElementById('status').textContent = 'האזור המרכזי — עיגול של כשעת נסיעה סביב ' + MAIN_CITY_NAME + '.';
+    document.getElementById('status').textContent = 'האזור המרכזי — עיגול של כ-' + Math.round(_mainRadius/1000) + ' ק\"מ סביב ' + MAIN_CITY_NAME + '.';
     return;
   }
   const locs = regionPoints.filter(p => p.location).map(p => p.location);
@@ -1720,7 +2013,10 @@ function geocodeAllPoints() {
   const status = document.getElementById('status');
   let done = 0;
   POINTS.forEach((p, i) => {
-    p.checked = true;
+    // A returning visit to this tab (a trip that already has a final plan)
+    // injects real checked/isSleep values reflecting the LAST confirmed
+    // selection -- don't stomp that back to "everything checked" here.
+    if (p.checked === undefined) p.checked = true;
     // Stagger requests slightly to stay well under geocoding rate limits
     setTimeout(() => {
       // componentRestrictions locks results to Italy the country (ISO "IT") -- without this,
@@ -1778,6 +2074,13 @@ function geocodeAllPoints() {
           const failed = POINTS.filter(x => x.geocodeFailed);
           status.textContent = 'מוכן. סמן/הסר נקודות ולחץ על אישור.' + (failed.length ? ` (${failed.length} לא אותרו: ${failed.map(f=>f.name).join(', ')})` : '');
           computeRegionDistances();
+          // The persistent main-area circle is drawn at map init, before any
+          // point has geocoded -- regionRadiusCap() had nothing to measure
+          // yet then, so it's redrawn here at its real size now that every
+          // point's location is known (a real Corfu run showed exactly why
+          // this matters: the un-scaled circle was hugely oversized for a
+          // small island).
+          if (mainAreaCircle) mainAreaCircle.setRadius(regionRadiusCap());
         }
       });
     }, i * 150);

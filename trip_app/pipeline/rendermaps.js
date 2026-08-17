@@ -18,23 +18,42 @@ function slug(s, i) {
   return base ? `${base}${i}` : `p${i}`;
 }
 
+// The map template already has a full "Beach" category (color, legend,
+// filter chip, sort order) -- but nothing ever assigned it, since Gemini's
+// extraction schema has no distinct Beach value. A Nature/Other point whose
+// own name says it's a beach gets reclassified here so that existing client
+// feature actually works, instead of every beach silently landing under the
+// generic Nature/Attraction bucket.
+function inferCategory(p) {
+  const mapped = CAT_MAP[p.category] || 'Attraction';
+  if ((p.category === 'Nature' || p.category === 'Other') && /חוף|beach/i.test(p.name || '')) return 'Beach';
+  return mapped;
+}
+
 // plan (organized) -> the REGIONS array the map template expects.
-function toRegions(plan, destinationEn) {
+// prevByName (optional): Map<placeName, {checked, isSleep}> from a PRIOR
+// confirmed selection -- lets a returning visit to this tab (after a trip
+// already has a final plan) show what was actually chosen last time instead
+// of resetting to "everything checked, nothing marked as a sleep base".
+function toRegions(plan, destinationEn, prevByName) {
   let idx = 0;
   return plan.regions.map((r) => ({
     region: r.name,
     points: r.places.map((p) => {
       idx++;
       const domain = (p.sources && p.sources[0]) || '';
+      const prev = prevByName && prevByName.get(p.name);
       return {
         id: slug(p.name, idx),
         name: p.name,
         query: `${p.name}, ${destinationEn}`,
-        category: CAT_MAP[p.category] || 'Attraction',
+        category: inferCategory(p),
         rec: !!p.recommended,
         desc: p.description || '',
         source: (p.sources || []).join(' / '),
-        url: domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : ''
+        url: domain ? (domain.startsWith('http') ? domain : `https://${domain}`) : '',
+        checked: prevByName ? !!prev : true,
+        isSleep: !!(prev && prev.isSleep)
       };
     })
   }));
@@ -45,14 +64,21 @@ function readTemplate(name) {
 }
 
 // ---- Route_Map (Tab 4): all points, user picks ----------------------------
-function renderRouteMap(plan, enrich, input, serverPort) {
+// prevSelection (optional): the trip's saved selection.json's `selected`
+// array, from a trip that already has a final plan -- returning to this tab
+// then shows what's actually confirmed (and which points are official sleep
+// bases) instead of resetting to a blank "everything checked" slate.
+function renderRouteMap(plan, enrich, input, serverPort, prevSelection) {
   const destination = input.destination;
   const destinationEn = enrich.destinationEn || destination;
   const center = enrich.mapCenter || { lat: 0, lng: 0 };
   const countryCode = (enrich.countryCode || '').toUpperCase() || 'US';
   const days = Number(input.days) || 3;
   const pace = input.pace || 'רגוע';
-  const regions = toRegions(plan, destinationEn);
+  const prevByName = prevSelection && prevSelection.length
+    ? new Map(prevSelection.map((p) => [p.name, { isSleep: !!p.isSleep }]))
+    : null;
+  const regions = toRegions(plan, destinationEn, prevByName);
 
   // Main-city reference: distances to each region are measured FROM here, and
   // the first region (organize puts the base city first) is treated as "the
